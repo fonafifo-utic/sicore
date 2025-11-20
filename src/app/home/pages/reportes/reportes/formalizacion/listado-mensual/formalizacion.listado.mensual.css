@@ -1,0 +1,53 @@
+.boton {
+    border-radius: 2rem;
+    font-size: 1rem;
+}
+
+.boton-redondo {
+    border-radius: 2rem;
+    font-size: 1rem;
+}
+
+.boton-editar {
+    background-color: #d5a326;
+}
+
+.boton-subir {
+    background-color: #64748B;
+}
+
+.boton-cancelar {
+    border-radius: 2rem;
+    font-size: 1.25rem;
+}
+
+ul {
+    list-style-type: none;
+}
+
+.boton-editar {
+    background-color: #d5a326;
+}
+
+.boton-enviar {
+    background-color: #75bef8;
+}
+
+.boton-subir {
+    background-color: #64748B;
+}
+
+.boton-enviar {
+    background-color: #00a0b4;
+}
+
+:host ::ng-deep .p-fileupload .p-fileupload-buttonbar { 
+    display: flex; 
+    justify-content: center; 
+}
+
+.boton-descargar {
+  border-radius: 2rem;
+  font-size: 1.25rem;
+  background-color: #64748B;
+}

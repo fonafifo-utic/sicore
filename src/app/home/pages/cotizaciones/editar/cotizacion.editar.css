@@ -1,0 +1,86 @@
+:host {
+    display: block;
+  }
+  
+  .swal2-container {
+    z-index: 200000;
+  }
+  
+  .datorequerido {
+    color: red;
+    font-size: 13px;
+    position: relative;
+    bottom: 5px;
+  }
+  
+  .colortitlewindow {
+    background-color: #17581c;
+    padding-top: 10px;
+    padding-bottom: 10px;
+  }
+  
+  .iconCloseRounded {
+    border-radius: 100% !important;
+  }
+  
+  .p-card-body {
+    padding: 0;
+  }
+  
+  .p-card .p-card-content {
+    padding: 0 0 1.25rem 0;
+  }
+  
+  
+  /* CSS Quill */
+  
+  .editor>div:nth-child(1) {
+    background: #f9fafb;
+    border-radius: 8px 8px 0 0;
+  }
+  
+  .editor>div:nth-child(2) {
+    background: #ffffff;
+    border-radius: 0 0 8px 8px;
+  }
+  
+  .boton {
+    border-radius: 2rem;
+    font-size: 1rem;
+  }
+  
+  .boton-cancelar {
+    border-radius: 2rem;
+    font-size: 1.25rem;
+  }
+  
+  .color-etiqueta {
+    color: #17581c;
+    text-decoration: underline;
+  }
+  
+  .imagenes-encabezado {
+    aspect-ratio: 1280 / 720;
+  }
+
+  .p-tag {
+    background: #4CAF50;
+    color: #ffffff;
+    font-size: 1.1rem;
+    font-weight: 700;
+    padding: 0.25rem 0.4rem;
+    border-radius: 3px;
+  }
+
+  .margen-carta {
+    margin: 0mm 16mm 0mm 16mm;
+  }
+  
+  .margen-izquierda {
+    margin-left: 210px;
+  }
+
+  .form-check-input:checked {
+    background-color: #4CAF50;
+    border-color: #4CAF50;
+  }

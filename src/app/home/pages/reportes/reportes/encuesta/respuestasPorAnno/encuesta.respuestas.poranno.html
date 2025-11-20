@@ -1,0 +1,63 @@
+<div class="grid">
+    <div class="col-12">
+        <div class="card"> 
+            <p-toolbar>
+                <ng-template pTemplate="left">
+                    <button style="border-radius: 2rem; font-size: 1rem;" pButton pRipple label="ATRÁS" icon="pi pi-times"
+                        class="mb-2 my-2 mx-2 boton p-button-danger" (click)="atras()"></button>
+
+                    <button style="border-radius: 2rem; font-size: 1rem;" pButton pRipple label="ACTUALIZAR" icon="pi pi-save" [disabled]="_desHabilitarSalvar"
+                        class="mb-2 my-2 mx-2 boton-aplicar" (click)="guardar()"></button>
+
+                    <button style="border-radius: 2rem; font-size: 1rem;" pButton pRipple label="DESCARGAR" icon="pi pi-file-pdf"
+                        class="mb-2 my-2 mx-2 boton" (click)="descargarPDF()"></button>
+                </ng-template>
+            </p-toolbar>
+        </div>
+
+        <div #myTextArea class="card carta-container" id="documento">
+            <div class="header">
+                <img src="assets/img/gobierno_de_costa_rica.png" style="width: 100%; height: auto;" alt="">
+            </div>
+
+            <div class="report-title">REPORTE</div>
+            <div class="subtitle">NIVEL DE RESPUESTA POR AÑO SOBRE LAS ENCUESTAS DE SERVICIO AL CLIENTE</div>
+            <div class="date">Fecha de Generación: {{_fechaGeneracion | date : 'dd/MM/yyyy HH:mm'}}</div>
+            <div class="document-id">{{_consecutivo}}</div>
+
+            <div class="custom-text">
+                <p *ngIf="_esVisibleTexto">{{_textoAlternativo}}</p>
+                <textarea *ngIf="!_esVisibleTexto" pTextarea id="textoPersonalizado" rows="3" cols="105" class="h-full" style="resize: none; border: 1px solid #ccc;"
+                    [formControl]="textAreaControl" (input)="cuandoTextAreaCambia()" (change)="cuandoTextAreaCambia()"></textarea>
+            </div>
+
+            <div class="chart-container">
+                <div class="chart">
+                    <p-chart width="500px;" responsive="true" type="pie" [data]="_pieData"
+                        [options]="_pieOpciones"></p-chart>
+                </div>
+            </div>
+
+            <div class="source">Fuente: SICORE</div>
+
+            <div class="generated-by">
+                <strong>Generado por: </strong>{{_usuario}}
+            </div>
+
+            <div class="footer">
+                <div>
+                    Web: https://www.fonafifo.go.cr/es/<br>
+                    Tel: +506 2545-3500<br>
+                    Fax: +506 2235-4803
+                </div>
+                <div>
+                    <img src="assets/img/esencial-cr-limpia.png" style="width: 25%; height: auto;" alt="">
+                </div>
+                <div>
+                    <div class="page-info">Página 1 de 1</div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>

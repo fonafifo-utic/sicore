@@ -1,0 +1,181 @@
+<div class="grid">
+	<div class="col-12">
+		<div class="card">
+			<h5>Registro de Clientes</h5>
+
+			<form [formGroup]="formCliente" (ngSubmit)="OnSubmit()">
+				<div class="p-fluid p-formgrid grid">
+					<div class="field col-6 md:col-6">
+						<label for="idSector">Sector Comercial: (*)</label>
+						<p-dropdown styleClass="mb-3" formControlName="idSector" optionLabel="sectorComercial" [options]="(_sectores$ | async)!"
+							(onChange)="seleccionaSectorComercial($event)" optionValue="idSectorComercial" placeholder="Seleccione el Sector Comercial"></p-dropdown>
+						<span class="datorequerido" *ngIf="campoEsValido('idSector')">
+							Campo requerido.
+						</span>
+					</div>
+
+					<div class="field col-12 md:col-6">
+						<label for="nombreCliente">Clasificación Industrial Internacional: (*)</label>
+						<input (keypress)="validaEspaciosBlancoAlInicio($event)" pInputText id="ucii" type="text" formControlName="ucii"
+                            placeholder="Unidad de Clasificación Industrial Internacional " [ngClass]="{'ng-invalid ng-dirty': campoEsValido('ucii')}" class="mb-3"
+							(focus)="entraComprobante()" (blur)="validaComprobantes()" maxlength = "10"/>
+						<span class="datorequerido" *ngIf="campoEsValido('ucii')">
+							Campo requerido.
+						</span>
+						<span class="datorequerido" *ngIf="_esFormatoIncorrecto">
+							Formato erróneo en la unidad.
+						</span>
+						<div class="form-check form-switch">
+							<label class="form-check-label" for="ckCIIUExtranjero">Extranjero</label>
+							<input class="form-check-input" type="checkbox" role="switch" id="ckCIIUExtranjero" (change)="seleccionaCIIUExtranjero($event)">
+						</div>
+					</div>
+				</div>
+
+				<div class="p-fluid p-formgrid grid">
+					<div class="field col-12 md:col-6">
+						<label for="nombreCliente">Nombre de la Empresa: (*)</label>
+						<input (keypress)="validaEspaciosBlancoAlInicio($event)" pInputText id="nombreCliente" type="text" formControlName="nombreCliente"
+                            placeholder="Nombre del Cliente" [ngClass]="{'ng-invalid ng-dirty': campoEsValido('nombreCliente')}" class="mb-3" (focus)="entraNombreEmpresa()" />
+						<span class="datorequerido" *ngIf="campoEsValido('nombreCliente')">
+							Campo requerido.
+						</span>
+						<span class="datorequerido" *ngIf="_caracteresMinimosMaximos">
+							El nombre de la Empresa debe tener mínimo 3 caracteres y máximo 100.
+						</span>
+					</div>
+
+					<div class="field col-12 md:col-6">
+						<label for="nombreComercial">Nombre Comercial: (*)</label>
+						<input (keypress)="validaEspaciosBlancoAlInicio($event)" pInputText id="nombreComercial" type="text" formControlName="nombreComercial"
+                            placeholder="Nombre Comercial del Cliente" [ngClass]="{'ng-invalid ng-dirty': campoEsValido('nombreComercial')}" class="mb-3" (focus)="entraNombreComercial()"/>
+						<span class="datorequerido" *ngIf="campoEsValido('nombreComercial')">
+							Campo requerido.
+						</span>
+						<span class="datorequerido" *ngIf="_caracteresMinimosMaximosComercial">
+							El nombre comercial debe tener mínimo 3 caracteres y máximo 100.
+						</span>
+					</div>
+				</div>
+
+                <div class="p-fluid p-formgrid grid">
+					<div class="field col-12 md:col-6">
+						<label for="cedulaCliente">Cédula Jurídica (únicamente números): (*)</label>
+						<input pInputText id="cedulaCliente" type="text" formControlName="cedulaCliente" placeholder="Número de Identificación del Cliente"
+							[ngClass]="{'ng-invalid ng-dirty': campoEsValido('cedulaCliente')}" class="mb-3" (focus)="poneFocoCedula()" (blur)="saleFocoCedula()"
+							type="number" maxlength = "{{_maximoPermitidoCedula}}" oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);"/>
+						<span class="datorequerido" *ngIf="campoEsValido('cedulaCliente')">
+							Campo requerido.
+						</span>
+						<span class="datorequerido" *ngIf="_longitudIncorrectaCedula">
+							Cédula no tiene la longitud requerida.
+						</span>
+						<span class="datorequerido" *ngIf="_cedulaExiste">
+							Cédula existe.
+						</span>
+						<div class="form-check form-switch">
+							<label class="form-check-label" for="ckHabilitaPrecio">Extranjero</label>
+							<input class="form-check-input" type="checkbox" role="switch" id="ckHabilitaPrecio" (change)="seleccionaExtranjero($event)">
+						</div>
+					</div>
+
+					<div class="field col-12 md:col-6">
+						<label for="contactoCliente">Nombre del Contacto: (*)</label>
+						<input (keypress)="validaEspaciosBlancoAlInicio($event)" pInputText id="contactoCliente" type="text" formControlName="contactoCliente"
+                            placeholder="Contacto del Cliente" [ngClass]="{'ng-invalid ng-dirty': campoEsValido('contactoCliente')}" class="mb-3" (focus)="entraNombreContacto()"/>
+						<span class="datorequerido" *ngIf="campoEsValido('contactoCliente')">
+							Campo requerido.
+						</span>
+						<span class="datorequerido" *ngIf="_caracteresMinimosMaximosContacto">
+							El nombre comercial debe tener mínimo 3 caracteres y máximo 100.
+						</span>
+					</div>
+				</div>
+
+                <div class="p-fluid p-formgrid grid">
+					<div class="field col-12 md:col-6">
+						<label for="telefonoCliente">Teléfono Principal (únicamente números):</label>
+						<input pInputText id="telefonoCliente" type="text" formControlName="telefonoCliente" placeholder="Teléfono Primario del Cliente"
+							[ngClass]="{'ng-invalid ng-dirty': campoEsValido('telefonoCliente')}" class="mb-3" (focus)="poneFocoTelefono()" (blur)="saleFocoTelefono()"
+							type="number" maxlength = "8" oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);"/>
+						<span class="datorequerido" *ngIf="campoEsValido('telefonoCliente')">
+							Campo requerido.
+						</span>
+						<span class="datorequerido" *ngIf="_longitudIncorrecta">
+							Teléfono con logitud incorrecta.
+						</span>
+						<span class="datorequerido" *ngIf="_numeroInicialIncorrecto">
+							Número inicial incorrecto.
+						</span>
+					</div>
+
+					<div class="field col-12 md:col-6">
+						<label for="emailCliente">Correo Electrónico: (*)</label>
+						<input (keypress)="validaEspaciosBlancoAlInicio($event)" pInputText id="emailCliente" type="email" formControlName="emailCliente"
+                            placeholder="Correo Electrónico del Cliente" [ngClass]="{'ng-invalid ng-dirty': campoEsValido('emailCliente')}" class="mb-3"
+							(blur)="saleFocoEmail()" (focus)="entraFocoEmail()"/>
+						<span class="datorequerido" *ngIf="campoEsValido('emailCliente')">
+							Campo requerido.
+						</span>
+						<span class="datorequerido" *ngIf="_validaEmail">
+							Correo Electrónico inválido.
+						</span>
+						<span class="datorequerido" *ngIf="_emailExiste">
+							Correo Electrónico existe.
+						</span>
+					</div>
+				</div>
+
+				<div class="p-fluid p-formgrid grid">
+					<div class="field col-12 md:col-6">
+						<label for="contactoContador">Contacto Financiero:</label>
+						<input (keypress)="validaEspaciosBlancoAlInicio($event)" pInputText id="contactoContador" type="text" formControlName="contactoContador"
+                            placeholder="Nombre del Contacto Financiero" class="mb-3" (focus)="entraNombreContactoContador()"/>
+						<span class="datorequerido" *ngIf="_caracteresMinimosMaximosContactoContador">
+							El nombre comercial debe tener mínimo 3 caracteres y máximo 100.
+						</span>
+					</div>
+					
+					<div class="field col-12 md:col-6">
+						<label for="emailContador">Correo Electrónico Financiero:</label>
+						<input (keypress)="validaEspaciosBlancoAlInicio($event)" pInputText id="emailContador" type="email" formControlName="emailContador"
+                            placeholder="Correo Electrónico del Contacto Financiero" class="mb-3" (blur)="saleFocoEmailContador()" (focus)="entraFocoEmailContador()"/>
+						<span class="datorequerido" *ngIf="_validaEmailContador">
+							Correo Electrónico inválido.
+						</span>
+					</div>
+
+				</div>
+
+				<div class="p-fluid p-formgrid grid">
+					<div class="field col-6 md:col-6">
+						<label for="idAgente">Ejecutivo de Cuenta:</label>
+						<p-dropdown styleClass="mb-3" formControlName="idAgente" optionLabel="nombre" [options]="(_funcionarios$ | async)!"
+							optionValue="idUsuario" placeholder="Ejecutivo de la Cuenta"></p-dropdown>
+					</div>
+
+					<div class="field col-12 md:col-6">
+						<label for="direccionFisica">Dirección: (*)</label>
+						<input (keypress)="validaEspaciosBlancoAlInicio($event)" pInputText id="direccionFisica" type="text" formControlName="direccionFisica" (focus)="entraDireccion()"
+							placeholder="Dirección Física del Cliente" [ngClass]="{'ng-invalid ng-dirty': campoEsValido('direccionFisica')}" class="mb-3" (blur)="saleDelFocoDireccion()"/>
+						<span class="datorequerido" *ngIf="campoEsValido('direccionFisica')">
+							Campo requerido.
+						</span>
+						<span class="datorequerido" *ngIf="_caracteresMinimosMaximosDireccion">
+							El nombre comercial debe tener mínimo 3 caracteres y máximo 100.
+						</span>
+					</div>
+				</div>
+
+				<div class="p-fluid p-formgrid grid">
+					<div class="col-6 md:col-3 field flex justify-content-end gap-2">
+						<button [disabled]="_habilitarAplicar" pButton pRipple class="boton p-button-success mr-2" label="Aplicar" icon="pi pi-save" [loading]="_guardando"></button>
+						<button pButton pRipple class="boton-cancelar p-button-danger mr-2" label="Cancelar" icon="pi pi-times" (click)="salir()"></button>
+					</div>
+				</div>
+
+
+			</form>
+		</div>
+	</div>
+</div>

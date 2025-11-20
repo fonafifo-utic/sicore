@@ -1,0 +1,91 @@
+<div class="grid">
+    <div class="col-12">
+      <div class="card">
+        <h5>Editar una Pregunta</h5>
+  
+        <form [formGroup]="formPreguntas">
+  
+          <div class="p-fluid p-formgrid grid">
+  
+            <div class="field col-12 md:col-6">
+              <label for="pregunta">Pregunta: (*)</label>
+              <input (keypress)="validaEspaciosBlancoAlInicio($event)" pInputText id="pregunta" type="text"
+                formControlName="pregunta" placeholder="Pregunta." class="mb-3"
+                [ngClass]="{'ng-invalid ng-dirty': campoEsValido('pregunta')}" />
+              <span class="datorequerido" *ngIf="campoEsValido('pregunta')">
+                Campo requerido.
+              </span>
+            </div>
+  
+            <div class="field col-12 md:col-6">
+              <label for="tipo">Tipos: (*)</label>
+              <select class="form-control mb-3" id="tipo" formControlName="tipo" (change)="seleccionaTipo($event)">
+                <option selected>Tipo de Pregunta</option>
+                <option *ngFor="let tipo of _tipos$" id={{tipo.tipo}}>{{tipo.tipo}}</option>
+              </select>
+              <span class="datorequerido" *ngIf="campoEsValido('pregunta')">
+                Campo requerido.
+              </span>
+            </div>
+  
+          </div>
+  
+          <div class="p-fluid p-formgrid grid" *ngIf="_muestraRespuestas">
+            
+            <div class="field col-6 md:col-3">
+              <label for="respuesta">Respuesta: (*)</label>
+              <input (keypress)="validaEspaciosBlancoAlInicio($event)" pInputText id="respuesta" type="text"
+                placeholder="Respuesta." class="mb-3" [ngClass]="{'ng-invalid ng-dirty': campoValidoRespuesta()}" />
+              <span class="datorequerido" *ngIf="campoValidoRespuesta()">
+                Campo requerido.
+              </span>
+            </div>
+  
+            <div class="field col-6 md:col-3" *ngIf="_muestraTabla">
+              <div class="col-6 md:col-6 py-5">
+                <button pButton pRipple class="boton-agregar boton p-button-success mr-2" pTooltip="Agregar"
+                  icon="pi pi-plus" (click)="agregaRespuestaTabla()"></button>
+              </div>
+            </div>
+  
+            <div class="field col-12 md:col-6" *ngIf="_muestraTabla">
+              <table class="table">
+                <thead>
+                  <tr>
+                    <th scope="col">#</th>
+                    <th scope="col">Opción</th>
+                    <th *ngIf="_muestraValor" scope="col">Valor</th>
+                    <th scope="col">Acciones</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr *ngFor="let respuesta of _respuestas; index as i">
+                    <th scope="row">{{i+1}}</th>
+                    <td>{{respuesta.respuesta}}</td>
+                    <td *ngIf="_muestraValor">{{respuesta.valorPeso}}</td>
+                    <td>
+                      <button pButton pRipple class="boton-agregar boton p-button-success mr-2" pTooltip="Editar"
+                        icon="pi pi-pencil" (click)="editaRespuestaTabla(i)"></button>
+                      <button pButton pRipple class="boton-agregar boton p-button-success mr-2" pTooltip="Agregar"
+                        icon="pi pi-trash" (click)="borraRespuestaTabla(i)"></button>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+  
+          </div>
+  
+          <div class="p-fluid p-formgrid grid ml-1">
+            <div class="col-6 md:col-6 field flex justify-content-end gap-2">
+              <button pButton pRipple class="boton p-button-success mr-2" label="Aplicar" icon="pi pi-save"
+                (click)="OnSubmit()"></button>
+              <button pButton pRipple class="boton-cancelar p-button-danger mr-2" label="Cancelar" icon="pi pi-times"
+                (click)="salir()"></button>
+            </div>
+          </div>
+  
+        </form>
+      </div>
+    </div>
+  </div>

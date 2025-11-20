@@ -1,0 +1,47 @@
+<div class="grid">
+    <div class="col-12">
+        <div class="card px-6 py-6">
+
+            <p-toolbar styleClass="mb-4" *ngIf="_perfilPermitido">
+                <ng-template pTemplate="left">
+                    <div class="my-2">
+                        <button pButton pRipple label="ENCUESTA" icon="pi pi-search" class="boton-redondo p-button-success mr-2" (click)="irToEncuesta()"></button>
+                    </div>
+                    <div class="my-2">
+                        <button pButton pRipple label="PREGUNTAS" icon="pi pi-question" class="boton-redondo p-button-success mr-2" (click)="irToPreguntas()"></button>
+                    </div>
+
+                    <div class="my-2">
+                        <button pButton pRipple label="LISTADO" icon="pi pi-list" class="boton-redondo p-button-success mr-2" (click)="irToListado()"></button>
+                    </div>
+                </ng-template>
+            </p-toolbar>
+
+            <p-toolbar styleClass="mb-4" *ngIf="!_perfilPermitido">
+                <ng-template pTemplate="left">
+                    <h3>Respuestas Encuesta</h3>
+                </ng-template>
+            </p-toolbar>
+
+            <div class="grid p-fluid">
+                
+                <div *ngFor="let pregunta of _preguntasTipoEscala" class="col-12 lg:col-6">
+                    <div class="card flex flex-column align-items-center">
+                        <h5 class="text-left w-full">{{pregunta}}</h5>
+                        <p-chart type="pie" [data]="setDataPie(pregunta)" [options]="_pieOpciones"></p-chart>
+                    </div>
+                </div>
+
+                <div *ngFor="let pregunta of _preguntasTipoSeleccion" class="col-12 lg:col-6">
+                    <div class="card">
+                        <h5>{{pregunta}}</h5>
+                        <p-chart type="bar" [data]="setDataBarra(pregunta)" [options]="barOptions"></p-chart>
+                    </div>
+                </div>
+
+            </div>
+            
+        </div>
+    </div>
+</div>
+

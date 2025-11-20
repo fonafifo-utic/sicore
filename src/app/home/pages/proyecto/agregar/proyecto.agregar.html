@@ -1,0 +1,100 @@
+<div class="grid">
+	<div class="col-12">
+		<div class="card">
+			<h5>Registrar un Proyecto</h5>
+
+			<form [formGroup]="formProyecto" (ngSubmit)="OnSubmit()">
+
+				<div class="p-fluid p-formgrid grid">
+
+					<div class="field col-12 md:col-6">
+						<label for="proyecto">Nombre del Proyecto: (*)</label>
+						<input (keypress)="validaEspaciosBlancoAlInicio($event)" (focus)="entraNombreProyecto()" pInputText id="proyecto" type="text"
+							formControlName="proyecto" placeholder="Nombre del proyecto."
+							[ngClass]="{'ng-invalid ng-dirty': campoEsValido('proyecto')}" class="mb-3" />
+						<span class="datorequerido" *ngIf="campoEsValido('proyecto')">
+							Campo requerido.
+						</span>
+						<span class="datorequerido" *ngIf="_maximoYMinimo">
+							Debe tener al menos 3 caracteres y máximo 100.
+						</span>
+					</div>
+
+				</div>
+
+				<div class="p-fluid p-formgrid grid">
+					
+					<div class="field col-12 md:col-6">
+						<label for="inicioProyecto">Inicio del Proyecto: (*)</label>
+						<input (keypress)="validaEspaciosBlancoAlInicio($event)" pInputText id="inicioProyecto" type="date"
+							formControlName="inicioProyecto" placeholder="Inicio del proyecto." class="mb-3" (blur)="seSaleFocoFechaInicio($event)"/>
+					</div>
+
+					<div class="field col-12 md:col-6">
+						<label for="finProyecto">Fin del Proyecto: (*)</label>
+						<input (keypress)="validaEspaciosBlancoAlInicio($event)" pInputText id="finProyecto" type="date"
+							formControlName="finProyecto" placeholder="Fin del proyecto." class="mb-3" (blur)="seSaleFocoFechaFin($event)"
+							(focus)="entraFocoFechaFin()" [ngClass]="{'ng-invalid ng-dirty': _fechaInvalida}"/>
+							<span class="datorequerido" *ngIf="_fechaInvalida">
+								La fecha de finalización debe ser mayor a la fecha de inicio.
+							</span>
+					</div>
+
+				</div>
+
+				<div class="p-fluid p-formgrid grid">
+
+					<div class="field col-12 md:col-6">
+						<label for="ubicacion">Ubicación Geográfica del Proyecto: (*)</label>
+						<input (keypress)="validaEspaciosBlancoAlInicio($event)" pInputText id="ubicacion" type="text" (focus)="entraUbicacion()"
+							formControlName="ubicacion" placeholder="Zona o sitio del proyecto." class="mb-3"
+							[ngClass]="{'ng-invalid ng-dirty': campoEsValido('ubicacion')}"/>
+						<span class="datorequerido" *ngIf="campoEsValido('ubicacion')">
+							Campo requerido.
+						</span>
+						<span class="datorequerido" *ngIf="_maximoYMinimoUbicacion">
+							Debe tener al menos 3 caracteres y máximo 100.
+						</span>
+					</div>
+					
+				</div>
+
+				<!-- <div class="p-fluid p-formgrid grid">
+
+					<div class="field col-12 md:col-6">
+						<label for="especie">Especie: (*)</label>
+						<input (keypress)="validaEspaciosBlancoAlInicio($event)" pInputText id="especie" type="text"
+							formControlName="especie" placeholder="Especie de Árboles." class="mb-3"
+							[ngClass]="{'ng-invalid ng-dirty': campoEsValido('especie')}"/>
+						<span class="datorequerido" *ngIf="campoEsValido('especie')">
+							Campo requerido.
+						</span>
+					</div>
+
+					<div class="field col-12 md:col-6">
+						<label for="especie">Número de Contrato: (*)</label>
+						<input (keypress)="validaEspaciosBlancoAlInicio($event)" pInputText id="contratoPSA" type="text"
+							formControlName="contratoPSA" placeholder="Número de Contrato PSA." class="mb-3"
+							[ngClass]="{'ng-invalid ng-dirty': campoEsValido('contratoPSA')}"/>
+						<span class="datorequerido" *ngIf="campoEsValido('contratoPSA')">
+							Campo requerido.
+						</span>
+					</div>
+					
+				</div> -->
+
+				<div class="p-fluid p-formgrid grid ml-1">
+
+					<div class="col-6 md:col-6 field flex justify-content-end gap-2">
+						<button pButton pRipple class="boton p-button-success mr-2" label="Guardar"
+							icon="pi pi-save" [loading]="_guardando"></button>
+						<button pButton pRipple class="boton-cancelar p-button-danger mr-2" label="Cancelar"
+							icon="pi pi-times" (click)="salir()"></button>
+					</div>
+
+				</div>
+
+			</form>
+		</div>
+	</div>
+</div>

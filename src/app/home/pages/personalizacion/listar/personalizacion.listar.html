@@ -1,0 +1,179 @@
+<div class="card">
+    <p-toast [life]="10000" (onClose)="cierraMensaje()"/>
+
+    <div class="grid" *ngIf="!_esAsistente">
+        <div class="col-12">
+            <div class="card">
+                <h5>Cotización</h5>
+                <div class="p-fluid p-formgrid grid">
+                    
+                    <div class="field col-12 md:col-6">
+                        <label for="leyendaDescriptivaCotizacionEspannol">Descripción para una cotización en español:</label>
+                        <textarea pInputTextarea id="leyendaDescriptivaCotizacionEspannol" cols="100%" rows="3" [autoResize]="true" (focus)="entraTextArea()">{{_leyendaDescriptivaCotizacionEspannol}}</textarea>
+                        <span *ngIf="_invalidaDescripcionCotizacion" style="color: red; padding-left: 10px;">La descripción es necesaria.</span>
+                    </div>
+
+                    <div class="field col-12 md:col-6">
+                        <label for="leyendaDescriptivaCotizacionIngles">Descripción para una cotización en inglés:</label>
+                        <textarea pInputTextarea id="leyendaDescriptivaCotizacionIngles" cols="100%" rows="3" [autoResize]="true" (focus)="entraTextArea()">{{_leyendaDescriptivaCotizacionIngles}}</textarea>
+                        <span *ngIf="_invalidaDescripcionCotizacionIngles" style="color: red; padding-left: 10px;">La descripción es necesaria.</span>
+                    </div>
+
+                    <div class="field col-12 md:col-6">
+                        <label for="leyendaFinalidadCotizacionEspannol">Finalizadad del dinero captado para una cotización en español:</label>
+                        <textarea pInputTextarea id="leyendaFinalidadCotizacionEspannol" cols="100%" rows="5" [autoResize]="true" (focus)="entraTextArea()">{{_leyendaFinalidadCotizacionEspannol}}</textarea>
+                        <span *ngIf="_invalidaFinalidadCotizacion" style="color: red; padding-left: 10px;">La finalidad es necesaria.</span>
+                    </div>
+
+                    <div class="field col-12 md:col-6">
+                        <label for="leyendaFinalidadCotizacionIngles">Finalizadad del dinero captado para una cotización en inglés:</label>
+                        <textarea pInputTextarea id="leyendaFinalidadCotizacionIngles" cols="100%" rows="5" [autoResize]="true" (focus)="entraTextArea()">{{_leyendaFinalidadCotizacionIngles}}</textarea>
+                        <span *ngIf="_invalidaFinalidadCotizacionIngles" style="color: red; padding-left: 10px;">La finalidad es necesaria.</span>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="grid" *ngIf="!_esAsistente">
+        <div class="col-12">
+            <div class="card">
+                <h5>Certificación</h5>
+                <div class="p-fluid p-formgrid grid">
+                    
+                    <div class="field col-12 md:col-6">
+                        <label for="leyendaDescripcionCertificadoEspannol">Descripción del certificado:</label>
+                        <textarea pInputTextarea id="leyendaDescripcionCertificadoEspannol" cols="100%" rows="5" [autoResize]="true" (focus)="entraTextArea()">{{_leyendaDescripcionCertificadoEspannol}}</textarea>
+                        <span *ngIf="_invalidaDescripcionCertificado" style="color: red; padding-left: 10px;">La descripción es necesaria.</span>
+                    </div>
+
+                    <div class="field col-12 md:col-6">
+                        <label for="leyendaDescripcionCertificadoIngles">Descripción del certificado en Inglés:</label>
+                        <textarea pInputTextarea id="leyendaDescripcionCertificadoIngles" cols="100%" rows="5" [autoResize]="true" (focus)="entraTextArea()">{{_leyendaDescripcionCertificadoIngles}}</textarea>
+                        <span *ngIf="_invalidaDescripcionCertificadoIngles" style="color: red; padding-left: 10px;">La descripción es necesaria.</span>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="grid">
+        <div class="col-12">
+            <div class="card">
+                <h5>Dirección Ejecutiva</h5>
+                <div class="p-fluid p-formgrid grid">
+                    
+                    <div class="field col-12 md:col-6">
+                        <label for="emailEjecutivo">Dirección Ejecutiva:</label>
+                        <select class="form-select" aria-label="Lista Directores Ejecutivos" (change)="seleccionaDirector($event)">
+                            <option *ngFor="let director of _directores" id="{{director.director}}" value="{{director.director}}" >{{director.director}}</option>
+                          </select>
+                    </div>
+
+                    <div class="field col-12 md:col-6">
+                        <label for="emailEjecutivo">Correo Electrónico Dirección Ejecutiva:</label>
+                        <input pInputText id="emailEjecutivo" (focus)="entraTextArea()" value="{{_correoGerenciaEjecutiva}}"/>
+                        <span *ngIf="_invalidaCorreoGerenciaEjecutiva" style="color: red; padding-left: 10px;">El correo electrónico es necesario.</span>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="grid" *ngIf="!_esAsistente">
+        <div class="col-6">
+            <div class="card">
+                <h5>Cargar Al Expediente: Permanencia</h5>
+                <div class="p-fluid p-formgrid grid">
+                    
+                    <div class="field col-4 md:col-4">
+                        <div class="my-2">
+                            <button pButton pRipple label="Subir Permanencia" icon="pi pi-save" class="boton p-button-success mr-2" (click)="abrirVentanaCargarPermanencia()"></button>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+
+        <div class="col-6">
+            <div class="card">
+                <h5>Subir Al Expediente: Cambio Climático</h5>
+                <div class="p-fluid p-formgrid grid">
+                    
+                    <div class="field col-4 md:col-4">
+                        <div class="my-2">
+                            <button pButton pRipple label="Subir Cambio Climático" icon="pi pi-save" class="boton p-button-success mr-2" (click)="abrirVentanaCargarCC()"></button>
+                        </div>
+                    </div>
+    
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="grid" *ngIf="!_esAsistente">
+        <div class="col-12">
+            <div class="card">
+                <h5>Ver Expediente</h5>
+                <div class="p-fluid p-formgrid grid">
+                    
+                    <div class="field col-2 md:col-2">
+                        <div class="my-2">
+                            <button pButton pRipple label="Ver Expediente" icon="pi pi-save" class="boton p-button-success mr-2" (click)="abrirVentanaVerExpediente()"></button>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <p-divider align="right">
+        <p-button [disabled]="_desHabilitaGuardar" (onClick)="salvarPersonalizacion()" label="Guardar" icon="pi pi-save" styleClass="p-button-outlined mr-1"></p-button>
+    </p-divider>
+
+</div>
+
+<p-dialog header="Adjuntar al Expediente" [modal]="true" [(visible)]="_vistaSubidaPermanencia" [style]="{ width: '70rem' }">
+
+    <p-fileUpload #fileUpload name="subeArchivos[]"
+        customUpload="true" (uploadHandler)="subirPermanencia($event, fileUpload)"
+        [multiple]="false" accept=".pdf" maxFileSize="10000000"
+        chooseLabel="Buscar" uploadLabel="Cargar" showCancelButton="false"
+        uploadStyleClass="{border-radius: 2rem;font-size: 1.25rem;}">
+    </p-fileUpload>
+
+</p-dialog>
+
+<p-dialog header="Adjuntar al Expediente" [modal]="true" [(visible)]="_vistaSubidaCC" [style]="{ width: '70rem' }">
+
+    <p-fileUpload #fileUpload name="subeArchivos[]"
+        customUpload="true" (uploadHandler)="subirCambioClimatico($event, fileUpload)"
+        [multiple]="true" accept=".pdf" maxFileSize="10000000"
+        chooseLabel="Buscar" uploadLabel="Cargar" showCancelButton="false"
+        uploadStyleClass="{border-radius: 2rem;font-size: 1.25rem;}">
+    </p-fileUpload>
+
+</p-dialog>
+
+<p-dialog header="Documentación del Proyecto" [modal]="true" [(visible)]="_vistaExpediente" [style]="{ width: '90rem' }">
+
+    <div class="card">
+        <p-tabView orientation="left">
+            <p-tabPanel header="{{_permanencia}}" class="line-height-3 m-0" *ngIf="_verExpedienteUno">
+                <pdf-viewer [src]="_urlDelExpedienteUno" [render-text]="true" [original-size]="false" style="width: 80rem; height: 50rem" [fit-to-page]="true"></pdf-viewer>
+            </p-tabPanel>
+            <p-tabPanel header="{{_cambioClimatico}}" class="line-height-3 m-0" *ngIf="_verExpedienteDos">
+                <pdf-viewer [src]="_urlDelExpedienteDos" [render-text]="true" [original-size]="false" style="width: 80rem; height: 50rem" [fit-to-page]="true"></pdf-viewer>
+            </p-tabPanel>
+            <!-- <p-tabPanel header="{{_nombreExpedienteTres}}" class="line-height-3 m-0" *ngIf="_verExpedienteTres">
+                <pdf-viewer [src]="_urlDelExpedienteTres" [render-text]="true" [original-size]="false" style="width: 80rem; height: 50rem" [fit-to-page]="true"></pdf-viewer>
+            </p-tabPanel> -->
+        </p-tabView>
+    </div>
+
+</p-dialog>

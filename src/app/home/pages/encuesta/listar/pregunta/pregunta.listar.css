@@ -1,0 +1,18 @@
+.boton {
+    border-radius: 2rem;
+    font-size: 1rem;
+}
+
+.boton-redondo {
+    border-radius: 2rem;
+    font-size: 1rem;
+}
+
+.flote {
+    background: #e9ecef;
+    color: #495057;
+}
+
+.boton-editar {
+    background-color: #d5a326;
+  }

@@ -1,0 +1,89 @@
+.boton {
+  border-radius: 2rem;
+  font-size: 1rem;
+}
+
+.boton-redondo {
+  border-radius: 2rem;
+  font-size: 1rem;
+}
+
+.flote {
+  background: #e9ecef;
+  color: #495057;
+}
+
+ul {
+  padding-left: 0;
+}
+
+:host {
+  display: block;
+}
+
+.swal2-container {
+  z-index: 200000;
+}
+
+.datorequerido {
+  color: red;
+  font-size: 13px;
+  position: relative;
+  bottom: 5px;
+}
+
+.colortitlewindow {
+  background-color: #17581c;
+  padding-top: 10px;
+  padding-bottom: 10px;
+}
+
+.iconCloseRounded {
+  border-radius: 100% !important;
+}
+
+.p-card-body {
+  padding: 0;
+}
+
+.p-card .p-card-content {
+  padding: 0 0 1.25rem 0;
+}
+
+
+/* CSS Quill */
+
+.editor>div:nth-child(1) {
+  background: #f9fafb;
+  border-radius: 8px 8px 0 0;
+}
+
+.editor>div:nth-child(2) {
+  background: #ffffff;
+  border-radius: 0 0 8px 8px;
+}
+
+.boton-cancelar {
+  border-radius: 2rem;
+  font-size: 1.25rem;
+}
+
+.fondo-boton-azul {
+  background-color: #2563eb;
+}
+
+.fondo-boton-pendiente {
+  background-color: #00bcd4;
+}
+
+.boton-editar {
+  background-color: #d5a326;
+}
+
+.determina-tiempo-envio {
+  color: red;
+}
+
+.fondo-boton- {
+  background-color: #2563eb;
+}

@@ -1,0 +1,116 @@
+<div class="grid">
+    <div class="col-12">
+        <div class="card px-6 py-6">
+
+            <p-toolbar styleClass="mb-1">
+                <div class="formgroup-inline">
+                    <div class="field">
+                        <p-multiSelect [options]="(_funcionarios$ | async)!" styleClass="w-full md:w-80 m-2" (onChange)="seleccionaFuncionario($event)"
+                            optionLabel="nombre" placeholder="Agente de Ventas" optionValue="idUsuario" [selectionLimit]="_numeroMaximoDeEleccion"/>
+                    </div>
+                    <div class="field">
+                        <p-button label="Excel" icon="pi pi-file-excel" styleClass="p-button-outlined m-2" (click)="exportar()"
+                            [disabled]="_desHabilitarExportar" tooltipPosition="top" pTooltip="Exportar Excel"></p-button>
+                    </div>
+                </div>
+            </p-toolbar>
+
+            <p-table [value]="_reporte" [columns]="_columnas" #dt responsiveLayout="scroll" [rowHover]="true"
+                id="reporte" rowGroupMode="subheader" [scrollable]="true" dataKey="idFuncionario"
+                styleClass="mt-1 p-datatable-gridlines" [expandedRowKeys]="filasExpandidas"
+                (onRowExpand)="cuandoSeExpandeElRegistro($event)" (onRowCollapse)="cuandoColapsaElRegistro($event)">
+
+                <ng-template pTemplate="caption">
+                    <div class="flex flex-column md:flex-row md:justify-content-between md:align-items-center">
+                        <h5 class="m-0">Esfuerzo por Funcionario</h5>
+                    </div>
+                </ng-template>
+
+                <ng-template pTemplate="header">
+                    <tr>
+                        <th style="width: 1%;"></th>
+                        <th pSortableColumn="agente">
+                            <div class="flex items-center gap-2">
+                                Agente de Cuenta
+                                <p-sortIcon field="agente"/>
+                            </div>
+                        </th>
+                        <th>Cantidad UCC</th>
+                        <th>Monto Dólares</th>
+                        <th>Última Venta</th>
+                        <th>Acciones</th>
+                    </tr>
+                </ng-template>
+
+                <ng-template pTemplate="body" let-item let-expanded="expanded" let-rowIndex="rowIndex">
+                    <tr>
+                        <td>
+                            <p-button [pRowToggler]="item" type="button" pRipple [text]="true" severity="secondary"
+                            [rounded]="true" [icon]="expanded ? 'pi pi-chevron-down' : 'pi pi-chevron-right'" />
+                        </td>
+                        <td>
+                            {{item.agente}}
+                        </td>
+                        <td>
+                            {{item.cantidad | number }} tons CO2
+                        </td>
+                        <td>
+                            {{item.monto | currency : '$' }}
+                        </td>
+                        <td>
+                            {{item.ultimaVenta | date : 'dd-MM-yyyy HH:mm'}}
+                        </td>
+                        <td>
+                            <div class="p-2" style="margin-top: auto;">
+                                <p-button tooltipPosition="top" pTooltip="Exportar PDF" icon="pi pi-file-pdf" [style]="{'border-radius':'50%'}"
+                                    [text]="true" [raised]="true" [disabled]="_desHabilitarExportarPDF" (click)="exportarPDF(item.idFuncionario)" />
+                            </div>
+                        </td>
+                    </tr>
+                </ng-template>
+
+                <ng-template pTemplate="rowexpansion" let-item>
+                    <tr>
+                        <td colspan="5">
+                            <div class="p-1">
+                                <h6 class="m-1" style="font-style: italic;">Esfuerzo de: {{item.agente}}</h6>
+                                <p-table [value]="_listadoDesglose" [paginator]="true" [rows]="10">
+                                    <ng-template pTemplate="header">
+                                        <tr>
+                                            <th style="width: 2rem">#</th>
+                                            <th>Número Certificado</th>
+                                            <th>Cliente</th>
+                                            <th>Fecha</th>
+                                            <th>Cantidad UCC</th>
+                                            <th>Monto</th>
+                                        </tr>
+                                    </ng-template>
+                                    <ng-template pTemplate="body" let-desglose let-rowIndex="rowIndex">
+                                        <tr>
+                                            <td>{{ rowIndex + 1 }}</td>
+                                            <td>{{ desglose.certificado }}</td>
+                                            <td>{{ desglose.cliente }}</td>
+                                            <td>{{ desglose.fecha }}</td>
+                                            <td>{{ desglose.cantidad | number }} tons CO2</td>
+                                            <td>{{ desglose.monto | currency : '$'}}</td>
+                                        </tr>
+                                    </ng-template>
+                                </p-table>
+                            </div>
+                        </td>
+                    </tr>
+                </ng-template>
+
+                <ng-template pTemplate="footer">
+                    <tr>
+                        <td colspan="2" class="text-right font-bold p-3 pb-0">Total:</td>
+                        <td class="font-bold p-3 pb-0">{{ _totalCantidad | number }} tons CO2</td>
+                        <td class="font-bold p-3 pb-0">{{ _totalMonto | currency: '$' }}</td>
+                    </tr>
+                </ng-template>
+
+            </p-table>
+
+        </div>
+    </div>
+</div>

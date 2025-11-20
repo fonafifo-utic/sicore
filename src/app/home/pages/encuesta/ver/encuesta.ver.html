@@ -1,0 +1,55 @@
+<div class="grid">
+    <div class="col-12">
+        <div class="card px-6 py-6">
+
+            <div *ngFor="let pregunta of _preguntas; index as i">
+                
+                <div class="card mb-3" *ngIf="evaluaTipoRating(pregunta)">
+                    <div class="grid">
+                        <div class="col-12 md:col-12">
+                            <h5>{{i + 1}}. {{evaluaPreguntaRating(pregunta)}}</h5>
+                            <p-rating [cancel]="false" [stars]="evaluaCantidadEstrellas(pregunta)" (onRate)="calificacion($event, pregunta)"></p-rating>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card mb-3" *ngIf="evaluaTipoSeleccion(pregunta)">
+                    <h5>{{i + 1}}. {{evaluaPreguntaSeleccion(pregunta)}}</h5>
+                    <div class="grid formgrid">
+                        <div class="col-6 md:col-4 my-1" *ngFor="let respuesta of evaluaRespuestas(pregunta)">
+                            <div class="flex align-items-center">
+                                <p-radioButton [(ngModel)]="radioBox" value="{{respuesta}}" (onClick)="seleccion($event, pregunta)"/>
+                                <label for="{{respuesta}}" class="ml-2">
+                                    {{respuesta}}
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card mb-3" *ngIf="evaluaTipoAbierta(pregunta)">     
+                    <h5>{{i + 1}}. {{evaluaPreguntaAbierta(pregunta)}}</h5>
+                    <div class="grid formgrid">
+                        <div class="col-12 md:col-12">
+                            <div class="field-checkbox">
+                                <textarea id="{{pregunta}}" placeholder="Escriba su respuesta." rows="5" cols="150" pInputTextarea></textarea>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+            <div class="p-fluid p-formgrid grid ml-1">
+                <!-- <div class="col-2 md:col-2 field flex justify-content-end gap-2">
+                  <button pButton pRipple class="boton p-button-success mr-2" label="Enviar" icon="pi pi-save" (click)="guardarEncuesta()"></button>
+                </div> -->
+                <div class="col-2 md:col-2 field flex justify-content-end gap-2">
+                    <button pButton pRipple class="boton-cancelar p-button-danger mr-2" label="Cancelar" icon="pi pi-times"(click)="salir()"></button>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+</div>

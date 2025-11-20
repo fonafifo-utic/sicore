@@ -1,0 +1,63 @@
+<div class="grid">
+	<div class="col-12">
+		<div class="card">
+			<h5>Registro de Inventario</h5>
+
+			<form [formGroup]="formInventario" (ngSubmit)="OnSubmit()">
+				<div class="p-fluid p-formgrid grid">
+
+					<div class="field col-6 md:col-6">
+						<label for="ubicacionProyecto">Proyecto: (*)</label>
+						<p-dropdown styleClass="mb-3" formControlName="ubicacionProyecto" optionLabel="proyecto" [options]="(_ubicaciones$ | async)!"
+							optionValue="idProyecto" placeholder="Seleccione la Ubicación del Proyecto" (onChange)="eligeProyecto($event)"></p-dropdown>
+						<span class="datorequerido" *ngIf="campoEsValido('ubicacionProyecto')">
+							Campo requerido.
+						</span>
+					</div>
+
+				</div>
+
+				<div class="p-fluid p-formgrid grid">
+					<div class="field col-12 md:col-6">
+						<label for="cantidad">Cantidad: (*)</label>
+						<input (keypress)="validaCaracteresEspeciales($event)" pInputText id="cantidad" type="text" formControlName="cantidad" placeholder="Cantidad"
+							[ngClass]="{'ng-invalid ng-dirty': campoEsValido('cantidad')}" class="mb-3" (focus)="entraCampoCantidad()"
+							maxlength = "9" oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);"/>
+						<span class="datorequerido" *ngIf="campoEsValido('cantidad')">
+							Campo requerido.
+						</span>
+						<span class="datorequerido" *ngIf="_maximoPermitido">
+							Máximo permitido: 250 000 ton CO2e.
+						</span>
+						<span class="datorequerido" *ngIf="_validarMayorCero">
+							El valor debe ser mayor uno.
+						</span>
+						<span class="datorequerido" *ngIf="_esUnicamenteNumero">
+							El valor deber ser numérico.
+						</span>
+					</div>
+
+					<div class="field col-12 md:col-6">
+						<label for="descripcion">Comentario: (*)</label>
+						<input pInputText id="descripcion" type="text" formControlName="descripcion" placeholder="Descripción del Movimiento"
+							[ngClass]="{'ng-invalid ng-dirty': campoEsValido('descripcion')}" class="mb-3" (focus)="entraCampoComentario()"/>
+						<span class="datorequerido" *ngIf="campoEsValido('descripcion')">
+							Campo requerido.
+						</span>
+						<span class="datorequerido" *ngIf="_maximoYMinimo">
+							Debe tener al menos 3 caracteres y máximo 100.
+						</span>
+
+						
+					</div>
+	
+					<div class="col-6 md:col-3 field flex justify-content-end gap-2">
+						<button pButton pRipple class="boton p-button-success mr-2" label="Aplicar" icon="pi pi-save" [loading]="_guardando"></button>
+						<button pButton pRipple class="boton-cancelar p-button-danger mr-2" label="Cancelar" icon="pi pi-times" (click)="salir()"></button>
+					</div>
+				</div>
+
+			</form>
+		</div>
+	</div>
+</div>

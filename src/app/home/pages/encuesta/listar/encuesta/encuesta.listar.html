@@ -1,0 +1,42 @@
+<div class="grid">
+    <div class="col-12">
+        <div class="card px-6 py-6">
+
+            <p-toolbar styleClass="mb-4">
+                <ng-template pTemplate="left">
+                    <div class="my-2">
+                        <button pButton pRipple label="VER ENCUESTA" icon="pi pi-search" class="boton-redondo p-button-success mr-2" (click)="irToEncuesta()"></button>
+                    </div>
+                    <div class="my-2">
+                        <button pButton pRipple label="PREGUNTAS" icon="pi pi-question" class="boton-redondo p-button-success mr-2" (click)="irToPreguntas()"></button>
+                    </div>
+                </ng-template>
+            </p-toolbar>
+
+            <div class="col-12 xl:col-12">
+                <div class="card">
+                    <h5>Encuesta</h5>
+                    <p-pickList [source]="_listadoPreguntas" [target]="_listadoEncuesta"
+                        sourceHeader="Listado de Preguntas" targetHeader="Posible Encuesta"
+                        [dragdrop]="true" [responsive]="true"
+                        [sourceStyle]="{ height: '30rem' }" [targetStyle]="{ height: '30rem' }" 
+                        breakpoint="1400px">
+                        
+                        <ng-template let-pregunta pTemplate="item">
+                            <div>{{pregunta.pregunta}}</div>
+                        </ng-template>
+        
+                    </p-pickList>
+                </div>
+            </div>
+
+            <div class="p-fluid p-formgrid grid ml-1">
+                <div class="col-2 md:col-2 field flex justify-content-end gap-2">
+                  <button pButton pRipple class="boton p-button-success mr-2" label="Guardar" icon="pi pi-save" (click)="guardarEncuesta()"></button>
+                </div>
+              </div>
+        </div>
+    </div>
+</div>
+    
+        

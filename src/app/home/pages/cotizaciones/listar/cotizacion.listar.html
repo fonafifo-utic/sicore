@@ -1,0 +1,169 @@
+<div class="grid">
+    <div class="col-12">
+        <div class="card px-6 py-6">
+
+            <p-toolbar styleClass="mb-4" *ngIf="!_esAsistenteDDC">
+                <ng-template pTemplate="left">
+                    <div class="my-2">
+                        <button pButton pRipple label="REGISTRAR" icon="pi pi-save" class="boton p-button-success mr-2" (click)="agregarCotizacion()"></button>
+                        <button pButton pRipple label="AGRUPAR" icon="pi pi-list-check" class="boton p-button-success mr-2" (click)="agruparCotizaciones()"></button>
+                    </div>
+                </ng-template>
+            </p-toolbar>
+
+
+            <ng-container *ngIf="_cotizaciones$ | async as cotizacion">
+
+                <p-table [value]="cotizacion" [columns]="columnas"
+                    #dt [columns]="columnas" responsiveLayout="scroll" [rows]="10" [globalFilterFields]="['consecutivo','nombreCliente','fechaHora', 'sectorComercial']"
+                    [paginator]="true" currentPageReportTemplate="Mostrando de {first} a {last} de {totalRecords} entradas" [rowHover]="true">
+                    
+                    <ng-template pTemplate="caption">
+                        <div class="flex flex-column md:flex-row md:justify-content-between md:align-items-center">
+                            <h5 class="m-0">Listado de Cotizaciones</h5>
+                            <span class="block mt-2 md:mt-0 p-input-icon-left">
+                                <i class="pi pi-search"></i>
+                                <input pInputText type="text" placeholder="Buscar..."  class="w-full sm:w-auto" (input)="filtroGlobal(dt,$event)"/>
+                            </span>
+                        </div>
+                    </ng-template>
+        
+                    <ng-template pTemplate="header">
+                        <tr>
+                            <th pSortableColumn="consecutivo">Cotización<p-sortIcon field="consecutivo"></p-sortIcon></th>
+                            <th pSortableColumn="nombreCliente">Cliente<p-sortIcon field="nombreCliente"></p-sortIcon></th>
+                            <th pSortableColumn="fechaHora">Fecha<p-sortIcon field="fechaHora"></p-sortIcon></th>
+                            <th pSortableColumn="proyecto">Proyecto<p-sortIcon field="proyecto"></p-sortIcon></th>
+                            <th>Cantidad</th>
+                            <th>Monto Dólares</th>
+                            <!-- <th>Funcionario</th> -->
+                            <th>Agente Cuenta</th>
+                            <th pSortableColumn="indicadorEstado">Estado<p-sortIcon field="indicadorEstado"></p-sortIcon></th>
+                            <th>Acciones</th>
+                        </tr>
+                    </ng-template>
+
+                    <ng-template pTemplate="body" let-item>
+                        <!-- [ngClass]="determinaAlarma(item.cantidadDiasEnviado)" -->
+                        <tr>
+                            <td style="width:14%; min-width:10rem;">
+                                <span class="p-column-title">Cotización</span>
+                                DDC-CO-{{colocaCerosAlNumeroEntero(item.consecutivo)}}-{{_anno}}
+                            </td>
+                            <td style="width:14%; min-width:10rem;">
+                                <span class="p-column-title">Cliente</span>
+                                {{item.nombreCliente}}
+                            </td>
+                            <td style="width:14%; min-width:10rem;">
+                                <span class="p-column-title">Fecha</span>
+                                {{item.fechaHora | date : 'dd/MM/yyyy HH:mm'}}
+                            </td>
+                            <td style="width:14%; min-width:10rem;">
+                                <span class="p-column-title">Proyecto</span>
+                                {{item.proyecto}}
+                            </td>
+                            <td style="width:14%; min-width:10rem;">
+                                <span class="p-column-title">Cantidad</span>
+                                {{item.cantidad | number}} ton CO2e
+                            </td>
+                            <td style="width:14%; min-width:10rem;">
+                                <span class="p-column-title">Monto Dólares</span>
+                                {{item.montoTotalDolares | currency}}
+                            </td>
+                            <!-- <td style="width:14%; min-width:10rem;">
+                                <span class="p-column-title">Funcionario</span>
+                                {{item.nombreCorto}}
+                            </td> -->
+                            <td style="width:14%; min-width:10rem;">
+                                <span class="p-column-title">Agente</span>
+                                {{item.agenteCuenta}}
+                            </td>
+                            <td style="width:15%; min-width:13rem;">
+                                <span class="p-column-title">Estado</span>
+                                <p-tag [value]="item.indicadorEstado" [style]="determinaColorDeEstado(item.indicadorEstado)" />
+                            </td>
+                            <td>
+                                <div class="flex">
+                                    <button (click)="irAVerCotizacion(item.idCotizacion)" pButton pRipple icon="pi pi-search" pTooltip="Ver" tooltipPosition="top" class="boton-redondo p-button-rounded p-button-success mr-2"></button>
+                                    <button *ngIf="esParaVerEditar(item)" (click)="irAEditarCotizacion(item.idCotizacion)" pButton pRipple icon="pi pi-pencil" pTooltip="Editar" tooltipPosition="top" class="boton-editar boton-redondo p-button-rounded p-button-success mr-2"></button>
+                                    <button *ngIf="esParaAnular(item)" (click)="anularCotizacion(item.idCotizacion, item.consecutivo)" pButton pRipple icon="pi pi-ban" pTooltip="Anular" tooltipPosition="top" class="boton-redondo p-button-rounded p-button-danger mr-2"></button>
+                                    <button *ngIf="esParaFormalizar(item)" (click)="mostrarFormalizacion(item)" pButton pRipple icon="pi pi-dollar" pTooltip="Formalizar" tooltipPosition="top" class="boton-redondo p-button-rounded fondo-boton-azul mr-2"></button>
+                                    <!--<button *ngIf="esCreditoDebito(item.indicadorEstado)" (click)="mostrarFormalizacionPendiente(item)" pButton pRipple icon="pi pi-clock" pTooltip="Aplicar Crédito" tooltipPosition="top" class="boton-redondo p-button-rounded fondo-boton-pendiente mr-2"></button> -->
+                                </div>
+                            </td>
+                        </tr>
+                    </ng-template>
+
+                </p-table>
+            </ng-container>
+
+        </div>
+    </div>
+</div>
+
+<p-dialog header="Formalizar Venta" [modal]="true" [(visible)]="_mostrarFormalizacion" [style]="{ width: '50rem' }">
+    <span class="p-text-secondary block mb-5">Cotización Número: {{_consecutivo}}</span>
+
+    <div class="flex align-items-center gap-3 mb-3">
+        <label for="comprobantePago" class="font-semibold w-12rem">¿Es a Crédito?</label>
+        <p-toggleButton [(ngModel)]="_credito" onLabel="Sí" offLabel="No" (onChange)="formalizacionCredito($event)"/>
+    </div>
+
+    <div class="flex align-items-center gap-3 mb-3">
+        <label for="codigoCIUU" class="font-semibold w-12rem">Código CIUU</label>
+        <input pInputText id="codigoCIUU" type="text" class="flex-auto" autocomplete="off" disabled="true" [value]="_uciii"/>
+    </div>
+
+    <div class="flex align-items-center gap-3">
+        <label for="fechaFormalizacion" class="font-semibold w-12rem">Fecha Formalización</label>
+        <input pInputText id="fechaFormalizacion" type="date" class="flex-auto" autocomplete="off"
+        (focus)="entraFecha()" (blur)="saleFecha()"/>
+    </div>
+    <small *ngIf="_fechaValidaRequerida" style="color: red;" >La fecha debe ser válida.</small>
+    <small *ngIf="_fechaInvalidaCotizacion" style="color: red;" >La fecha debe ser mayor o igual a la de Cotización: {{_fechaCotizacionHecha | date: 'dd/MM/yyyy'}}</small>
+    <small *ngIf="_fechaInvalidaExpiracion" style="color: red;" >La fecha debe ser menor o igual a la de Expiración: {{_fechaExpiracion | date: 'dd/MM/yyyy'}}.</small>
+    
+    <div class="flex align-items-center gap-3 mt-3 mb-5">
+        <label for="montoDolares" class="font-semibold w-12rem">Monto Dólares</label>
+        <input pInputText id="montoDolares" class="flex-auto" autocomplete="off" disabled="true"/>
+    </div>
+
+    <div class="flex justify-content-end gap-2">
+        <button pButton pRipple class="boton p-button-success mr-2" label="Aplicar" icon="pi pi-save" (click)="formalizarVenta()" [loading]="_guardando" [disabled]="_desHabilitarAplicar"></button>
+		<button pButton pRipple class="boton-cancelar p-button-danger mr-2" label="Cancelar" icon="pi pi-times" (click)="cancelarFormalizacion()"></button>
+    </div>
+</p-dialog>
+
+<p-dialog header="Pendiente" [modal]="true" [(visible)]="_mostrarPendiente" [style]="{ width: '50rem' }">
+    <span class="p-text-secondary block mb-5">Cotización Número: {{_consecutivo}}</span>
+
+    <div class="flex align-items-center gap-3 mb-3">
+        <label for="comprobantePago" class="font-semibold w-12rem">¿Es a Crédito?</label>
+        <p-toggleButton disabled="true" [(ngModel)]="_credito" onLabel="Sí" offLabel="No"/>
+    </div>
+
+    <!-- <div class="flex align-items-center gap-3 mb-3">
+        <label for="comprobantePago" class="font-semibold w-12rem">Número de Comprobante</label>
+        <input pInputText id="comprobantePago" type="text" class="flex-auto" autocomplete="off"
+            (focus)="entraComprobante()" [disabled]="_esCreditoDebito" (blur)="validaComprobanteCredito()"
+            maxlength = "9" oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);"/>
+        <small *ngIf="_esRequeridoComprobante" style="color: red;">El comprobante es requerido.</small>
+        <small *ngIf="_yaExisteComprobante" style="color: red;">Este comprobante ya existe.</small>
+        <small *ngIf="_esFormatoIncorrecto" style="color: red;">Formato o longitud incorrecta.</small>
+    </div> -->
+
+    <div class="flex align-items-center gap-3">
+        <label for="fechaFormalizacion" class="font-semibold w-12rem">Fecha Formalización</label>
+        <input pInputText id="fechaFormalizacion" type="date" class="flex-auto" autocomplete="off" disabled = "true"/>
+    </div>
+    
+    <div class="flex align-items-center gap-3 mt-3 mb-5">
+        <label for="montoDolares" class="font-semibold w-12rem">Monto Dólares</label>
+        <input pInputText id="montoDolares" class="flex-auto" autocomplete="off" disabled="true"/>
+    </div>
+
+    <div class="flex justify-content-end gap-2">
+        <button pButton pRipple class="boton p-button-success mr-2" label="Aplicar" icon="pi pi-save" (click)="formalizarVentaPendiente()" [loading]="_guardando" [disabled]="_desHabilitarAplicar"></button>
+		<button pButton pRipple class="boton-cancelar p-button-danger mr-2" label="Cancelar" icon="pi pi-times" (click)="cancelarFormalizacion()"></button>
+    </div>
+</p-dialog>

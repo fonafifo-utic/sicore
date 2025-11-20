@@ -1,0 +1,61 @@
+<div class="grid">
+	<div class="col-12">
+		<div class="card">
+			<h5>Editar Usuario</h5>
+
+			<form [formGroup]="formUsuario" (ngSubmit)="OnSubmit()">
+				<div class="p-fluid p-formgrid grid">
+
+					<div class="field col-4 md:col-4">
+						<label for="correo">Correo Electrónico de Notificaciones: (*)</label>
+						<input pInputText id="correo" type="email" formControlName="correo" placeholder="nombre.apellido@fonafifo.go.cr"
+							[ngClass]="{'ng-invalid ng-dirty': campoEsValido('correo')}" class="mb-1"/>
+						<span class="datorequerido" *ngIf="campoEsValido('correo')">
+							Campo requerido.
+						</span>
+					</div>
+
+					<div class="field col-4 md:col-4">
+						<label for="telefonoMovil">Teléfono Móvil: (*)</label>
+						<input pInputText id="telefonoMovil" type="text" formControlName="telefonoMovil" placeholder="88996644"
+							[ngClass]="{'ng-invalid ng-dirty': campoEsValido('telefonoMovil')}" class="mb-1"/>
+						<span class="datorequerido" *ngIf="campoEsValido('telefonoMovil')">
+							Campo requerido.
+						</span>
+					</div>
+
+					<div class="field col-4 md:col-4">
+						<label for="idPerfil">Perfil: (*)</label>
+						<p-dropdown formControlName="idPerfil" optionLabel="descripcion" [options]="(_perfiles$ | async)!"
+						optionValue="idPerfil" placeholder="Seleccione un Perfil de Usuario"></p-dropdown>
+					</div>
+
+					<div class="col-6 md:col-6 field flex justify-content-end gap-2" *ngIf="!cambiarPassword">
+						<button pButton pRipple class="boton p-button-success mr-2" label="Actualizar" icon="pi pi-save"></button>
+						<button pButton pRipple class="boton-cancelar p-button-danger mr-2" label="Cancelar" icon="pi pi-times" (click)="salir()"></button>
+					</div>
+				</div>
+			</form>
+
+			<span class="_h5">Cambio de Contraseña</span>
+			<p-inputSwitch class="mb-3" [(ngModel)]="cambiarPassword"></p-inputSwitch>
+			
+			<div *ngIf="cambiarPassword" class="p-fluid p-formgrid grid">
+				<div class="field col-6 md:col-6">
+					<label for="password">Nueva Contraseña:</label>
+					<input pInputText id="password" type="password" placeholder="Nueva Contraseña" class="mb-1" (focus)="quitaClaseAdvertencia()"/>
+				</div>
+
+				<div class="field col-6 md:col-6">
+					<label for="confirma">Confirma Contraseña:</label>
+					<input pInputText id="confirma" type="password" placeholder="Confirma Contraseña" class="mb-1" (focus)="quitaClaseAdvertencia()"/>
+				</div>
+
+				<div class="col-6 md:col-6 field flex justify-content-end gap-2" *ngIf="cambiarPassword">
+					<button pButton pRipple class="boton p-button-success mr-2" label="Actualizar" icon="pi pi-save" (click)="OnSubmit()"></button>
+					<button pButton pRipple class="boton-cancelar p-button-danger mr-2" label="Cancelar" icon="pi pi-times" (click)="salir()"></button>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>

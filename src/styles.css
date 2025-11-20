@@ -1,0 +1,89 @@
+.colortitlewindow {
+    background-color: #000;
+}
+
+.card0 {
+    box-shadow: 0px 4px 8px 0px #757575;
+    border-radius: 0px;
+    margin-top: 0px;
+}
+
+.card2 {
+    margin: 0px 40px
+}
+
+.mat-success {
+    background-color: #c22e33;
+    color: #fff;
+    width: 250px;
+    border-radius: 5px;
+    margin-top: 15px;
+}
+
+.spacer {
+    margin-right: 5px;
+}
+
+.textocolumns {
+    font-size: 14px;
+    font-weight: 600;
+}
+
+.textocontenido {
+    font-size: 14px;
+    font-weight: normal;
+}
+
+.valorescontenidotitulosdetalle {
+    font-size: 16px;
+    background-color: floralwhite;
+    color: #ce3c2c;
+    border: 1px solid #dedbdb;
+    border-radius: 5px;
+    padding: 5px;
+}
+
+.textonotas {
+    font-size: 20px;
+    color: rgb(119, 119, 119);
+}
+
+.scroll {
+    overflow: auto;
+    overflow-x: hidden;
+}
+
+.scroll::-webkit-scrollbar {
+    width: 12px;
+}
+
+.scroll::-webkit-scrollbar-track {
+    -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3);
+    border-radius: 10px;
+}
+
+.scroll::-webkit-scrollbar-thumb {
+    border-radius: 10px;
+    background-color: rgb(8, 156, 8);
+    outline: 1px solid rgb(8, 90, 61);
+    -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3);
+}
+
+.fondo {
+    background: url('assets/b1.jpg');
+    margin: 0px;
+    width: 100%;
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: center center;
+    height: 100vh;
+}
+
+/* body {
+    background: url('assets/b1.jpg');
+    margin: 0px;
+    width: 100%;
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: center center;
+} */

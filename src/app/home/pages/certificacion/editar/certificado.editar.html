@@ -1,0 +1,90 @@
+<div class="grid">
+	<div class="col-12">
+		<div class="card">
+			<h5>Editar Un Certificado</h5>
+			<form>
+				<div class="p-fluid p-formgrid grid">
+					<div class="field col-12 md:col-12">
+						<label for="nombreCliente">Nombre del Certificado: (*)</label>
+						<input (keypress)="validaEspaciosBlancoAlInicio($event)" pInputText id="nombreCertificado"
+							type="text" placeholder="Nombre del Certificado" class="mb-3" (focus)="entraNombre()" />
+						<span class="datorequerido" *ngIf="_nombreRequerido">
+							Campo requerido.
+						</span>
+						<span class="datorequerido" *ngIf="_caracteresMinimosMaximos">
+							El nombre debe tener mínimo 3 caracteres y máximo 100.
+						</span>
+					</div>
+				</div>
+
+				<div class="p-fluid p-formgrid grid">
+					<div class="field col-12 md:col-12">
+						<label for="cedula">Cédula Jurídica: (*)</label>
+						<input (keypress)="validaEspaciosBlancoAlInicio($event)" pInputText id="cedula" type="text"
+							placeholder="Cédula Jurídica" class="mb-3" (focus)="entraCedula()" />
+						<span class="datorequerido" *ngIf="_cedulaRequerida">
+							Campo requerido.
+						</span>
+					</div>
+				</div>
+
+				<div class="p-fluid p-formgrid grid">
+					<div class="field col-12 md:col-12">
+						<label for="numeroTransferencia">Número Transferencia: (*)</label>
+						<input (keypress)="validaEspaciosBlancoAlInicio($event)" pInputText id="numeroTransferencia"
+							type="text" placeholder="Número de Transferencia" class="mb-3"
+							(focus)="entraNumeroTransferencia()" />
+						<span class="datorequerido" *ngIf="_transferenciaRequerida">
+							Campo requerido.
+						</span>
+					</div>
+				</div>
+
+				<div class="p-fluid p-formgrid grid">
+					<div class="field col-12 md:col-12">
+						<label for="observacion">Observaciones:</label>
+						<textarea (blur)="saleObservaciones()" id="observacion" class="form-control" rows="3"></textarea>
+                    </div>
+				</div>
+
+				<div class="p-fluid p-formgrid grid">
+					<div class="field col-3 md:col-3">
+						<div *ngIf="true" class="form-check form-switch mt-2 m-2">
+							<input class="form-check-input" type="checkbox" role="switch" id="ckCotizacionEnIngles" (change)="selecccionaIdioma($event)" />
+							<label class="form-check-label mx-2" for="ckCotizacionEnIngles">en Inglés</label>
+						</div>
+					</div>
+
+					<div class="field col-6 md:col-6">
+						<div *ngIf="true" class="mt-2 m-2">
+							<input type="range" id="tituloSize" min="20" max="60" value="60" step="1" (change)="cambiaTamannoTitulo($event)"/>
+							<label class="form-check-label mx-2" for="tituloSize">Tamaño del Título</label>
+						</div>
+					</div>
+				</div>
+
+				<div class="p-fluid p-formgrid grid">
+					<div class="field col-12 md:col-12">
+						<label for="justificacion">Justificación: (*)</label>
+						<textarea (keypress)="validaEspaciosBlancoAlInicio($event)" pInputText id="justificacion"
+							type="text" placeholder="Justificación del Cambio en el Certificado" class="mb-3"
+							(focus)="entraJustificacion()" rows="3"></textarea>
+						<span class="datorequerido" *ngIf="_justificacionRequerida">
+							Campo requerido.
+						</span>
+					</div>
+				</div>
+
+
+				<div class="p-fluid p-formgrid grid">
+					<div class="field col-6 md:col-3">
+						<div class="flex justify-content-end gap-2 mt-5">
+							<button pButton pRipple class="boton p-button-success mr-2" label="Aplicar"
+								icon="pi pi-save" (click)="aplicarCambiosEditar()"></button>
+						</div>
+					</div>
+				</div>
+			</form>
+		</div>
+	</div>
+</div>

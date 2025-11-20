@@ -1,0 +1,73 @@
+<div class="grid">
+	<div class="col-12">
+		<div class="card">
+			<h5>Devolución de Inventario</h5>
+
+			<form [formGroup]="formInventario" (ngSubmit)="OnSubmit()">
+				<div class="p-fluid p-formgrid grid">
+
+					<div class="field col-6 md:col-6">
+						<label for="ubicacionProyecto">Proyecto: (*)</label>
+						<input pInputText id="proyecto" type="text" class="mb-3" [disabled]="true"/>
+					</div>
+
+				</div>
+
+				<div class="p-fluid p-formgrid grid">
+					<div class="field col-12 md:col-4">
+						<label for="cantidad">Remanente:</label>
+						<input pInputText id="remanente" type="text" class="mb-3" [disabled]="true"/>
+					</div>
+
+					<div class="field col-12 md:col-4">
+						<label for="cantidad">Utilizado:</label>
+						<input pInputText id="comprometido" type="text" class="mb-3" [disabled]="true"/>
+					</div>
+
+					<div class="field col-12 md:col-4">
+						<label for="cantidad">Deducción: (*)</label>
+						<input (keypress)="validaCaracteresEspeciales($event)" pInputText id="cantidad" type="text" formControlName="cantidad" placeholder="Cantidad"
+							[ngClass]="{'ng-invalid ng-dirty': campoEsValido('cantidad')}" class="mb-3" (focus)="entraCampoCantidad()"/>
+						<span class="datorequerido" *ngIf="campoEsValido('cantidad')">
+							Campo requerido.
+						</span>
+						<span class="datorequerido" *ngIf="_maximoPermitido">
+							Máximo permitido.
+						</span>
+						<span class="datorequerido" *ngIf="_esUnicamenteNumero">
+							El valor deber ser numérico.
+						</span>
+						<span class="datorequerido" *ngIf="_cantidadNoPermitida">
+							Cantidad no permitida. El valor deber ser mayor o igual al comprometido.
+						</span>
+					</div>
+	
+				</div>
+
+				<div class="p-fluid p-formgrid grid">
+					<div class="field col-12 md:col-6">
+						<label for="descripcion">Comentario: (*)</label>
+						<input pInputText id="descripcion" type="text" formControlName="descripcion" placeholder="Descripción del Movimiento"
+							[ngClass]="{'ng-invalid ng-dirty': campoEsValido('descripcion')}" class="mb-3" (focus)="entraCampoComentario()"/>
+						<span class="datorequerido" *ngIf="campoEsValido('descripcion')">
+							Campo requerido.
+						</span>
+						<span class="datorequerido" *ngIf="_maximoYMinimo">
+							Debe tener al menos 3 caracteres y máximo 100.
+						</span>	
+					</div>
+	
+				</div>
+
+				<div class="p-fluid p-formgrid grid">
+					<div class="col-6 md:col-3 field flex justify-content-end gap-2">
+						<button pButton pRipple class="boton p-button-success mr-2" label="Aplicar" icon="pi pi-save" [loading]="_guardando"></button>
+						<button pButton pRipple class="boton-cancelar p-button-danger mr-2" label="Cancelar" icon="pi pi-times" (click)="salir()"></button>
+					</div>
+				</div>
+
+			</form>
+			
+		</div>
+	</div>
+</div>

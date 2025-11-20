@@ -1,0 +1,120 @@
+/* background-image: url('http://predesa.fonafifo.com/sicore/assets/img/certificado.png'); */
+/* background-image: url('http://scgi.fonafifo.com/sicore/assets/img/certificado.png'); */
+/* background-image: url('localhost:4200/assets/img/certificado.png'); */
+
+
+/*
+export const environment = {
+  production: false,
+  baseUrl: 'http://localhost:4200'
+};
+
+import { environment } from '../../environments/environment';
+
+export class TuComponente {
+  fondoUrl = `${environment.baseUrl}/assets/img/certificado.png`;
+}
+
+<div class="fondo-certificado" [style.background-image]="'url(' + fondoUrl + ')'">
+  <!-- contenido -->
+</div>
+*/
+
+.fondo-certificado {
+    background-image: url('http://scgi.fonafifo.com/sicore/assets/img/certificado.png');
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: center center;
+}
+
+.fondo-segunda-plana {
+    background-image: url('http://scgi.fonafifo.com/sicore/assets/img/certificado.png');
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: center center;
+}
+
+.fuente-encabezado-gcr {
+    font-size: 2.2rem;
+    font-weight: bold;
+    text-transform: uppercase;
+}
+
+.fuente-encabezado {
+    font-size: 2rem;
+    font-weight: bold;
+    text-transform: uppercase;
+}
+
+.fuente-creditos-carbono {
+    color: #ED7D31;
+    font-size: 2.2rem;
+    font-weight: bold;
+}
+
+.fuente-cliente {
+    color: #ED7D31;
+    font-weight: bold;
+}
+
+.fuente-normal {
+    font-size: 1.3rem;
+    font-weight: bold;
+}
+
+.fuente-normal-1 {
+    font-size: 1.2rem;
+    font-weight: bold;
+}
+
+.fuente-autorizacion {
+    font-size: 1.3rem;
+    text-align: justify;
+    padding-left: 65px;
+    padding-right: 70px;
+}
+
+.fuente-footer {
+    font-size: 1.5rem;
+    font-weight: bold;
+}
+
+.fuente-tabla {
+    padding-left: 65px;
+    width: 1176px;
+    font-size: 1.5rem;
+}
+
+.fuente-pie-pagina {
+    text-align: right;
+    font-size: 15px;
+}
+
+.fuente-clave-unica {
+    text-align: right;
+    font-size: 20px;
+}
+
+.fuente-clave-unica-oculta {
+    text-align: right;
+    font-size: 20px;
+    opacity: 0.5;
+}
+
+.form-check-input:checked {
+    background-color: #4CAF50;
+    border-color: #4CAF50;
+}
+
+.form-check-input {
+    width: 4em;
+    height: 2em;
+}
+
+.form-check-label {
+    font-size: 1.5rem;
+}
+
+.al-pie-pagina {
+    margin-top: 9%;
+}

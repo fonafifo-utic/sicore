@@ -1,0 +1,740 @@
+<div class="grid">
+    <div class="col-12">
+        <div class="card px-6 py-6">
+
+            <p-toolbar styleClass="mb-4">
+                <ng-template pTemplate="left">
+                    <div class="my-2">
+                        <h3>Editar Cotización</h3>
+                        <button pButton pRipple label="ATRÁS" icon="pi pi-times" class="boton p-button-danger mb-5" (click)="irAListar()"></button>
+
+                        <div class="card">
+                            <div class="grid">
+
+                                <div class="col-3">
+                                    <h5>Datos de la Cotización</h5>
+
+                                    <p-fieldset legend="Datos del Cliente" [toggleable]="true" [collapsed]="true"
+                                        class="line-height-3 m-0">
+                                        
+                                        <form [formGroup]="formCliente">
+                                            <div class="p-fluid field col-12 md:col-12">
+                                                <p-dropdown styleClass="mb-3" optionLabel="sectorComercial"
+                                                    (onChange)="seleccionaUnSector($event)"
+                                                    [options]="(_sectores$ | async)!"
+                                                    optionValue="idSectorComercial" formControlName="idSectorComercial"
+                                                    placeholder="Seleccione el Sector Empresarial"></p-dropdown>
+
+                                                <p-multiSelect styleClass="mb-3" 
+                                                    [options]="(_clientes$ | async)!" formControlName="idCliente"
+                                                    optionLabel="nombreCliente" [selectionLimit]="limiteSeleccionEnCliente"
+                                                    placeholder="Seleccione el Cliente" optionValue="idCliente"
+                                                    (onChange)="seleccionaUnCliente($event, 0)"/>
+
+                                                <input [disabled]="_bloqueaNombre" pInputText id="nombreClienteElegido" type="text" (keyup)="entradaDatosClienteCambia($event)"
+                                                    placeholder="Nombre del Cliente" class="mb-3" />
+
+                                                <input [disabled]="_bloqueaNombre" pInputText id="cedulaClienteElegido" type="text" (keyup)="entradaDatosClienteCambia($event)"
+                                                    placeholder="Cédula Cliente" class="mb-3" />
+
+                                                <input [disabled]="_bloqueaNombre" pInputText id="contactoClienteElegido" type="text" (keyup)="entradaDatosClienteCambia($event)"
+                                                    placeholder="Contacto Cliente" class="mb-3" />
+
+                                                <input [disabled]="_bloqueaNombre" pInputText id="emailClienteElegido" type="text" (keyup)="entradaDatosClienteCambia($event)"
+                                                    placeholder="Correo Electrónico" class="mb-3" />
+
+                                                <input [disabled]="_bloqueaNombre" pInputText id="telefonoClienteElegido" type="text" (keyup)="entradaDatosClienteCambia($event)"
+                                                    placeholder="Teléfono Cliente" class="mb-3" />
+
+                                                <input [disabled]="_bloqueaNombre" pInputText id="direccionFisicaElegido" type="text" (keyup)="entradaDatosClienteCambia($event)"
+                                                    placeholder="Dirección Física" class="mb-3" />
+                                                
+                                                <button [disabled]="_habilitarEditarCliente" pButton pRipple label="Editar Cliente" class="boton" (click)="irAEditar()"></button>
+                                            </div>
+                                        </form>
+                                    </p-fieldset>
+                                    
+                                    <p-fieldset legend="Datos del Proyecto" [toggleable]="true" [collapsed]="true"
+                                        class="line-height-3 m-0" >
+                                        <form [formGroup]="formProyecto">
+                                            <div class="p-fluid field col-12 md:col-12">
+                                                <p-dropdown styleClass="mb-3" optionLabel="proyecto"
+                                                    (onChange)="seleccionaUnProyecto($event)"
+                                                    [options]="(_proyectos$ | async)!"
+                                                    optionValue="idProyecto" formControlName="idProyecto"
+                                                    placeholder="Seleccione el Proyecto"></p-dropdown>
+
+                                                <input pInputText id="proyecto" type="text" placeholder="Proyecto" class="mb-3" disabled = "true"/>
+                                                <input pInputText id="ubicacionGeografica" type="text" placeholder="Ubicación" class="mb-3" disabled = "true"/>
+                                            </div>
+                                        </form>
+                                    </p-fieldset>
+
+                                    <p-fieldset legend="Datos de la Cotización" [toggleable]="true" [collapsed]="false"
+                                        class="line-height-3 m-0">
+                                        <form>
+                                            <div class="p-fluid field col-12 md:col-12">
+                                                <p-inputGroup class="w-full">
+                                                    <input pInputText id="cantidad" type="text" (keyup)="seModificaLaCantidad()" (focus)="cantidadEntraEnFoco()"
+                                                        (blur)="cantidadSaleDeFoco()" placeholder="Cantidad" value="{{ _cantidad }}"
+                                                        type="number" maxlength = "9" oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);"/>
+                                                    <p-inputGroupAddon>ton CO2e</p-inputGroupAddon>
+                                                </p-inputGroup>
+                                                <span class="p-2 formato-remanente-proyecto">Remanente del Proyecto: <strong>{{_remanenteDelProyecto | number }}</strong> ton CO2e</span>
+                                                <br><span *ngIf="advertenciaRemanente" class="p-2" style="color: red;">La cantidad no puede ser mayor al remanente del proyecto.</span>
+                                                <span *ngIf="_validaCantidad" class="p-2" style="color: red;">La cantidad debe ser mayor a uno.</span>
+
+                                                <p-divider layout="horizontal"></p-divider>
+
+                                                <p-inputGroup class="w-full mt-3" *ngIf="_habilitaUsoInterno">
+                                                    <input [disabled]="_habilitaPrecio" pInputText id="precioUnitario" type="text" (keyup)="seModificaElPrecio()" (keydown)="validaNumerosYLetras($event)" (focus)="entraEnPrecio()"
+                                                        (blur)="precioSaleDeFoco()" placeholder="Precio Unitario" value="{{ _precioEnDolaresSugerido }}"/>
+                                                    <p-inputGroupAddon>$</p-inputGroupAddon>
+                                                </p-inputGroup>
+                                                <span *ngIf="advertenciaPrecioExcedido" class="p-2" style="color: red;">El precio no puede exceder los $7.50, ni ser menor a $6.00</span>
+
+                                                <div class="form-check form-switch" *ngIf="_habilitaUsoInterno" >
+                                                    <label class="form-check-label" for="ckHabilitaPrecio">Aplicar Descuento</label>
+                                                    <input class="form-check-input" type="checkbox" role="switch" id="ckHabilitaPrecio" (change)="selecccionaDescuento($event)">
+                                                </div>
+
+                                                <div class="form-check form-switch">
+                                                    <label class="form-check-label" for="ckExcepcion">Uso Interno</label>
+                                                    <input class="form-check-input" type="checkbox" role="switch" id="ckExcepcion" (change)="seleccionaExcepcion($event)">
+                                                </div>
+                                                
+                                                <div class="mt-3" *ngIf="!_habilitaPrecio">
+                                                    <p-divider layout="horizontal"></p-divider>
+                                                    
+                                                    <label for="justificacionDescuento">Justificación del Descuento:</label>
+                                                    <textarea rows="5" placeholder="Anotación del Descuento" id="justificacionDescuento" cols="30" pInputTextarea (keyup)="entradaDatosClienteCambia($event)"
+                                                        (focus)="entraAnotaciones()" (blur)="saleJustificacionDescuento()"></textarea>
+                                                        <span *ngIf="_validaAnotacioDescuento" class="p-2" style="color: red;">Debe existir una justificación para el descuento.</span>
+                                                        <span *ngIf="_validaExtensionDescuento" class="p-2" style="color: red;">La justificación debe tener al menos 10 caractéres y máximo 200.</span>
+                                                    
+                                                    <p-divider layout="horizontal"></p-divider>
+                                                </div>
+
+                                                <div class="mt-3" *ngIf="!_habilitaUsoInterno">
+                                                    <p-divider layout="horizontal"></p-divider>
+                                                    
+                                                    <label for="excepcion">Justificación de Uso Interno:</label>
+                                                    <!-- (focus)="entraAnotaciones()" (blur)="saleJustificacionDescuento()" -->
+                                                    <textarea rows="5" placeholder="Justificación" id="excepcion" cols="30" pInputTextarea (keyup)="entradaDatosClienteCambia($event)"></textarea>
+                                                        <span *ngIf="_validaAnotacioJustificacion" class="p-2" style="color: red;">Debe existir una justificación.</span>
+                                                        <span *ngIf="_validaExtensionJustificacion" class="p-2" style="color: red;">La justificación debe tener al menos 10 caractéres y máximo 200.</span>
+                                                    
+                                                    <p-divider layout="horizontal"></p-divider>
+                                                </div>
+
+                                                <p-inputGroup class="w-full mb-3 mt-3">
+                                                    <input pInputText id="valorLinea" type="text"
+                                                    placeholder="Sub-Total" [disabled]="true" value="{{ _resultadoCantidadPorPrecio }}"/>
+                                                    <p-inputGroupAddon>$</p-inputGroupAddon>
+                                                </p-inputGroup>
+
+                                                <p-divider layout="horizontal"></p-divider>
+
+                                                <label>Motivo de Compra:</label>
+                                                <p-dropdown styleClass=""
+                                                    (onChange)="seleccionaJustificacion($event)"
+                                                    [ngModelOptions]="{standalone: true}"
+                                                    [options]="_justificaciones"
+                                                    [(ngModel)]="justificacionModelo"
+                                                    optionLabel="justificacion"
+                                                    optionValue="justificacion"
+                                                    placeholder="Seleccione el Motivo"
+                                                    [disabled]="_deshabilitaMotivoCompra">
+                                                </p-dropdown>
+                                                
+                                                <!-- <div class="form-check form-switch">
+                                                    <label class="form-check-label" for="ckHabilitaJustificacion">Justificar</label>
+                                                    <input class="form-check-input" type="checkbox" role="switch" id="ckHabilitaJustificacion" (change)="habilitaJustificacion($event)">
+                                                </div> -->
+
+                                                <div class="mt-3" *ngIf="_otraJustificacion">
+                                                    <label for="anotaciones">Otro Motivo de Compra:</label>
+                                                    <textarea rows="5" placeholder="Anotación de otro motivo de compra" id="anotaciones" cols="30" pInputTextarea (keyup)="entradaDatosClienteCambia($event)"
+                                                        (focus)="entraJustificacionMotivo()" (blur)="saleJustificacionMotivo()"></textarea>
+                                                    <span *ngIf="_validaAnotaciones" class="p-2" style="color: red;">Debe existir una justificación.</span>
+                                                    <span *ngIf="_validaLogitudAnotaciones" class="p-2" style="color: red;">La justificación debe tener al menos 10 caractéres y máximo 200.</span>
+                                                </div>
+
+                                                <p-divider layout="horizontal"></p-divider>
+
+                                                <label for="fechaVencimiento">Fecha Vencimiento:</label>
+                                                <input pInputText id="fechaVencimiento" type="date"
+                                                    class="w-full" placeholder="Fecha de Vencimiento" (change)="seleccionaUnaFechaVencimiento($event)" value="{{ _fechaAproximadaVencimientoString }}"
+                                                    (focus)="entraFechaVencimiento()" (blur)="saleFechaVencimiento($event)" [disabled]="_desHabilitaFechaVencimiento"/>
+                                                <br>
+                                                <span *ngIf="_advertenciaFechaPasadaActual" class="p-2" style="color: red;">La fecha de vencimiento debe ser futura a la fecha actual.</span>
+                                                <span *ngIf="_fechaValida" class="p-2" style="color: red;">Debe existir una fecha válida.</span>
+                                                <span *ngIf="_fechaValidaSuperior" class="p-2" style="color: red;">La fecha no puede superar los tres meses.</span>
+
+                                                <p-divider layout="horizontal"></p-divider>
+
+                                                <label>Números de Cuenta:</label>
+                                                <div class="form-check mt-3">
+                                                    <input class="form-check-input" type="checkbox" value="F" id="ckConvenio" (change)="seleccionaNumeroCuenta($event)" [disabled]="_desHabilitaNumeroCuenta">
+                                                    <label class="form-check-label" for="ckConvenio">
+                                                        FID-544-17
+                                                    </label>
+                                                </div>
+
+                                                <div class="form-check mt-2">
+                                                    <input class="form-check-input" type="checkbox" value="N" id="ckNacional" (change)="seleccionaNumeroCuenta($event)" [disabled]="_desHabilitaNumeroCuenta">
+                                                    <label class="form-check-label" for="ckNacional">
+                                                        Fonafifo
+                                                    </label>
+                                                </div>
+
+                                                <div class="form-check mt-2">
+                                                    <input class="form-check-input" type="checkbox" value="M" id="ckPSAMujer" (change)="seleccionaNumeroCuenta($event)" [disabled]="_desHabilitaNumeroCuenta">
+                                                    <label class="form-check-label" for="ckPSAMujer">
+                                                        FID-544-13
+                                                    </label>
+                                                </div>
+
+                                                <p-divider layout="horizontal"></p-divider>
+                                                
+                                                <label>Idioma:</label>
+                                                <div class="form-check form-switch">
+                                                    <input class="form-check-input" type="checkbox" role="switch" id="ckCotizacionEnIngles" (change)="selecccionaIdioma($event)" [disabled]="_desHabilitaIdioma">
+                                                    <label class="form-check-label" for="ckCotizacionEnIngles">Cotización en Inglés</label>
+                                                </div>
+                                                
+                                                <p-divider layout="horizontal"></p-divider>
+
+                                                <label>Tipo de Compra:</label>
+                                                <p-dropdown styleClass="mb-3"
+                                                    [disabled]="_desHabilitaTipoCompra"
+                                                    (onChange)="seleccionaTipoCompra($event)"
+                                                    [ngModelOptions]="{standalone: true}"
+                                                    [options]="_tiposCompra"
+                                                    [(ngModel)]="tipoCompraModelo"
+                                                    optionLabel="tipoCompra"
+                                                    optionValue="tipoCompra"
+                                                    placeholder="Seleccione el Tipo de Compra"></p-dropdown>
+                                            </div>
+                                        </form>
+                                    </p-fieldset>
+<!--
+                                    <p-fieldset legend="Datos del Funcionario" [toggleable]="true" [collapsed]="false"
+                                        class="line-height-3 m-0">
+                                        <form>
+                                            <div class="p-fluid field col-12 md:col-12">
+                                                <input pInputText id="nombreFuncionario" type="text" (keyup)="entradaDatosFuncionarioCambia($event)"
+                                                    placeholder="Funcionario" class="mb-3" />
+
+                                                <input pInputText id="emailFuncionario" type="email" (keyup)="entradaDatosFuncionarioCambia($event)"
+                                                    placeholder="Correo Electrónico" class="mb-3" />
+
+                                                <input pInputText id="telefonoFuncionario" type="text" (keyup)="entradaDatosFuncionarioCambia($event)"
+                                                    placeholder="Teléfono Funcionario" class="mb-3" />
+                                            </div>
+                                        </form>
+                                    </p-fieldset>
+-->
+                                </div>
+
+                                <div class="col-1">
+                                    <p-divider layout="vertical"></p-divider>
+                                </div>
+
+                                <div class="col-8" *ngIf="!_cambioDeIdioma">
+                                    <div class="border-round m-3 text-center p-2">
+                                        <img src="assets/img/fonafifo-logo-trans.png" alt=""
+                                            class="mr-5" width="30%" />
+                                    </div>
+
+                                    <div class="text-center">
+                                        <h4 class="line-height-3 m-0">{{_encFonafifo}}</h4>
+                                        <h5 class="line-height-3 m-0">{{_encDir_1}}</h5>
+                                        <h5 class="line-height-3 m-0">{{_encDir_2}}</h5>
+
+                                        <p-divider layout="horizontal" align="left">
+                                            <span class="p-tag">1. Consecutivo y Validez:</span>
+                                        </p-divider>
+
+                                        <h6 class="line-height-3 m-0 mt-1">{{_tituloCotizacion}}</h6>
+                                        <h6 class="line-height-3 m-0">{{_consecutivo}}</h6>
+                                        <h6 class="line-height-3 m-0">
+                                            {{_fechaExpiracion}}<strong>{{_fechaAproximadaVencimiento | date :
+                                                'fullDate'}}</strong></h6>
+                                    </div>
+
+                                    <p-divider layout="horizontal" align="left">
+                                        <span class="p-tag">2. Fecha actual:</span>
+                                    </p-divider>
+
+                                    <p class="line-height-3 mt-1">{{_textoFechaInicio}}:
+                                        <strong>{{_fechaActual | date : 'fullDate'}}</strong></p>
+
+                                    <p-divider layout="horizontal" align="left">
+                                        <span class="p-tag">3. Cliente:</span>
+                                    </p-divider>
+
+                                    <div class="line-height-3 m-0 mt-1">
+                                        <div class="row mt-1">
+                                            <div class="col-md-6">
+                                                <p><strong>Cliente:</strong> {{_nombreClienteElegido}}</p>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <p><strong>Cédula:</strong> {{_cedulaClienteElegido}}</p>
+                                            </div>
+                                        </div>
+
+                                        <div class="row mt-5">
+                                            <div class="col-md-6">
+                                                <p><strong>Contacto:</strong> {{_contactoClienteElegido}}</p>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <p><strong>Email:</strong> {{_emailClienteElegido}}</p>
+                                            </div>
+                                        </div>
+
+                                        <div class="row mt-5 mb-5">
+                                            <div class="col-md-6">
+                                                <p><strong>Dirección:</strong> {{_direccionClienteElegido}}</p>
+                                            </div>
+
+                                            <div class="col-md-6">
+                                                <p><strong>Teléfono:</strong> {{_telefonoClienteElegido}}</p>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <p-divider layout="horizontal" align="left">
+                                        <span class="p-tag">4. Cotización:</span>
+                                    </p-divider>
+
+                                    <div class="line-height-3 m-0">
+                                        <table class="table">
+                                            <thead>
+                                                <th scope="col">Cantidad</th>
+                                                <th scope="col">Descripción</th>
+                                                <th scope="col">Precio Unitario</th>
+                                                <th scope="col">Sub-Total</th>
+                                            </thead>
+                                            <tbody>
+                                                <tr>
+                                                    <td style="width:10%; min-width:5rem;">{{_cantidad}} ton CO2e</td>
+                                                    <td style="width:40%; min-width:10rem; text-align: justify;">{{_descripcion}}</td>
+                                                    <td style="width:10%; min-width:5rem;">$ {{_precioEnDolaresSugerido}}</td>
+                                                    <td style="width:10%; min-width:5rem;">$ {{_resultadoCantidadPorPrecio}}</td>
+                                                </tr>
+                                            </tbody>
+                                            <tfoot>
+                                                <tr>
+                                                    <td style="width:10%; min-width:5rem;"></td>
+                                                    <td colspan="2" style="width:10%; min-width:5rem;"><strong>TOTAL (Fonafifo está exonerado de IVA)</strong></td>
+                                                    <td style="width:10%; min-width:5rem;"><strong>$ {{_resultadoCantidadPorPrecio}}</strong></td>
+                                                </tr>
+                                                <tr>
+                                                    <td style="width:10%; min-width:5rem;"></td>
+                                                    <td colspan="3" style="width:10%; min-width:5rem;"><strong>En letras: </strong>{{_montoEnLetras}}</td>
+                                                </tr>
+                                                <tr>
+                                                    <td style="width:10%; min-width:5rem;"></td>
+                                                    <td colspan="3" style="width:10%; min-width:5rem;">
+                                                        <p><strong>Proyecto:</strong> {{_nombreProyectoElegido}}</p>
+                                                    </td>
+                                                </tr>
+                                                <tr *ngIf="!_habilitaPrecio">
+                                                    <td style="width:10%; min-width:5rem;"></td>
+                                                    <td colspan="3" style="width:10%; min-width:5rem;">
+                                                        <p><strong>Descuento por:</strong> {{_justificacionClientePorDescuesto}}</p>
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <td style="width:10%; min-width:5rem;"></td>
+                                                    <td colspan="3" style="width:10%; min-width:5rem;">
+                                                        <p><strong>Justificación:</strong> {{_anotacionesClienteElegido}}</p>
+                                                    </td>
+                                                </tr>
+                                            </tfoot>
+                                        </table>
+                                    </div>
+
+                                    <p-divider layout="horizontal" align="left">
+                                        <span class="p-tag">5. Cuentas:</span>
+                                    </p-divider>
+
+                                    <div *ngIf="!_desHabilitaNumeroCuenta" class="line-height-3 m-0">
+                                        <table class="table table-striped">
+                                            <thead *ngIf="!cuentaBancariaConvenio && !cuentaBancariaPSAMujer">
+                                                <th colspan="3">
+                                                    <p>
+                                                        Favor realizar depósito a la - Cuenta de Fonafifo del Banco Nacional de Costa Rica -
+                                                    </p>
+                                                </th>
+                                            </thead>
+
+                                            <thead *ngIf="cuentaBancariaConvenio && !cuentaBancariaPSAMujer">
+                                                <th colspan="3">
+                                                    <p>
+                                                        Favor realizar depósito a la - Fideicomiso 544-17 -
+                                                    </p>
+                                                </th>
+                                            </thead>
+
+                                            <thead *ngIf="cuentaBancariaPSAMujer && !cuentaBancariaConvenio">
+                                                <th colspan="3">
+                                                    <p>
+                                                        Fideicomiso 544-13, creado dentro del FID-544-13, del BNCR, Cédula Jurídica: 3-110-688505
+                                                    </p>
+                                                </th>
+                                            </thead>
+                                            
+                                            <thead>
+                                                <th scope="col">Cuenta Corriente</th>
+                                                <th scope="col">Cuenta Cliente</th>
+                                                <th scope="col">Cuenta IBAN</th>
+                                                <th scope="col">Moneda</th>
+                                            </thead>
+                                            <tbody>
+                                                <tr *ngIf="!cuentaBancariaConvenio && !cuentaBancariaPSAMujer">
+                                                    <td style="width:15%; min-width:5rem;">100-02-000-619177-9</td>
+                                                    <td style="width:15%; min-width:5rem;">15100010026191775</td>
+                                                    <td style="width:15%; min-width:5rem;">CR69015100010026191775</td>
+                                                    <td style="width:15%; min-width:5rem;">Dólares</td>
+                                                </tr>
+                                                <tr *ngIf="!cuentaBancariaConvenio && !cuentaBancariaPSAMujer">
+                                                    <td style="width:15%; min-width:5rem;">100-01-000-216436-6</td>
+                                                    <td style="width:15%; min-width:5rem;">15100010012164361</td>
+                                                    <td style="width:15%; min-width:5rem;">CR61015100010012164361</td>
+                                                    <td style="width:15%; min-width:5rem;">Colones</td>
+                                                </tr>
+                                                <tr *ngIf="cuentaBancariaConvenio && !cuentaBancariaPSAMujer">
+                                                    <td style="width:15%; min-width:5rem;">100-02-000-623170-3</td>
+                                                    <td style="width:15%; min-width:5rem;">15100010026231701</td>
+                                                    <td style="width:15%; min-width:5rem;">CR28015100010026231701</td>
+                                                    <td style="width:15%; min-width:5rem;">Dólares</td>
+                                                </tr>
+                                                <tr *ngIf="cuentaBancariaConvenio && !cuentaBancariaPSAMujer">
+                                                    <td style="width:15%; min-width:5rem;">100-01-000-222331-0</td>
+                                                    <td style="width:15%; min-width:5rem;">15100010012223313</td>
+                                                    <td style="width:15%; min-width:5rem;">CR30015100010012223313</td>
+                                                    <td style="width:15%; min-width:5rem;">Colones</td>
+                                                </tr>
+                                                <tr *ngIf="cuentaBancariaPSAMujer && !cuentaBancariaConvenio">
+                                                    <td style="width:15%; min-width:5rem;">100-02-000-617813-1</td>
+                                                    <td style="width:15%; min-width:5rem;">15100010026178131</td>
+                                                    <td style="width:15%; min-width:5rem;">CR51015100010026178131</td>
+                                                    <td style="width:15%; min-width:5rem;">Dólares</td>
+                                                </tr>
+                                                <tr *ngIf="cuentaBancariaPSAMujer && !cuentaBancariaConvenio">
+                                                    <td style="width:15%; min-width:5rem;">100-01-000-215849-1</td>
+                                                    <td style="width:15%; min-width:5rem;">15100010012158490</td>
+                                                    <td style="width:15%; min-width:5rem;">CR80015100010012158490</td>
+                                                    <td style="width:15%; min-width:5rem;">Colones</td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+
+                                    <p-divider layout="horizontal" align="left">
+                                        <span class="p-tag">6. Funcionario:</span>
+                                    </p-divider>
+
+                                    <div class="line-height-3 m-0 mt-1">
+                                        <div class="row mt-1">
+                                            <div class="col-md-12">
+                                                <p><strong>Funcionario:</strong> {{_nombreFuncionario}}</p>
+                                            </div>
+                                        </div>
+                                        <div class="row mt-3">
+                                            <div class="col-md-6">
+                                                <p><strong>Correo Electrónico:</strong> {{_emailFuncionario}}</p>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <p><strong>Teléfono:</strong> {{_telefonoFuncionario}}</p>
+                                            </div>
+                                        </div>
+                                        <div class="row mt-3 text-center">
+                                            <div class="col-md-12">
+                                                <p><strong>{{_departamento}}</strong></p>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <p-divider layout="horizontal" align="left">
+                                        <span class="p-tag">7. PSA:</span>
+                                    </p-divider>
+
+                                    <p class="line-height-3 m-0" style="text-align: justify;">
+                                        {{_textoDescriptivoFinalEraParte}}
+                                    </p>
+
+                                    <p class="line-height-3 m-0 mt-3" style="text-align: center; font-style: italic;">
+                                        {{_textoDescriptivoFinalDaParte}}
+                                    </p>
+
+                                    <p-divider align="right">
+                                        <p-button label="Guardar" icon="pi pi-save" (onClick)="guardarCotizacion()" [loading]="_salvando"
+                                            styleClass="p-button-outlined m-2" [disabled]="_desHabilitarBotonGuardar"></p-button>
+                                        <p-button label="Observaciones" icon="pi pi-align-left" (onClick)="verDialogoObservaciones()"
+                                            styleClass="p-button-outlined m-2"></p-button>
+                                    </p-divider>
+                                </div>
+
+                                <div class="col-8" *ngIf="_cambioDeIdioma">
+                                    <div class="border-round m-3 text-center p-2">
+                                        <img src="assets/img/fonafifo-logo-trans.png" alt=""
+                                            class="mr-5" width="30%" />
+                                    </div>
+
+                                    <div class="text-center">
+                                        <h4 class="line-height-3 m-0">{{_encFonafifo}}</h4>
+                                        <h5 class="line-height-3 m-0">{{_encDir_1}}</h5>
+                                        <h5 class="line-height-3 m-0">{{_encDir_2}}</h5>
+
+                                        <p-divider layout="horizontal" align="left">
+                                            <span class="p-tag">1. Consecutivo y Validez:</span>
+                                        </p-divider>
+
+                                        <h6 class="line-height-3 m-0 mt-1">{{_tituloCotizacion}}</h6>
+                                        <h6 class="line-height-3 m-0">{{_consecutivo}}</h6>
+                                        <h6 class="line-height-3 m-0">
+                                            {{_fechaExpiracion}}<strong>{{_fechaAproximadaVencimientoEnIngles}}</strong>
+                                        </h6>
+                                    </div>
+
+                                    <p-divider layout="horizontal" align="left">
+                                        <span class="p-tag">2. Fecha actual:</span>
+                                    </p-divider>
+
+                                    <p class="line-height-3 mt-1">{{_textoFechaInicio}}:
+                                        <strong>{{_fechaActualEnIngles}}</strong></p>
+
+                                    <p-divider layout="horizontal" align="left">
+                                        <span class="p-tag">3. Cliente:</span>
+                                    </p-divider>
+
+                                    <div class="line-height-3 m-0 mt-1">
+                                        <div class="row mt-1">
+                                            <div class="col-md-6">
+                                                <p><strong>Customer:</strong> {{_nombreClienteElegido}}</p>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <p><strong>ID:</strong> {{_cedulaClienteElegido}}</p>
+                                            </div>
+                                        </div>
+
+                                        <div class="row mt-5">
+                                            <div class="col-md-6">
+                                                <p><strong>Contact:</strong> {{_contactoClienteElegido}}</p>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <p><strong>Email:</strong> {{_emailClienteElegido}}</p>
+                                            </div>
+                                        </div>
+
+                                        <div class="row mt-5 mb-5">
+                                            <div class="col-md-6">
+                                                <p><strong>Address:</strong> {{_direccionClienteElegido}}</p>
+                                            </div>
+
+                                            <div class="col-md-6">
+                                                <p><strong>Phone:</strong> {{_telefonoClienteElegido}}</p>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <p-divider layout="horizontal" align="left">
+                                        <span class="p-tag">4. Cotización:</span>
+                                    </p-divider>
+
+                                    <div class="line-height-3 m-0">
+                                        <table class="table">
+                                            <thead>
+                                                <th scope="col">Amount</th>
+                                                <th scope="col">Description</th>
+                                                <th scope="col">Price</th>
+                                                <th scope="col">Final Price</th>
+                                            </thead>
+                                            <tbody>
+                                                <tr>
+                                                    <td style="width:10%; min-width:5rem;">{{_cantidad}} ton CO2e</td>
+                                                    <td style="width:40%; min-width:10rem; text-align: justify;">{{_descripcion}}</td>
+                                                    <td style="width:10%; min-width:5rem;">$ {{_precioEnDolaresSugerido}}</td>
+                                                    <td style="width:10%; min-width:5rem;">$ {{_resultadoCantidadPorPrecio}}</td>
+                                                </tr>
+                                            </tbody>
+                                            <tfoot>
+                                                <tr>
+                                                    <td style="width:10%; min-width:5rem;"></td>
+                                                    <td colspan="2" style="width:10%; min-width:5rem;"><strong>TOTAL (Fonafifo is exempt from VAT)</strong></td>
+                                                    <td style="width:10%; min-width:5rem;"><strong>$ {{_resultadoCantidadPorPrecio}}</strong></td>
+                                                </tr>
+                                                <tr>
+                                                    <td style="width:10%; min-width:5rem;"></td>
+                                                    <td colspan="3" style="width:10%; min-width:5rem;">
+                                                        <p><strong>Name of Proyect:</strong> {{_nombreProyectoElegido}}</p>
+                                                    </td>
+                                                </tr>
+                                                <tr *ngIf="!_habilitaPrecio">
+                                                    <td style="width:10%; min-width:5rem;"></td>
+                                                    <td colspan="3" style="width:10%; min-width:5rem;">
+                                                        <p><strong>Discount:</strong> {{_justificacionClientePorDescuesto}}</p>
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <td style="width:10%; min-width:5rem;"></td>
+                                                    <td colspan="3" style="width:10%; min-width:5rem;">
+                                                        <p><strong>Justification:</strong> {{_anotacionesClienteElegido}}</p>
+                                                    </td>
+                                                </tr>
+                                            </tfoot>
+                                        </table>
+                                    </div>
+
+                                    <p-divider layout="horizontal" align="left">
+                                        <span class="p-tag">5. Cuentas:</span>
+                                    </p-divider>
+
+                                    <div class="line-height-3 m-0">
+                                        <table class="table table-striped">
+                                            <thead *ngIf="!cuentaBancariaConvenio && !cuentaBancariaPSAMujer">
+                                                <th colspan="3">
+                                                    <p>
+                                                        Account for Deposit: - Banco Nacional de Costa Rica, Fonafifo Account -
+                                                    </p>
+                                                </th>
+                                            </thead>
+
+                                            <thead *ngIf="cuentaBancariaConvenio && !cuentaBancariaPSAMujer">
+                                                <th colspan="3">
+                                                    <p>
+                                                        Account for Deposit: "544017 FONAFIFO CONVENIO ICT-BNCR"
+                                                    </p>
+                                                </th>
+                                            </thead>
+
+                                            <thead *ngIf="cuentaBancariaPSAMujer && !cuentaBancariaConvenio">
+                                                <th colspan="3">
+                                                    <p>
+                                                        Account for Deposit: "Fideicomiso 544-13 | FID-544-13 | ID: 3-110-688505"
+                                                    </p>
+                                                </th>
+                                            </thead>
+                                            
+                                            <thead>
+                                                <th scope="col">Account Number</th>
+                                                <th scope="col">Customer Account Number</th>
+                                                <th scope="col">IBAN Account Number</th>
+                                                <th scope="col">Currency</th>
+                                            </thead>
+                                            <tbody>
+                                                <tr *ngIf="!cuentaBancariaConvenio && !cuentaBancariaPSAMujer">
+                                                    <td style="width:15%; min-width:5rem;">100-02-000-619177-9</td>
+                                                    <td style="width:15%; min-width:5rem;">15100010026191775</td>
+                                                    <td style="width:15%; min-width:5rem;">CR69015100010026191775</td>
+                                                    <td style="width:15%; min-width:5rem;">Dollars</td>
+                                                </tr>
+                                                <tr *ngIf="!cuentaBancariaConvenio && !cuentaBancariaPSAMujer">
+                                                    <td style="width:15%; min-width:5rem;">100-01-000-216436-6</td>
+                                                    <td style="width:15%; min-width:5rem;">15100010012164361</td>
+                                                    <td style="width:15%; min-width:5rem;">CR61015100010012164361</td>
+                                                    <td style="width:15%; min-width:5rem;">Colones</td>
+                                                </tr>
+                                                <tr *ngIf="cuentaBancariaConvenio && !cuentaBancariaPSAMujer">
+                                                    <td style="width:15%; min-width:5rem;">100-02-000-623170-3</td>
+                                                    <td style="width:15%; min-width:5rem;">15100010026231701</td>
+                                                    <td style="width:15%; min-width:5rem;">CR28015100010026231701</td>
+                                                    <td style="width:15%; min-width:5rem;">Dollars</td>
+                                                </tr>
+                                                <tr *ngIf="cuentaBancariaConvenio && !cuentaBancariaPSAMujer">
+                                                    <td style="width:15%; min-width:5rem;">100-01-000-222331-0</td>
+                                                    <td style="width:15%; min-width:5rem;">15100010012223313</td>
+                                                    <td style="width:15%; min-width:5rem;">CR30015100010012223313</td>
+                                                    <td style="width:15%; min-width:5rem;">Colones</td>
+                                                </tr>
+                                                <tr *ngIf="cuentaBancariaPSAMujer && !cuentaBancariaConvenio">
+                                                    <td style="width:15%; min-width:5rem;">100-02-000-617813-1</td>
+                                                    <td style="width:15%; min-width:5rem;">15100010026178131</td>
+                                                    <td style="width:15%; min-width:5rem;">CR51015100010026178131</td>
+                                                    <td style="width:15%; min-width:5rem;">Dollars</td>
+                                                </tr>
+                                                <tr *ngIf="cuentaBancariaPSAMujer && !cuentaBancariaConvenio">
+                                                    <td style="width:15%; min-width:5rem;">100-01-000-215849-1</td>
+                                                    <td style="width:15%; min-width:5rem;">15100010012158490</td>
+                                                    <td style="width:15%; min-width:5rem;">CR80015100010012158490</td>
+                                                    <td style="width:15%; min-width:5rem;">Colones</td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+
+                                    <p-divider layout="horizontal" align="left">
+                                        <span class="p-tag">6. Funcionario:</span>
+                                    </p-divider>
+
+                                    <div class="line-height-3 m-0 mt-1">
+                                        <div class="row mt-1">
+                                            <div class="col-md-12">
+                                                <p><strong>Contact:</strong> {{_nombreFuncionario}}</p>
+                                            </div>
+                                        </div>
+                                        <div class="row mt-3">
+                                            <div class="col-md-6">
+                                                <p><strong>Email:</strong> {{_emailFuncionario}}</p>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <p><strong>Phone:</strong> {{_telefonoFuncionario}}</p>
+                                            </div>
+                                        </div>
+                                        <div class="row mt-3 text-center">
+                                            <div class="col-md-12">
+                                                <p><strong>{{_departamento}}</strong></p>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <p-divider layout="horizontal" align="left">
+                                        <span class="p-tag">7. PSA:</span>
+                                    </p-divider>
+
+                                    <p class="line-height-3 m-0" style="text-align: justify;">
+                                        {{_textoDescriptivoFinalEraParte}}
+                                    </p>
+
+                                    <p class="line-height-3 m-0 mt-3" style="text-align: center; font-style: italic;">
+                                        {{_textoDescriptivoFinalDaParte}}
+                                    </p>
+
+                                    <p-divider align="right">
+                                        <p-button label="Guardar" icon="pi pi-save" (onClick)="guardarCotizacion()" [loading]="_salvando"
+                                            styleClass="p-button-outlined m-2" [disabled]="_desHabilitarBotonGuardar"></p-button>
+                                        <p-button label="Observaciones" icon="pi pi-align-left" (onClick)="verDialogoObservaciones()"
+                                            styleClass="p-button-outlined m-2"></p-button>
+                                    </p-divider>
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+                </ng-template>
+            </p-toolbar>
+
+        </div>
+    </div>
+</div>
+
+<div *ngIf="_muestrarEdicionCliente">
+    <p-dialog maskStyleClass="backdrop-blur-sm" [(visible)]="_muestrarEdicionCliente" [style]="{ width: '60vw' }">
+        <editar-cliente></editar-cliente>
+    </p-dialog>
+</div>
+
+<p-dialog maskStyleClass="backdrop-blur-sm" header="Observaciones de la Cotización" [modal]="true"
+    [(visible)]="_muestraObservaciones" [style]="{ width: '40vw' }">
+    <form>
+        <div class="p-fluid p-formgrid grid">
+            <div class="field col-12 md:col-12">
+                <label for="observaciones">Observaciones:</label>
+                <textarea pInputText id="observaciones" type="text" class="mb-3" rows="7" readonly="true"></textarea>
+            </div>
+        </div>
+    </form>
+</p-dialog>

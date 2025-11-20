@@ -1,0 +1,34 @@
+<div class="grid">
+    <div class="col-12">
+        <div class="card px-6 py-6">
+
+            <div class="flex align-items-center justify-content-center">
+                <div class="flex flex-column align-items-center justify-content-center">
+                    <img src="assets/img/img_login.png" alt="siCORE" class="mb-5 w-16rem flex-shrink-0">
+                    <div style="border-radius:56px; padding:0.3rem; background: linear-gradient(180deg, rgba(0, 90, 11, 0.4) 10%, rgba(33, 150, 243, 0) 30%);">
+                        <div class="w-full surface-card py-8 px-5 sm:px-8 flex flex-column align-items-center" style="border-radius:53px">
+                            <span class="font-bold text-3xl" style="color: #6EB441;">404</span>
+                            <h1 class="text-900 font-bold text-3xl lg:text-5xl mb-2">Página No Encontrada</h1>
+                            <div class="text-600 mb-5">El recurso solicitado no está disponible.</div>
+            
+                            <a (click)="vaManualUsuario()" class="cursor w-full flex align-items-center py-5 border-300 border-bottom-1">
+                                <span class="flex justify-content-center align-items-center border-round" style="height:3.5rem; width:3.5rem; background-color: #6EB441;">
+                                    <i class="text-50 pi pi-book text-2xl"></i>
+                                </span>
+                                <span class="ml-4 flex flex-column">
+                                    <span class="text-900 lg:text-xl font-medium mb-0 block">Descargar Manual de Usuario</span>
+                                </span>
+                            </a>
+            
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+<p-dialog header="Manual de Usuario" [modal]="true" [(visible)]="_mostrarManual" [contentStyle]="{ 'overflow-y' : 'hidden', 'max-height' : '70%' }">
+    <pdf-viewer [src]="_urlDelPDF" [render-text]="true" [original-size]="false" style="width: 80rem; height: 50rem" [fit-to-page]="true"></pdf-viewer>
+</p-dialog>

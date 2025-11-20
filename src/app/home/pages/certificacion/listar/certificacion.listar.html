@@ -1,0 +1,123 @@
+<div class="grid">
+    <div class="col-12">
+        <div class="card px-6 py-6">
+            <p-toast [life]="10000" (onClose)="cierraMensaje()"/>
+
+            <p-toolbar styleClass="mb-4" *ngIf="_verMensajeNoCertificados">
+                <ng-template pTemplate="left">
+                    <div class="my-2">
+                        <h5 class="m-0">No existe listado de Certificados para mostrar.</h5>
+                    </div>
+                </ng-template>
+            </p-toolbar>
+
+            <ng-container *ngIf="_cetificados$ | async as certificado">
+
+                <p-table [value]="certificado" [columns]="_columnas"
+                    #dt [columns]="_columnas" responsiveLayout="scroll" [rows]="10" [globalFilterFields]="['consecutivo', 'nombreCertificado', 'numeroCertificado']"
+                    [paginator]="true" currentPageReportTemplate="Mostrando de {first} a {last} de {totalRecords} entradas" [rowHover]="true">
+                    
+                    <ng-template pTemplate="caption">
+                        <div class="flex flex-column md:flex-row md:justify-content-between md:align-items-center">
+                            <h5 class="m-0">Listado de Certificados</h5>
+                            <span class="block mt-2 md:mt-0 p-input-icon-left">
+                                <i class="pi pi-search"></i>
+                                <input pInputText type="text" placeholder="Buscar..."  class="w-full sm:w-auto" (input)="filtroGlobal(dt,$event)"/>
+                            </span>
+                        </div>
+                    </ng-template>
+        
+                    <ng-template pTemplate="header">
+                        <tr>
+                            <th pSortableColumn="consecutivo">Cotización<p-sortIcon field="consecutivo"></p-sortIcon></th>
+                            <th>Cliente</th>
+                            <th pSortableColumn="consecutivo">Certificado<p-sortIcon field="consecutivo"></p-sortIcon></th>
+                            <th>Fecha</th>
+                            <th>Monto</th>
+                            <th>Estado</th>
+                            <th>Agente Cuenta</th>
+                            <th>Acciones</th>
+                        </tr>
+                    </ng-template>
+
+                    <ng-template pTemplate="body" let-item>
+                        <tr>
+                            <td style="width:15%; min-width:10rem;">
+                                <span class="p-column-title">Cotización</span>
+                                {{_colocaCerosAlNumeroEntero(item.consecutivo, item.idCertificado)}}
+                            </td>
+                            <td style="width:15%; min-width:10rem;">
+                                <span class="p-column-title">Cliente</span>
+                                {{item.nombreCertificado}}
+                            </td>
+                            <td style="width:15%; min-width:10rem;">
+                                <span class="p-column-title">Certificado</span>
+                                {{creaNumeroCertificado(item.numeroCertificado, item.annoInventarioGEI)}}
+                            </td>
+                            <td style="width:14%; min-width:10rem;">
+                                <span class="p-column-title">Fecha</span>
+                                {{item.fechaEmisionCertificado | date : 'dd/MM/yyyy HH:mm'}}
+                            </td>
+                            <td style="width:14%; min-width:10rem;">
+                                <span class="p-column-title">Monto</span>
+                                {{item.montoTransferencia | currency}}
+                            </td>
+                            <td style="width:14%; min-width:10rem;">
+                                   <span class="p-column-title">Estado</span>
+                                   <p-tag [value]="item.indicadorEstado" [style]="determinaColorDeEstado(item.indicadorEstado)" />
+                               </td>
+                            <td style="width:20%; min-width:20rem;">
+                                <span class="p-column-title">Agente</span>
+                                {{item.usuario}}
+                            </td>
+                            <td class="ajuste-izquierda">
+                                <div class="flex">
+                                    <button *ngIf="esParaVerCertificado()" (click)="irToVer(item.idCertificado)" pButton pRipple pTooltip="Ver" icon="pi pi-search" tooltipPosition="top" class="boton-redondo p-button-rounded p-button-success mr-2"></button>
+                                    <button *ngIf="esParaVerSubirFirmado(item)" (click)="abrirDialogoFirma(item.consecutivo, item.idCertificado, item.numeroCertificado, item.numeroCertificadoUnico)" pButton pRipple icon="pi pi-upload" pTooltip="Subir Firmado" tooltipPosition="top" class="boton-subir boton-redondo p-button-rounded p-button-success mr-2"></button>
+                                    <button *ngIf="esParaVerEnviar(item)" (click)="enviarCertificado(item.idCertificado, item.idCotizacion, item.consecutivo, item.idCliente, item.numeroCertificado)" pButton pRipple icon="pi pi-send" pTooltip="Enviar" tooltipPosition="top" class="boton-enviar boton-redondo p-button-rounded p-button-success mr-2"></button>
+                                    <button *ngIf="esParaVerDescargar(item)" (click)="descargarCertificadoFirmado(item.idCertificado)" pButton pRipple icon="pi pi-download" pTooltip="Descargar Firmado" tooltipPosition="top" class="boton-descargar boton-redondo p-button-rounded p-button-success mr-2"></button>
+                                </div>
+                            </td>
+                        </tr>
+                    </ng-template>
+
+                </p-table>
+            </ng-container>
+
+        </div>
+    </div>
+</div>
+
+<p-dialog header="Subir Certificado Firmado" [modal]="true" [(visible)]="_subirCertificado" [style]="{ width: '50rem' }">
+    <span class="p-text-secondary block mb-5" id="consecutivo"></span>
+
+    
+    <p-fileUpload #fileUpload name="subeArchivos[]"
+        customUpload="true" (uploadHandler)="subirFirmado($event, fileUpload)"
+        [multiple]="false" accept=".pdf" maxFileSize="100000000"
+        chooseLabel="Buscar" uploadLabel="Cargar" showCancelButton="false"
+        uploadStyleClass="{border-radius: 2rem;font-size: 1.25rem;}">
+
+        <!-- <ng-template pTemplate="content">
+            <ul *ngIf="_certificadoFirmado.length">
+                <li *ngFor="let archivo of _certificadoFirmado">
+                    {{ archivo.name }} - {{ archivo.size }} bytes
+                </li>
+            </ul>
+        </ng-template> -->
+    </p-fileUpload>
+
+    <!-- <div class="flex justify-content-end gap-2 mt-5">
+        <button pButton pRipple class="boton p-button-success mr-2" label="Aplicar" icon="pi pi-save" (click)="subirCertificadoFirmado()"></button>
+		<button pButton pRipple class="boton-cancelar p-button-danger mr-2" label="Cancelar" icon="pi pi-times" (click)="cancelar()"></button>
+    </div> -->
+</p-dialog>
+
+<p-dialog header="Vista Previa del Certificado" [modal]="true" [(visible)]="_vistaPreviaCertificado" [contentStyle]="{ 'overflow-y' : 'hidden', 'max-height' : '70%' }">
+    <pdf-viewer [src]="_urlDelPDF" [render-text]="true" [original-size]="false" style="width: 80rem; height: 50rem" [fit-to-page]="true"></pdf-viewer>
+
+    <div class="flex justify-content-end gap-2 mt-5">
+        <button pButton pRipple class="boton p-button-success mr-2" label="Enviar" icon="pi pi-send" (click)="enviarCertificadoFirmado()"></button>
+		<button pButton pRipple class="boton-cancelar p-button-danger mr-2" label="Cancelar" icon="pi pi-times" (click)="cancelarVistaPrevia()"></button>
+    </div>
+</p-dialog>

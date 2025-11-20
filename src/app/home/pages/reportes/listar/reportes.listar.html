@@ -1,0 +1,120 @@
+<div class="grid">
+    <div class="col-12">
+        <div class="card px-12 py-12">
+            <h5>Reportes</h5>
+            <div class="row">
+
+                <div class="col-2 md:col-2">
+                    <div class="card" style="width: 15rem; overflow: hidden;">
+                        <img src="assets/img/img_login.png" class="w-full card-img-top">
+                        <div class="card-body">
+                            <h5 class="card-title">Reporte de Cotizaciones</h5>
+                            <p style="color: #495057;">Informe que contiene registros históricos de las Cotizaciones
+                                filtradas por un rango de fecha.</p>
+                            <div class="pie-tarjeta">
+                                <div class="flex gap-4 mt-1" *ngIf="_mostrarReporte">
+                                    <p-button label="Generar" icon="pi pi-fw pi-list-check"
+                                        (onClick)="generarReporteCotizaciones()"
+                                        styleClass="p-button-outlined m-2"></p-button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-2 md:col-2">
+                    <div class="card" style="width: 15rem; overflow: hidden;">
+                        <img src="assets/img/img_login.png" class="w-full card-img-top">
+                        <div class="card-body">
+                            <h5 class="card-title">Reporte de Formalizaciones</h5>
+                            <p style="color: #495057;">Informe que contiene registros históricos de las Formalizaciones
+                                filtradas por un rango de fecha.</p>
+                            <div class="pie-tarjeta">
+                                <div class="flex gap-4 mt-1" *ngIf="_mostrarReporte">
+                                    <p-button label="Generar" icon="pi pi-fw pi-list-check"
+                                        (onClick)="generarReporteFormalizaciones()"
+                                        styleClass="p-button-outlined m-2"></p-button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-2 md:col-2">
+                    <div class="card" style="width: 15rem; overflow: hidden;">
+                        <img src="assets/img/img_login.png" class="w-full card-img-top">
+                        <div class="card-body">
+                            <h5 class="card-title">Reporte de Certificados</h5>
+                            <p style="color: #495057;">Informe que contiene registros históricos de los Certificados
+                                filtrados por un rango de fecha.</p>
+                            <div class="pie-tarjeta">
+                                <div class="flex gap-4 mt-1" *ngIf="(_mostrarReporte) || (_mostrarReportePorPermisoEspecial)">
+                                    <p-button label="Generar" icon="pi pi-fw pi-list-check"
+                                        (onClick)="generarReporteCertificados()"
+                                        styleClass="p-button-outlined m-2"></p-button>
+                                </div>
+                            </div>
+
+
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-2 md:col-2">
+                    <div class="card" style="width: 15rem; overflow: hidden;">
+                        <img src="assets/img/img_login.png" class="w-full card-img-top">
+                        <div class="card-body">
+                            <h5 class="card-title">Reporte de Ventas</h5>
+                            <p style="color: #495057;">Informe que contiene registros históricos de las Ventas hechas,
+                                filtradas por un rango de fecha.</p>
+                            <div class="pie-tarjeta">
+                                <div class="flex gap-4 mt-1" *ngIf="(_mostrarReporte) || (_mostrarReportePorPermisoEspecial)">
+                                    <p-button label="Generar" icon="pi pi-fw pi-list-check"
+                                        (onClick)="generarReporteVentas()"
+                                        styleClass="p-button-outlined m-2"></p-button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-2 md:col-2">
+                    <div class="card" style="width: 15rem; overflow: hidden;">
+                        <img src="assets/img/img_login.png" class="w-full card-img-top">
+                        <div class="card-body">
+                            <h5 class="card-title">Reporte de Esfuerzo por Agente</h5>
+                            <p style="color: #495057;">Informe que contiene registros del esfuerzo anual de los agentes de venta.</p>
+                            <div class="pie-tarjeta">
+                                <div class="flex gap-4 mt-1" *ngIf="(_mostrarReporte) || (_mostrarReportePorPermisoEspecial)">
+                                    <p-button label="Generar" icon="pi pi-fw pi-list-check"
+                                        (onClick)="generarReporteEsfuerzo()"
+                                        styleClass="p-button-outlined m-2"></p-button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-2 md:col-2">
+                    <div class="card" style="width: 15rem; overflow: hidden;">
+                        <img src="assets/img/img_login.png" class="w-full card-img-top">
+                        <div class="card-body">
+                            <h5 class="card-title">Respuestas a la Encuesta Por Año</h5>
+                            <p style="color: #495057;">Gráfico con las respuestas de la encuesta enviada a los clientes por año.</p>
+                            <div class="pie-tarjeta">
+                                <div class="flex gap-4 mt-1" *ngIf="(_mostrarReporte) || (_mostrarReportePorPermisoEspecial)">
+                                    <p-button label="Generar" icon="pi pi-fw pi-list-check"
+                                        (onClick)="generarReporteEncuestaRespuestasPorAnno()"
+                                        styleClass="p-button-outlined m-2"></p-button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+<!-- <p-panelMenu [multiple]="true" [model]="panelMenuItems"></p-panelMenu> -->

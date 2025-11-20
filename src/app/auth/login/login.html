@@ -1,0 +1,330 @@
+<encabezado></encabezado>
+
+<div class="fondo">
+    <div class="animate__animated animate__fadeInDown">
+        <div class="container px-1 px-md-5 px-lg-1 px-xl-5 py-5 mx-auto">
+            <div style="margin-top: 40px; border: 0px; border-radius: 15px;">
+                <div class="row d-flex">
+                    <div class="panel panel-default blackboard-outer">
+                        <div class="card0">
+                            <div class="row">
+    
+                                <div class="col-lg-6">
+                                    <div
+                                        class="row px-3 justify-content-center mt-10 mb-5 border-line divimagesolidarismo">
+                                        <video [src]="_enlaceVideoParaMostrar" loop muted autoplay
+                                            oncanplay="this.play()" onloadedmetadata="this.muted = true"></video>
+                                    </div>
+                                </div>
+    
+                                <div class="col-lg-6">
+                                    <div class="row mb-12 px-3 justify-content-center"
+                                        style="text-align: center;margin-top: 20px;">
+                                        <h1 class="titulologin"><i class="pi pi-lock"
+                                                style="font-size: 2rem;color:red"></i>
+                                            INICIAR SESIÓN</h1>
+                                    </div>
+    
+                                    <hr>
+    
+                                    <div class="row mb-12 px-3 justify-content-center">
+                                        <form autocomplete="off" [formGroup]="frmLogin"
+                                            (ngSubmit)="ValidarCredenciales()">
+    
+                                            <div *ngIf="_muestraSpinner">
+                                                <div class="spinner-types mt-5 px-3 py-3">
+                                                    <div class="spinner-pulse" id="spinner3"></div>
+                                                </div>
+                                            </div>
+    
+                                            <div *ngIf="!_muestraSpinner">
+                                                <div class="row px-3 py-3">
+                                                    <div class="col-sm-12" style="display: flex;">
+                                                        <i class="pi pi-user"
+                                                            style="font-size:28px;margin-left: 5px;margin-right: 5px;margin-top: 8px;"></i>
+                                                        <input type="text" autocomplete="false" pInputText
+                                                            placeholder="{{_placeholder}}"
+                                                            formControlName="correocedula" [style]="{'width':'100%'}" />
+                                                    </div>
+    
+                                                    <span class="form-text text-danger"
+                                                        *ngIf="campoEsValido('correocedula')">
+                                                        Campo requerido y con formato válido.
+                                                    </span>
+                                                </div>
+    
+                                                <div class="row px-3 py-3">
+                                                    <div class="col-sm-12" style="display: flex;">
+                                                        <i class="pi pi-lock"
+                                                            style="font-size:28px;margin-left: 5px;margin-right: 5px;margin-top: 8px;"></i>
+                                                        <input type="password" pInputText placeholder="Contraseña"
+                                                            formControlName="password" [style]="{'width':'100%'}" />
+                                                    </div>
+    
+                                                    <span class="form-text text-danger"
+                                                        *ngIf="campoEsValido('password')">
+                                                        Campo requerido.
+                                                    </span>
+                                                </div>
+    
+                                                <div class="row mb-3 px-3 justify-content-center"> <button pButton
+                                                        pRipple type="submit" label="Iniciar" icon="pi pi-sign-in"
+                                                        class="p-button-rounded p-button-success p-button-lg"
+                                                        [style]="{'width':'75%'}"></button>
+                                                </div>
+                                            </div>
+    
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
+    
+                            <div class="row mt-2" style="display:flex; justify-content: center;">
+                                <hr style="color: rgb(75, 43, 1);  width: 90%;">
+                            </div>
+    
+                            <div class="row d-flex">
+                                <div class="col-4">
+                                    <div class="textocreditos">Fondo Nacional de Financiamiento Forestal</div>
+                                    <div class="textocreditos">Derechos Reservados | Unidad de Tecnología de Información
+                                        y
+                                        Comunicación (U-TIC)</div>
+                                    <div style="color:white;">-</div>
+                                </div>
+                                <div class="col-4">
+                                    <div style="text-align: center;width: 100%;">
+                                        <img src="assets/img/fonafifo-logo-trans.png" alt="" height="65">
+                                    </div>
+                                </div>
+                                <div class="col-4" style="text-align:right;">
+                                    <div>
+                                        <table style="width: 100%;">
+                                            <tr>
+                                                <td style="width: 60%;"></td>
+                                                <td>
+                                                    <div style="display: flex; text-align: right;">
+                                                        <div class="textocreditos"
+                                                            style="margin-right:15px;padding-right: 15px;margin-top: 15px;">
+                                                            V2025.0.3.0</div>
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<p-dialog header="Configuración de Autenticación de Dos Factores" (onHide)="cierraLaVentanaDeConfiguracion()"
+    [modal]="true" [(visible)]="_mostrarConfiguracionDFM" [style]="{ width: '45rem', height: '50rem'}">
+    <div class="info-box" #primerPaso>
+        <div class="steps-container">
+            <div class="step">
+                <div class="step-number">1</div>
+                <div class="step-content">
+                    <h5 class="step-title">Descarga Microsoft Authenticator</h5>
+                    <p class="step-description">Si no lo tienes instalado, descárgalo desde tu tienda de aplicaciones
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="info-box">
+        <div class="steps-container">
+            <div class="step">
+                <div class="step-number">2</div>
+                <div class="step-content">
+                    <h5 class="step-title">Agrega una nueva cuenta</h5>
+                    <p class="step-description">Toca "+" — "Cuenta del trabajo o escuela"</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="info-box">
+        <div class="steps-container">
+            <div class="step">
+                <div class="step-number">3</div>
+                <div class="step-content">
+                    <h5 class="step-title">Escanea este código QR</h5>
+                    <div class="qr-container">
+                        <p-image [src]="_imagenDelQR" alt="Image" width="250" height="auto" />
+                        <p>Apunta la cámara de tu dispositivo al código QR</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- <div class="info-box">
+            <div class="steps-container">
+                <div class="step">
+                    <div class="step-number">4</div>
+                    <div class="step-content">
+                        <h5 class="step-title">¿No puedes escanear? Ingresa el código manualmente</h5>
+                        <div class="manual-code">HJ4G 8K9P L2M6 Q3T7</div>
+                    </div>
+                </div>
+            </div>
+        </div> -->
+
+    <div class="info-box">
+        <div class="steps-container">
+            <div class="step">
+                <div class="step-number">4</div>
+                <div class="step-content">
+                    <h5 class="step-title">Verifica la configuración</h5>
+                    <p class="step-description">Ingresa el código de 6 dígitos que aparece en Microsoft Authenticator:
+                    </p>
+
+                    <div class="verification">
+                        <div class="input-group">
+                            <input type="text" class="code-input" maxlength="1" pattern="[0-9]*" inputmode="numeric">
+                            <input type="text" class="code-input" maxlength="1" pattern="[0-9]*" inputmode="numeric">
+                            <input type="text" class="code-input" maxlength="1" pattern="[0-9]*" inputmode="numeric">
+                            <input type="text" class="code-input" maxlength="1" pattern="[0-9]*" inputmode="numeric">
+                            <input type="text" class="code-input" maxlength="1" pattern="[0-9]*" inputmode="numeric">
+                            <input type="text" class="code-input" maxlength="1" pattern="[0-9]*" inputmode="numeric">
+                        </div>
+
+                        <div class="button-container">
+                            <button class="button" id="botonDeVerificacionParaConfigurar"
+                                (click)="verificaAndCompleta()">Verificar y completar</button>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</p-dialog>
+
+<p-dialog header="Opciones de Autenticación" (onHide)="cierraOpcionesDeAutenticacion()" [modal]="true"
+    [(visible)]="_mostrarDFM" [style]="{ width: '35rem', height: '37rem'}">
+    <div class="options-container">
+        <div class="option selected" data-value="authenticator" (click)="entraEnLasOpcionesDeLogueo($event)">
+            <div class="option-header">
+                <div class="option-icon">
+                    <i class="pi pi-mobile"></i>
+                </div>
+                <div class="option-title">Microsoft Authenticator</div>
+            </div>
+            <div class="option-description">Usar aplicación configurada</div>
+            <div class="option-status">Configurado</div>
+            <div class="radio-btn"></div>
+        </div>
+
+        <div class="option" data-value="email" (click)="entraEnLasOpcionesDeLogueo($event)">
+            <div class="option-header">
+                <div class="option-icon">
+                    <i class="pi pi-envelope"></i>
+                </div>
+                <div class="option-title">Correo electrónico</div>
+            </div>
+            <div class="option-description">Recibir código por email</div>
+            <div class="radio-btn"></div>
+        </div>
+
+        <div class="button-container">
+            <button class="button" (click)="continuaConElLogin()">Continuar</button>
+        </div>
+    </div>
+</p-dialog>
+
+<p-dialog header="Confirmación" [modal]="true" [(visible)]="_mostrarConfirmacionDeDFM"
+    [style]="{ width: '35rem', height: '40rem'}" (onHide)="volverMostrarDFM()">
+    <div class="content">
+        <p class="instructions">Ingresa el código de 6 dígitos de Microsoft Authenticator</p>
+
+        <div class="info-box">
+            <div class="info-item">
+                <div class="info-icon"><i class="pi pi-mobile"></i></div>
+                <div class="info-text">Microsoft Authenticator</div>
+            </div>
+        </div>
+
+        <div class="divider"></div>
+
+        <div class="verification-section">
+            <div class="verification-title">Código de verificación</div>
+
+            <div class="input-container">
+                <div class="input-group">
+                    <input type="text" class="code-input" maxlength="1" inputmode="numeric" pattern="[0-9]*">
+                    <input type="text" class="code-input" maxlength="1" inputmode="numeric" pattern="[0-9]*">
+                    <input type="text" class="code-input" maxlength="1" inputmode="numeric" pattern="[0-9]*">
+                    <input type="text" class="code-input" maxlength="1" inputmode="numeric" pattern="[0-9]*">
+                    <input type="text" class="code-input" maxlength="1" inputmode="numeric" pattern="[0-9]*">
+                    <input type="text" class="code-input" maxlength="1" inputmode="numeric" pattern="[0-9]*">
+                </div>
+            </div>
+
+            <div class="timer">
+                <i class="pi pi-clock"></i>
+                <span>El código se actualiza cada 20 segundos</span>
+            </div>
+        </div>
+
+        <div class="button-container">
+            <button class="btn-back" (click)="volverMostrarDFM()">
+                <i class="pi pi-arrow-left"></i>
+                Atrás
+            </button>
+            <button class="btn-verify" id="botonDeVerificacion" (click)="verificaParaIniciar()">Verificar</button>
+        </div>
+    </div>
+</p-dialog>
+
+<p-dialog header="Confirmación" [modal]="true" [(visible)]="_displayDobleFactor"
+    [style]="{ width: '35rem', height: '42rem'}" (onHide)="volverMostrarDFM()">
+    <div class="content">
+        <p class="instructions-v">El código de seguridad se generó y se envió exitosamente.</p>
+
+        <div class="divider"></div>
+
+        <div class="verification-section">
+            <div class="verification-title">Código de verificación</div>
+
+            <div class="input-container">
+                <div class="input-group">
+                    <input type="text" class="code-input" maxlength="1" inputmode="numeric" pattern="[0-9]*">
+                    <input type="text" class="code-input" maxlength="1" inputmode="numeric" pattern="[0-9]*">
+                    <input type="text" class="code-input" maxlength="1" inputmode="numeric" pattern="[0-9]*">
+                    <input type="text" class="code-input" maxlength="1" inputmode="numeric" pattern="[0-9]*">
+                    <input type="text" class="code-input" maxlength="1" inputmode="numeric" pattern="[0-9]*">
+                    <input type="text" class="code-input" maxlength="1" inputmode="numeric" pattern="[0-9]*">
+                </div>
+            </div>
+
+            <div class="divider"></div>
+
+            <div class="timer">
+                <i class="pi pi-clock"></i>
+                <span>Digite el código de seguridad</span>
+            </div>
+
+            <div class="timer">
+                <div class="circletimer" style="margin-top: 30px;">{{_tiempoRestante}}</div>
+                <label class="labelContador" style="margin-top: 35px;margin-left: 5px;">seg restantes</label>
+            </div>
+        </div>
+
+        <div class="divider"></div>
+
+        <div class="button-container">
+            <button class="btn-back" (click)="volverMostrarDFM()">
+                <i class="pi pi-arrow-left"></i>
+                Atrás
+            </button>
+            <button class="btn-verify" id="btn" (click)="ValidarCodigoSeguridad()">Validar</button>
+        </div>
+    </div>
+</p-dialog>

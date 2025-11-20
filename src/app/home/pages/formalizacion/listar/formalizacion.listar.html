@@ -1,0 +1,426 @@
+<div class="grid">
+    <div class="col-12">
+        <div class="card px-6 py-6">
+            <p-toast [life]="10000" (onClose)="cierraMensaje()"/>
+
+           <div *ngIf="_skeleton">
+               <div class="flex mb-3">
+                   <div>
+                       <p-skeleton height="3rem" width="15rem" styleClass="mb-2" />
+                   </div>
+               </div>
+   
+               <p-skeleton width="100%" height="600px" />
+           </div>
+
+           <div *ngIf="!_skeleton">
+
+                <p-toolbar styleClass="mb-4" *ngIf="_verMensajeNoFormalizaciones">
+                    <ng-template pTemplate="left">
+                        <div class="my-2">
+                            <h5 class="m-0">No existe listado de Formalizaciones para mostrar.</h5>
+                        </div>
+                    </ng-template>
+                </p-toolbar>
+
+               <ng-container *ngIf="_formalizaciones$ | async as formalizacion">
+   
+                   <p-table [value]="formalizacion" [columns]="_columnas"
+                       #dt [columns]="_columnas" responsiveLayout="scroll" [rows]="10" [globalFilterFields]="['consecutivo', 'nombreCliente', 'fechaHora', 'indicadorEstado']"
+                       [paginator]="true" currentPageReportTemplate="Mostrando de {first} a {last} de {totalRecords} entradas" [rowHover]="true">
+                       
+                       <ng-template pTemplate="caption">
+                           <div class="flex flex-column md:flex-row md:justify-content-between md:align-items-center">
+                               <h5 class="m-0">Listado de Formalizaciones</h5>
+                               <span class="block mt-2 md:mt-0 p-input-icon-left">
+                                   <i class="pi pi-search"></i>
+                                   <input pInputText type="text" placeholder="Buscar..."  class="w-full sm:w-auto" (input)="filtroGlobal(dt,$event)"/>
+                               </span>
+                           </div>
+                       </ng-template>
+           
+                       <ng-template pTemplate="header">
+                           <tr>
+                               <th pSortableColumn="consecutivo">Cotización<p-sortIcon field="consecutivo"></p-sortIcon></th>
+                               <th pSortableColumn="nombreCliente">Cliente<p-sortIcon field="nombreCliente"></p-sortIcon></th>
+                               <th pSortableColumn="fechaHora">Fecha<p-sortIcon field="fechaHora"></p-sortIcon></th>
+                               <th>Monto Dólares</th>
+                               <th>Monto Colones</th>
+                               <th>Contado | Crédito</th>
+                               <th pSortableColumn="indicadorEstado">Estado<p-sortIcon field="indicadorEstado"></p-sortIcon></th>
+                               <th>Acciones</th>
+                           </tr>
+                       </ng-template>
+   
+                       <ng-template pTemplate="body" let-item>
+                           <tr>
+                               <td style="width:14%; min-width:10rem;">
+                                   <span class="p-column-title">Cotización</span>
+                                   {{colocaCerosAlNumeroEntero(item.consecutivo, item.idFormalizacion)}}
+                               </td>
+                               <td style="width:14%; min-width:10rem;">
+                                   <span class="p-column-title">Cliente</span>
+                                   {{item.nombreCliente}}
+                               </td>
+                               <td style="width:14%; min-width:10rem;">
+                                   <span class="p-column-title">Fecha</span>
+                                   {{item.fechaHora | date : 'dd/MM/yyyy HH:mm'}}
+                               </td>
+                               <td style="width:14%; min-width:10rem;">
+                                   <span class="p-column-title">Monto Dólares</span>
+                                   {{item.montoDolares | currency}}
+                               </td>
+                               <td style="width:14%; min-width:10rem;">
+                                   <span class="p-column-title">Monto Dólares</span>
+                                   {{item.montoColones | currency : '₡'}}
+                               </td>
+                               <td style="width:14%; min-width:10rem;">
+                                   <span class="p-column-title">Crédito | Contado</span>
+                                   {{item.creditoDebito}}
+                               </td>
+                               <td style="width:14%; min-width:10rem;">
+                                   <span class="p-column-title">Estado</span>
+                                   <p-tag [value]="item.indicadorEstado" [style]="determinaColorDeEstado(item.indicadorEstado)" />
+                               </td>
+                               <td class="ajuste-izquierda">
+                                   <div class="flex">
+                                       <button (click)="verFormalizacion(item.idFormalizacion)" pTooltip="Ver" pButton pRipple icon="pi pi-search" tooltipPosition="top" class="boton-redondo p-button-rounded p-button-success mr-2"></button>
+                                       <button *ngIf="esParaAplicarPagoDebito(item)" (click)="mostrarAplicacionPagoDebito(item)" pTooltip="Aplicar Pago" pButton pRipple icon="pi pi-dollar" tooltipPosition="top" class="fondo-boton-azul boton-redondo p-button-rounded p-button-success mr-2"></button>
+                                       <button *ngIf="esParaVerFactura(item)" (click)="verFactura(item.idFormalizacion)" pTooltip="Ver Factura" pButton pRipple icon="pi pi-file" tooltipPosition="top" class="fondo-boton-gris boton-redondo p-button-rounded p-button-success mr-2"></button>
+                                       <button *ngIf="esParaVerEditar(item)" (click)="verEditar(item)" pTooltip="Editar Formalización" pButton pRipple icon="pi pi-upload" tooltipPosition="top" class="fondo-boton-gris boton-redondo p-button-rounded p-button-success mr-2"></button>
+                                       <button *ngIf="esParaCerrarFormalizacion(item)" (click)="cerrarFormalizacion(item)" pTooltip="Cerrar Formalización" pButton pRipple icon="pi pi-check" tooltipPosition="top" class="boton-redondo p-button-rounded p-button-success mr-2"></button>
+
+                                       <!-- <button *ngIf="esParaAplicarPago(item)" (click)="mostrarAplicacionPago(item)" pTooltip="Aplicar Pago Crédito" pButton pRipple icon="pi pi-dollar" tooltipPosition="top" class="fondo-boton-azul boton-redondo p-button-rounded p-button-success mr-2"></button> -->
+                                       <!-- <button *ngIf="esParaGenerarFactura(item)" (click)="volverToSubir(item)" pTooltip="Generar Factura" pButton pRipple icon="pi pi-upload" tooltipPosition="top" class="fondo-boton-pendiente boton-redondo p-button-rounded p-button-success mr-2"></button> -->
+                                       <!-- <button *ngIf="esRevisarFormalizacion(item)" (click)="peticionParaActivarUnaFormalizacion(item)" pButton pRipple icon="pi pi-exclamation-circle" pTooltip="Revisar Formalización" tooltipPosition="top" class="boton-redondo p-button-rounded p-button-success mr-2"></button> -->
+                                       <!-- <button *ngIf="esAprobarFormalizacion(item)" (click)="revisarFormalizacion(item)" pButton pRipple icon="pi pi-check-square" pTooltip="Aprobar Formalización" tooltipPosition="top" class="boton-redondo p-button-rounded p-button-success mr-2"></button> -->
+                                       <!-- <button *ngIf="esParaActivarUnaFormalizacion(item)" (click)="activarUnaFormalizacion(item)" pButton pRipple icon="pi pi-chevron-circle-down" pTooltip="Activar Formalización" tooltipPosition="top" class="boton-redondo p-button-rounded p-button-success mr-2"></button> -->
+                                   </div>
+                               </td>
+                           </tr>
+                       </ng-template>
+   
+                   </p-table>
+               </ng-container>
+           </div>
+
+        </div>
+    </div>
+</div>
+
+<p-dialog header="Aplicar Pago" [modal]="true" [(visible)]="_aplicarPagoDebito" [style]="{ width: '70rem' }">
+    <span class="p-text-secondary block mb-5" id="consecutivo"></span>
+
+    <div class="flex align-items-center gap-3 mb-3">
+        <label for="comprobantePago" class="font-semibold w-12rem">Número de Comprobante</label>
+        <input pInputText id="comprobantePago" type="text" class="flex-auto" autocomplete="off"
+            (focus)="entraComprobante()" (blur)="validaComprobantes()"
+            maxlength = "9" oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);"/>
+        <small *ngIf="_esRequeridoComprobante" style="color: red;">El comprobante es requerido.</small>
+        <small *ngIf="_yaExisteComprobante" style="color: red;">Este comprobante ya existe.</small>
+        <small *ngIf="_esFormatoIncorrecto" style="color: red;">Formato o longitud incorrecta.</small>
+    </div>
+
+    <div class="flex align-items-center gap-3 mb-3">
+        <label for="numeroFactura" class="font-semibold w-12rem">Número Factura Fonafifo</label>
+        <input pInputText id="numeroFactura" class="flex-auto" autocomplete="off" maxlength="24"
+        (focus)="entraFactura()" (blur)="validaFacturas()"/>
+        <small *ngIf="_esRequeridoFactura" style="color: red;">El número de factura es requerida.</small>
+        <small *ngIf="_yaExisteFactura" style="color: red;">Esta factura ya existe.</small>
+    </div>
+
+    <!-- <div class="flex align-items-center gap-3 mb-5">
+        <label for="numeroComprobante" class="font-semibold w-12rem">Número de Transacción</label>
+        <input pInputText id="numeroComprobante" class="flex-auto" autocomplete="off" maxlength="10"
+        (focus)="entraNumeroComprobante()" (blur)="validaNumeroComprobante()"/>
+        <small *ngIf="_esRequeridoNumeroComprobante" style="color: red;">El número de comprobante es requerido.</small>
+        <small *ngIf="_yaExisteNumeroComprobante" style="color: red;">Este número de comprobante ya existe.</small>
+    </div> -->
+    
+    <div class="flex align-items-center gap-3 mb-5">
+        <label for="fechaFormalizacion" class="font-semibold w-12rem">Fecha Formalización</label>
+        <input pInputText id="fechaFormalizacion" class="flex-auto" autocomplete="off" disabled="true"/>
+    </div>
+
+    <div class="flex align-items-center gap-3 mb-3">
+        <label for="montoDolares" class="font-semibold w-12rem">Monto Dólares</label>
+        <input pInputText id="montoDolares" class="flex-auto" autocomplete="off" disabled="true"/>
+    </div>
+
+    <div class="flex align-items-center gap-3 mb-3">
+        <label for="montoColones" class="font-semibold w-12rem">Monto Colones</label>
+        <input pInputText id="montoColones" class="flex-auto" autocomplete="off" disabled="true"/>
+    </div>
+
+    <div class="flex align-items-center gap-3 mb-1">
+        <label for="ucii" class="font-semibold w-12rem">Clasificación Industrial Internacional</label>
+        <input pInputText id="ucii" class="flex-auto" autocomplete="off" disabled="true"/>
+    </div>
+
+    <div class="flex align-items-center gap-3 mb-3">
+        <span>Tipo de Cambio Compra: <strong>{{_tipoCambio}}</strong></span>
+    </div>
+
+    <div class="flex align-items-center gap-3 mb-5">
+        <div class="form-check form-switch">
+            <label class="form-check-label" for="ckManual">Subir Factura Manual</label>
+            <input class="form-check-input" type="checkbox" role="switch" id="ckManual" (change)="seleccionaManual($event)">
+        </div>
+    </div>
+
+    <p-fileUpload #fileUpload name="subeArchivos[]"
+        customUpload="true" (uploadHandler)="subirXMLsDebito($event, fileUpload)"
+        [multiple]="true" accept=".pdf,.xml" maxFileSize="1000000"
+        chooseLabel="Buscar" uploadLabel="Cargar" showCancelButton="false"
+        uploadStyleClass="{border-radius: 2rem;font-size: 1.25rem;}" >
+
+        <ng-template pTemplate="content" *ngIf="_archivoValidos">
+            <ul *ngIf="archivosXMLs.length">
+                <li *ngFor="let archivo of archivosXMLs">
+                    {{ archivo.name }} - {{ archivo.size }} bytes
+                </li>
+            </ul>
+        </ng-template>
+    </p-fileUpload>
+
+</p-dialog>
+
+<p-dialog header="Vista Previa de la Factura" [modal]="true" [(visible)]="_vistaPreviaFactura" [contentStyle]="{ 'overflow-y' : 'hidden', 'max-height' : '70%' }">
+    <pdf-viewer [src]="_urlDelPDF" [render-text]="true" [original-size]="false" style="width: 80rem; height: 50rem" [fit-to-page]="true"></pdf-viewer>
+
+    <div class="flex justify-content-end gap-2 mt-5">
+		<button pButton pRipple class="boton-descargar mr-2" label="Descargar" icon="pi pi-download" (click)="descargarFacturaPDF()"></button>
+		<button pButton pRipple class="boton-cancelar p-button-danger mr-2" label="Cancelar" icon="pi pi-times" (click)="cancelarVistaPrevia()"></button>
+    </div>
+</p-dialog>
+
+<p-dialog header="Editar Formalización" [modal]="true" [(visible)]="_editarPago" [style]="{ width: '70rem' }">
+    <span class="p-text-secondary block" id="consecutivo"></span>
+    <div class="flex align-items-center gap-3" *ngIf="_tieneFacturas">
+        <span class="p-text-secondary block mb-5" style="font-style: italic;">Esta Cotización, ya cuenta con los archivos de la factura.</span>
+    </div>
+
+    <div class="flex align-items-center gap-3 mb-3">
+        <label for="comprobantePago" class="font-semibold w-12rem">Número de Comprobante</label>
+        <input pInputText id="comprobantePago" type="text" class="flex-auto" autocomplete="off"
+            (focus)="entraComprobante()" (blur)="validaComprobantes()"
+            maxlength = "9" oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);"/>
+        <small *ngIf="_esRequeridoComprobante" style="color: red;">El comprobante es requerido.</small>
+        <small *ngIf="_yaExisteComprobante" style="color: red;">Este comprobante ya existe.</small>
+        <small *ngIf="_esFormatoIncorrecto" style="color: red;">Formato o longitud incorrecta.</small>
+    </div>
+
+    <div class="flex align-items-center gap-3 mb-3">
+        <label for="numeroFactura" class="font-semibold w-12rem">Número Factura Fonafifo</label>
+        <input pInputText id="numeroFactura" class="flex-auto" autocomplete="off" maxlength="24"
+        (focus)="entraFactura()" (blur)="validaFacturas()"/>
+        <small *ngIf="_esRequeridoFactura" style="color: red;">El número de factura es requerida.</small>
+        <small *ngIf="_yaExisteFactura" style="color: red;">Esta factura ya existe.</small>
+    </div>
+
+    <!-- <div class="flex align-items-center gap-3 mb-5">
+        <label for="numeroComprobante" class="font-semibold w-12rem">Número de Transacción</label>
+        <input pInputText id="numeroComprobante" class="flex-auto" autocomplete="off" maxlength="10"
+        (focus)="entraNumeroComprobante()" (blur)="validaNumeroComprobante()"/>
+        <small *ngIf="_esRequeridoNumeroComprobante" style="color: red;">El número de comprobante es requerido.</small>
+        <small *ngIf="_yaExisteNumeroComprobante" style="color: red;">Este número de comprobante ya existe.</small>
+    </div> -->
+    
+    <div class="flex align-items-center gap-3 mb-5">
+        <label for="fechaFormalizacion" class="font-semibold w-12rem">Fecha Formalización</label>
+        <input pInputText id="fechaFormalizacion" class="flex-auto" autocomplete="off" disabled="true"/>
+    </div>
+
+    <div class="flex align-items-center gap-3 mb-5">
+        <label for="montoDolares" class="font-semibold w-12rem">Monto Dólares</label>
+        <input pInputText id="montoDolares" class="flex-auto" autocomplete="off" disabled="true"/>
+    </div>
+
+    <div class="flex align-items-center gap-3">
+        <label for="montoColones" class="font-semibold w-12rem">Monto Colones</label>
+        <input pInputText id="montoColones" class="flex-auto" disabled="true"/>
+    </div>
+
+    <div class="flex align-items-center gap-3 mb-5">
+        <span>Tipo de Cambio Compra: <strong>{{_tipoCambio}}</strong></span>
+    </div>
+    
+    <div class="flex gap-2 justify-content-end mt-5 mb-5" *ngIf="esParaVerEditarFormalizacion()">
+        <div class="form-check form-switch">
+            <label class="form-check-label tamanno-switch-fuente" for="ckHabilitaCargarArchivos">Cargar Archivos</label>
+            <input class="form-check-input tamanno-switch" type="checkbox" role="switch" id="ckHabilitaCargarArchivos" (change)="mostrarCargarArchivos($event)">
+        </div>
+    </div>
+
+    <div class="flex gap-2 justify-content-end mt-5 mb-5" *ngIf="esParaVerEditarFormalizacion()">
+        <button pButton pRipple class="boton p-button-success mr-2" label="Aplicar" icon="pi pi-save" (click)="aplicarXMLsEnEditar()" [loading]="_guardando" [disabled]="_desHabilitarBotonesEditar"></button>
+		<button pButton pRipple class="boton-cancelar p-button-danger mr-2" label="Cancelar" icon="pi pi-times" (click)="cancelarVistaPrevia()" [disabled]="_desHabilitarBotonesEditar"></button>
+    </div>
+
+    <div class="flex gap-2 justify-content-end mt-5 mb-5" *ngIf="esAprobarFormalizacion()">
+        <button pButton pRipple class="boton p-button-success mr-2" label="Aprobar/Rechazar" icon="pi pi-check-square" (click)="revisarFormalizacion()" [loading]="_guardando" [disabled]="_desHabilitarBotonesEditar"></button>
+    </div>
+
+    <p-fileUpload #fileUpload name="subeArchivos[]" *ngIf="_habilitaCargarArchivos"
+        customUpload="true" (uploadHandler)="subirXMLsEnEditar($event, fileUpload)"
+        [multiple]="true" accept=".pdf,.xml" maxFileSize="1000000"
+        chooseLabel="Buscar" uploadLabel="Cargar" showCancelButton="false"
+        uploadStyleClass="{border-radius: 2rem;font-size: 1.25rem;}" >
+
+        <ng-template pTemplate="content" *ngIf="_archivoValidos">
+            <ul *ngIf="archivosXMLs.length">
+                <li *ngFor="let archivo of archivosXMLs">
+                    {{ archivo.name }} - {{ archivo.size }} bytes
+                </li>
+            </ul>
+        </ng-template>
+    </p-fileUpload>
+
+</p-dialog>
+
+<p-dialog maskStyleClass="backdrop-blur-sm" header="Observaciones de la Formalización" [modal]="true"
+    [(visible)]="_muestraObservaciones" [style]="{ width: '40vw' }">
+    <form>
+        <div class="p-fluid p-formgrid grid">
+            <div class="field col-12 md:col-12">
+                <div *ngIf="!this._apruebaOrRechaza">
+                    <label for="observaciones">Observaciones: (*)</label>
+                    <textarea pInputText id="observaciones" type="text" placeholder="Comentarios acerca de la Formalización" class="mb-3" (focus)="entraObservaciones()" rows="7"></textarea>
+                    <span class="datorequerido" *ngIf="_datoRequerido">
+                        Campo requerido.
+                    </span>
+                    <span class="datorequerido" *ngIf="_cantidadMenor">
+                        La observación debe ser mayor a 5 caracteres.
+                    </span>
+                </div>
+
+                <!-- <div class="form-check form-switch">
+                    <label class="form-check-label tamanno-switch-aprobacion p-1" for="ckAprobar">Aprobar</label>
+                    <input class="form-check-input tamanno-switch-aprobacion" type="checkbox" role="switch" id="ckAprobar"
+                        (change)="apruebaFormalizacion($event)">
+                </div> -->
+
+                <div class="field col-3 md:col-3 flex gap-2">
+                    <!-- <button pButton pRipple class="boton-aprobar mr-2" label="" icon="pi pi-save" ></button>
+                    <button pButton pRipple class="boton-cancelar p-button-danger mr-2" label="Rechazar" icon="pi pi-times" ></button> -->
+                    <p-button label="Aprobar" icon="pi pi-check" styleClass="p-button-outlined m-2" (click)="aprobarFormalizacion()"></p-button>
+                    <p-button label="Rechazar" icon="pi pi-times" styleClass="p-button-outlined p-button-danger m-2" (click)="rechazarFormalizacion()"></p-button>
+                </div>
+
+            </div>
+        </div>
+    </form>
+</p-dialog>
+
+<!-- <p-dialog header="Aplicar Pago" [modal]="true" [(visible)]="_aplicarPago" [style]="{ width: '70rem' }">
+    <span class="p-text-secondary block" id="consecutivo"></span>
+    <div class="flex align-items-center gap-3" *ngIf="_tieneFacturas">
+        <span class="p-text-secondary block mb-5" style="font-style: italic;">Esta Cotización, ya cuenta con los archivos de la factura.</span>
+    </div>
+
+    <div class="flex align-items-center gap-3 mb-3">
+        <label for="comprobantePago" class="font-semibold w-12rem">Número de Comprobante</label>
+        <input pInputText id="comprobantePago" type="text" class="flex-auto" autocomplete="off"
+            (focus)="entraComprobante()" (blur)="validaComprobantes()"
+            maxlength = "9" oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);"/>
+        <small *ngIf="_esRequeridoComprobante" style="color: red;">El comprobante es requerido.</small>
+        <small *ngIf="_yaExisteComprobante" style="color: red;">Este comprobante ya existe.</small>
+        <small *ngIf="_esFormatoIncorrecto" style="color: red;">Formato o longitud incorrecta.</small>
+    </div>
+
+    <div class="flex align-items-center gap-3 mb-3">
+        <label for="numeroFactura" class="font-semibold w-12rem">Número Factura Fonafifo</label>
+        <input pInputText id="numeroFactura" class="flex-auto" autocomplete="off" maxlength="24"
+        (focus)="entraFactura()" (blur)="validaFacturas()"/>
+        <small *ngIf="_esRequeridoFactura" style="color: red;">El número de factura es requerida.</small>
+        <small *ngIf="_yaExisteFactura" style="color: red;">Esta factura ya existe.</small>
+    </div>
+
+    <div class="flex align-items-center gap-3 mb-5">
+        <label for="numeroComprobante" class="font-semibold w-12rem">Número de Transacción</label>
+        <input pInputText id="numeroComprobante" class="flex-auto" autocomplete="off" maxlength="10"
+        (focus)="entraNumeroComprobante()" (blur)="validaNumeroComprobante()"/>
+        <small *ngIf="_esRequeridoNumeroComprobante" style="color: red;">El número de comprobante es requerido.</small>
+        <small *ngIf="_yaExisteNumeroComprobante" style="color: red;">Este número de comprobante ya existe.</small>
+    </div>
+    
+    <div class="flex align-items-center gap-3 mb-5">
+        <label for="fechaFormalizacion" class="font-semibold w-12rem">Fecha Formalización</label>
+        <input pInputText id="fechaFormalizacion" class="flex-auto" autocomplete="off" disabled="true"/>
+    </div>
+
+    <div class="flex align-items-center gap-3 mb-3">
+        <label for="montoDolares" class="font-semibold w-12rem">Monto Dólares</label>
+        <input pInputText id="montoDolares" class="flex-auto" autocomplete="off" disabled="true"/>
+    </div>
+
+    <div class="flex align-items-center gap-3">
+        <label for="montoColones" class="font-semibold w-12rem">Monto Colones</label>
+        <input pInputText id="montoColones" class="flex-auto" autocomplete="off" disabled="true"/>
+    </div>
+
+    <div class="flex align-items-center gap-3 mb-5">
+        <span>Tipo de Cambio Venta: <strong>{{_tipoCambio}}</strong></span>
+    </div>
+
+    <div class="flex gap-2 justify-content-end mt-5">
+        <button pButton pRipple class="boton p-button-success mr-2" label="Aplicar" icon="pi pi-save" (click)="aplicarFormalizacion()" [loading]="_guardando"></button>
+		<button pButton pRipple class="boton-cancelar p-button-danger mr-2" label="Cancelar" icon="pi pi-times" (click)="cancelarVistaPrevia()"></button>
+    </div>
+
+    <p-fileUpload #fileUpload name="subeArchivos[]" *ngIf="!_tieneFacturas"
+        customUpload="true" (uploadHandler)="subirXMLs($event, fileUpload)"
+        [multiple]="true" accept=".pdf,.xml" maxFileSize="1000000"
+        chooseLabel="Buscar" uploadLabel="Cargar" showCancelButton="false"
+        uploadStyleClass="{border-radius: 2rem;font-size: 1.25rem;}" >
+
+        <ng-template pTemplate="content" *ngIf="_archivoValidos">
+            <ul *ngIf="archivosXMLs.length">
+                <li *ngFor="let archivo of archivosXMLs">
+                    {{ archivo.name }} - {{ archivo.size }} bytes
+                </li>
+            </ul>
+        </ng-template>
+    </p-fileUpload>
+
+</p-dialog> -->
+
+<!-- <p-dialog header="Generar Factura para Crédito" [modal]="true" [(visible)]="_reemplazarArchivos" [style]="{ width: '70rem' }">
+    <span class="p-text-secondary block mb-5" id="consecutivo"></span>
+
+    <div class="flex align-items-center gap-3 mb-3">
+        <label for="numeroFactura" class="font-semibold w-12rem">Número Factura Fonafifo</label>
+        <input pInputText id="numeroFactura" class="flex-auto" autocomplete="off" maxlength="24"
+        (focus)="entraFactura()" (blur)="validaFacturas()"/>
+        <small *ngIf="_esRequeridoFactura" style="color: red;">El número de factura es requerida.</small>
+        <small *ngIf="_yaExisteFactura" style="color: red;">Esta factura ya existe.</small>
+    </div>
+
+    <div class="flex align-items-center gap-3 mb-5">
+        <label for="fechaFormalizacion" class="font-semibold w-12rem">Fecha Formalización</label>
+        <input pInputText id="fechaFormalizacion" class="flex-auto" disabled="true"/>
+    </div>
+
+    <div class="flex align-items-center gap-3 mb-3">
+        <label for="montoDolares" class="font-semibold w-12rem">Monto Dólares</label>
+        <input pInputText id="montoDolares" class="flex-auto" disabled="true"/>
+    </div>
+
+    <div class="flex align-items-center gap-3">
+        <label for="montoColones" class="font-semibold w-12rem">Monto Colones</label>
+        <input pInputText id="montoColones" class="flex-auto" disabled="true"/>
+    </div>
+
+    <div class="flex align-items-center gap-3 mb-5">
+        <span>Tipo de Cambio Venta: <strong>{{_tipoCambio}}</strong></span>
+    </div>
+
+    <p-fileUpload #fileUpload name="subeArchivos[]"
+        customUpload="true" (uploadHandler)="reeplazaXML($event, fileUpload)"
+        [multiple]="true" accept=".pdf,.xml" maxFileSize="1000000"
+        chooseLabel="Buscar" uploadLabel="Cargar" showCancelButton="false"
+        uploadStyleClass="{border-radius: 2rem;font-size: 1.25rem;}" >
+    </p-fileUpload>
+
+</p-dialog> -->
+

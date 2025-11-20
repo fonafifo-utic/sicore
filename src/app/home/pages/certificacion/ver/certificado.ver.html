@@ -1,0 +1,289 @@
+<div class="card py-8 px-8">
+
+    <div *ngIf="!_enIngles" style="width: 1240px; height: 980px;" id="primerPlanoCertificado">
+        <div class="fondo-certificado" style="width: 1240px; height: 970px;">
+            <div class="row">
+                <div class="col-4 text-center mt-5">
+                    <img src="assets/img/minae.png" style="width: 75%; height: auto;" alt="">
+                </div>
+                <div class="col-4 text-center">
+                    <img src="assets/img/esencial-cr-limpia.png" style="width: 40%; height: auto;" alt="">
+                </div>
+                <div class="col-4 text-center">
+                    <img src="assets/img/ucc-fonafifo.png" style="width: 80%; height: auto;" alt="">
+                </div>
+            </div>
+
+            <div class="row text-center mt-3">
+                <span class="fuente-encabezado-gcr">{{_encabezado_1}}</span>
+                <span class="fuente-encabezado">{{_encabezado_2}}</span>
+                <span class="fuente-encabezado">{{_encabezado_3}}</span>
+
+                <span class="mt-1 fuente-creditos-carbono">{{_ucc}}</span>
+                <span class="fuente-normal">{{_advertencia}}</span>
+            </div>
+
+            <div class="row text-center mt-3">
+                <p class="fuente-cliente" [style]="_fuenteCliente">{{_nombreCertificado}}</p>
+                <p [ngClass]="fuenteNormal(_proyecto)">{{_adquisicionA}} <span style="color: #2F559D;">{{_cantidad}}</span>
+                    {{_adquisicionB}}
+                    <span style="color: #2F559D;">{{_proyecto}}</span>
+                </p>
+            </div>
+
+            <div class="row mt-3 mb-5">
+                <p class="fuente-autorizacion">{{_autorizacion}}</p>
+            </div>
+
+            <div class="row al-pie-pagina text-center">
+                <div class="col-sm-4">
+                    <span class="fuente-normal">{{_fecha}}</span><br>
+                    <span class="fuente-normal">Fecha</span><br>
+                    <span class="fuente-normal"></span>
+                </div>
+                <div class="col-sm-4">
+                    <span class="fuente-normal">{{_director}}</span><br>
+                    <span class="fuente-normal">{{_tituloDirector}}</span><br>
+                    <span class="fuente-normal">Firmado Digitalmente</span><br>
+                </div>
+                <div class="col-sm-4">
+                    <span class="fuente-normal">{{_numeroCertificado}}</span><br>
+                    <span class="fuente-normal">Número Certificado</span><br>
+                    <span class="fuente-normal"></span>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <div *ngIf="_enIngles" style="width: 1240px; height: 980px;" id="primerPlanoCertificado">
+        <div class="fondo-certificado" style="width: 1240px; height: 970px;">
+            <div class="row">
+                <div class="col-4 text-center mt-5">
+                    <img src="assets/img/minae.png" style="width: 75%; height: auto;" alt="">
+                </div>
+                <div class="col-4 text-center">
+                    <img src="assets/img/esencial-cr-limpia.png" style="width: 40%; height: auto;" alt="">
+                </div>
+                <div class="col-4 text-center">
+                    <img src="assets/img/ucc-fonafifo.png" style="width: 80%; height: auto;" alt="">
+                </div>
+            </div>
+
+            <div class="row text-center mt-3">
+                <span class="fuente-encabezado-gcr">{{_encabezado_1}}</span>
+                <span class="fuente-encabezado">{{_encabezado_2}}</span>
+                <span class="fuente-encabezado">{{_encabezado_3}}</span>
+
+                <span class="mt-1 fuente-creditos-carbono">{{_ucc}}</span>
+                <span class="fuente-normal">{{_advertencia}}</span>
+            </div>
+
+            <div class="row text-center mt-3">
+                <p class="fuente-cliente" [style]="_fuenteCliente">{{_nombreCertificado}}</p>
+                <p class="fuente-normal">{{_adquisicionA}} <span style="color: #2F559D;">{{_cantidad}}</span>
+                    {{_adquisicionB}}
+                    <span style="color: #2F559D;">{{_proyecto}}</span> {{_adquisicionC}}
+                </p>
+            </div>
+
+            <div class="row mt-3 mb-5">
+                <p class="fuente-autorizacion">{{_autorizacion}}</p>
+            </div>
+
+            <div class="row al-pie-pagina text-center">
+                <div class="col-sm-4">
+                    <span class="fuente-normal">{{_fecha}}</span><br>
+                    <span class="fuente-normal">Date</span>
+                </div>
+                <div class="col-sm-4">
+                    <span class="fuente-normal">{{_director}}</span><br>
+                    <span class="fuente-normal">Executive Director</span><br>
+                    <span class="fuente-normal">Digitally Signed</span><br>
+                </div>
+                <div class="col-sm-4">
+                    <span class="fuente-normal">{{_numeroCertificado}}</span><br>
+                    <span class="fuente-normal">Certificate Number</span>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <p-divider align="right"></p-divider>
+
+    <div *ngIf="!_enIngles" class="fondo-certificado" style="width: 1240px; height: 980px;"
+        id="segundoPlanoCertificado">
+        <div class="fondo-certificado" style="width: 1240px; height: 970px;">
+            <div class="row">
+                <div class="col-4 text-center mt-5">
+                    <img src="assets/img/minae.png" style="width: 75%; height: auto;" alt="">
+                </div>
+                <div class="col-4 text-center">
+                    <img src="assets/img/esencial-cr-limpia.png" style="width: 40%; height: auto;" alt="">
+                </div>
+                <div class="col-4 text-center">
+                    <img src="assets/img/ucc-fonafifo.png" style="width: 80%; height: auto;" alt="">
+                </div>
+            </div>
+
+            <div class="row text-center mt-5 fuente-tabla">
+                <table class="table">
+                    <tbody style="text-align: left;">
+                        <tr>
+                            <th scope="row" style="width: 50%;">Número Cédula Jurídica:</th>
+                            <th scope="row">{{_numeroCedula}}</th>
+                        </tr>
+                        <tr *ngIf="!_certificadoDeUsoInterno">
+                            <th scope="row">Monto Transferencia:</th>
+                            <th scope="row">${{_montoTransferencia}}</th>
+                        </tr>
+                        <tr *ngIf="!_certificadoDeUsoInterno">
+                            <th scope="row">Número Transferencia:</th>
+                            <th scope="row">{{_numeroTransferencia}}</th>
+                        </tr>
+                        <tr *ngIf="!_certificadoDeUsoInterno">
+                            <th scope="row">Nombre del Banco:</th>
+                            <th scope="row">{{_banco}}</th>
+                        </tr>
+                        <tr *ngIf="!_certificadoDeUsoInterno">
+                            <th scope="row">Fecha Transferencia:</th>
+                            <th scope="row">{{_fechaTransferencia}}</th>
+                        </tr>
+                        <tr>
+                            <th scope="row">Cantidad de Toneladas:</th>
+                            <th scope="row">{{_cantidad}} tonCO2e</th>
+                        </tr>
+                        <tr>
+                            <th scope="row">Proyecto:</th>
+                            <th scope="row">{{_proyecto}}</th>
+                        </tr>
+                        <tr>
+                            <th scope="row">Motivo de Compensación:</th>
+                            <th scope="row">{{_anotaciones}}</th>
+                        </tr>
+                        <tr *ngIf="_activaObservaciones">
+                            <th style="border-bottom-width: 0px;" colspan="2">Observaciones:</th>
+                        </tr>
+                        <tr *ngIf="_activaObservaciones">
+                            <td style="border-bottom-width: 0px; font-size: 14px;"  colspan="2">{{_observaciones}}</td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                <table class="table mt-5">
+                    <tfoot>
+                        <tr>
+                            <td style="text-align: left; font-size: medium;">{{_notaFinal}}</td>
+                        </tr>
+                        <tr class="fuente-pie-pagina">
+                            <td>{{_usuarioFecha}}</td>
+                        </tr>
+                        <tr class="fuente-clave-unica-oculta">
+                            <td>{{_numeroDeIdentificacionUnico}}</td>
+                        </tr>
+                    </tfoot>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <div *ngIf="_enIngles" class="fondo-certificado" style="width: 1240px; height: 980px;" id="segundoPlanoCertificado">
+        <div class="fondo-certificado" style="width: 1240px; height: 970px;">
+            <div class="row">
+                <div class="col-4 text-center mt-5">
+                    <img src="assets/img/minae.png" style="width: 75%; height: auto;" alt="">
+                </div>
+                <div class="col-4 text-center">
+                    <img src="assets/img/esencial-cr-limpia.png" style="width: 40%; height: auto;" alt="">
+                </div>
+                <div class="col-4 text-center">
+                    <img src="assets/img/ucc-fonafifo.png" style="width: 80%; height: auto;" alt="">
+                </div>
+            </div>
+
+            <div class="row text-center mt-5 fuente-tabla">
+                <table class="table">
+                    <tbody style="text-align: left;">
+                        <tr>
+                            <th scope="row" style="width: 50%;">Legal Identification:</th>
+                            <th scope="row">{{_numeroCedula}}</th>
+                        </tr>
+                        <tr>
+                            <th scope="row">Transfer Amount:</th>
+                            <th scope="row">$ {{_montoTransferencia}}</th>
+                        </tr>
+                        <tr>
+                            <th scope="row">Transfer Number:</th>
+                            <th scope="row">{{_numeroTransferencia}}</th>
+                        </tr>
+                        <tr>
+                            <th scope="row">Bank Name:</th>
+                            <th scope="row">{{_banco}}</th>
+                        </tr>
+                        <tr>
+                            <th scope="row">Transfer Date:</th>
+                            <th scope="row">{{_fechaTransferencia}}</th>
+                        </tr>
+                        <tr>
+                            <th scope="row">Quantity of Tons:</th>
+                            <th scope="row">{{_cantidad}} tonCO2e</th>
+                        </tr>
+                        <tr>
+                            <th scope="row">Project:</th>
+                            <th scope="row">{{_proyecto}}</th>
+                        </tr>
+                        <tr>
+                            <th scope="row">Reason for Compensation:</th>
+                            <th scope="row">{{_anotaciones}}</th>
+                        </tr>
+                        <tr *ngIf="_activaObservaciones">
+                            <th style="border-bottom-width: 0px;" colspan="2">Observations:</th>
+                        </tr>
+                        <tr *ngIf="_activaObservaciones">
+                            <td style="border-bottom-width: 0px; font-size: 14px;" colspan="2">{{_observaciones}}</td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                <table class="table mt-1">
+                    <tfoot>
+                        <tr>
+                            <td style="text-align: left; font-size: medium;">{{_notaFinal}}</td>
+                        </tr>
+                        <tr class="fuente-pie-pagina">
+                            <td>{{_usuarioFecha}}</td>
+                        </tr>
+                        <tr class="fuente-clave-unica-oculta">
+                            <td>{{_numeroDeIdentificacionUnico}}</td>
+                        </tr>
+                    </tfoot>
+                </table>
+
+            </div>
+        </div>
+    </div>
+
+    <p-divider align="right"></p-divider>
+
+    <div class="flex">
+        <p-button *ngIf="((!_esAsistenteDDC) && (!_esAsistenteDE) && (!_certificadoAprobado))" label="Aprobar" icon="pi pi-check" styleClass="p-button-outlined m-2"
+            (onClick)="actualizarCertificado()"></p-button>
+
+        <p-button *ngIf="((!_esAsistenteDDC) && (!_esAsistenteDE) && (!_certificadoAprobado) && (!_certificadoDeUsoInterno))" label="Editar" icon="pi pi-file-edit" styleClass="p-button-outlined m-2"
+            (onClick)="irToEditar()"></p-button>
+
+        <p-button *ngIf="true" label="Exportar" icon="pi pi-file-pdf" styleClass="p-button-outlined m-2"
+            (onClick)="descargarPDF()"></p-button>
+
+        <p-button *ngIf="true" label="Salir" icon="pi pi-times" styleClass="p-button-outlined p-button-danger m-2"
+            (onClick)="irToCertificados()"></p-button>
+    </div>
+
+</div>
+
+<div *ngIf="_muestrarEdicionCertificado">
+    <p-dialog maskStyleClass="backdrop-blur-sm" header="Editar Certificado" [modal]="true" [(visible)]="_muestraModalEdicionCertificado" [style]="{ width: '50vw' }">
+        <editar-certificado></editar-certificado>
+    </p-dialog>
+</div>

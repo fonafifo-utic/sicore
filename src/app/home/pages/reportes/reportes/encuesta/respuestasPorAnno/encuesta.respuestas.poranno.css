@@ -1,0 +1,109 @@
+.carta-container {
+    width: 21cm;
+    height: 29.7cm;
+    background-color: white;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    padding: 1cm 1cm;
+    position: relative;
+    overflow: hidden;
+}
+
+.header {
+    padding-bottom: 15px;
+    border-bottom: 2px solid;
+}
+
+.report-title {
+    text-align: center;
+    font-size: 22px;
+    font-weight: bold;
+    margin: 10px 0;
+}
+
+.subtitle {
+    text-align: center;
+    font-size: 16px;
+    margin-bottom: 10px;
+    font-weight: bold;
+}
+
+.date {
+    text-align: left;
+    font-size: 14px;
+}
+
+.document-id {
+    text-align: left;
+    font-size: 14px;
+    font-weight: bold;
+}
+
+.custom-text {
+    padding: 10px;
+    margin-bottom: 10px;
+}
+
+.chart-container {
+    border: 1px solid #ccc;
+}
+
+.chart {
+    background-color: #f5f5f5;
+}
+
+.source {
+    font-size: 12px;
+    margin-top: 10px;
+    font-style: italic;
+}
+
+.generated-by {
+    margin: 100px 0;
+    text-align: center;
+}
+
+.footer {
+    position: absolute;
+    bottom: 1.5cm;
+    left: 2cm;
+    right: 2cm;
+    padding-top: 10px;
+    border-top: 2px solid;
+    font-size: 12px;
+    display: flex;
+    justify-content: space-between;
+}
+
+.page-info {
+    font-weight: bold;
+}
+
+@media print {
+    body {
+        background-color: white;
+        padding: 0;
+    }
+
+    .carta-container {
+        box-shadow: none;
+        width: 100%;
+        height: auto;
+        page-break-after: always;
+    }
+}
+
+.boton {
+    border-radius: 2rem;
+    font-size: 1.25rem;
+}
+
+.boton-aplicar {
+    color: #ffffff;
+    background: #0d6efd;
+    border: 1px solid #0d6efd;
+    padding: 0.5rem 1rem;
+    font-size: 1rem;
+    transition: background-color 0.2s, color 0.2s, border-color 0.2s, box-shadow 0.2s;
+    border-radius: 3px;
+    outline-color: transparent;
+}

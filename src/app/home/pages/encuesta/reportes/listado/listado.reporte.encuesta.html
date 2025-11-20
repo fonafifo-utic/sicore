@@ -1,0 +1,184 @@
+<div class="grid">
+    <div class="col-12">
+        <div class="card px-6 py-6">
+
+            <ng-container *ngIf="_listadoPorMes$ | async as listadoPorMes">
+
+                <p-table [value]="listadoPorMes" [columns]="_columnas"
+                    #dt [columns]="_columnas" responsiveLayout="scroll" [rows]="10" [globalFilterFields]="['numeroCertificado', 'nombreCliente','pregunta', 'respuesta']"
+                    [paginator]="true" currentPageReportTemplate="Mostrando de {first} a {last} de {totalRecords} entradas" [rowHover]="true">
+                    
+                <ng-template pTemplate="caption">
+                    <div class="flex flex-column md:flex-row md:justify-content-between md:align-items-center">
+                        <h5 class="m-0">Listado de Respuestas del Mes</h5>
+                        <span class="block mt-2 md:mt-0 p-input-icon-left">
+                            <i class="pi pi-search"></i>
+                            <input pInputText type="text" placeholder="Buscar..."  class="w-full sm:w-auto" (input)="filtroGlobal(dt,$event)"/>
+                        </span>
+                    </div>
+                </ng-template>
+    
+                    <ng-template pTemplate="header">
+                        <tr>
+                            <th pSortableColumn="numeroCertificado">Certificado<p-sortIcon field="numeroCertificado"></p-sortIcon></th>
+                            <th pSortableColumn="nombreCliente">Cliente<p-sortIcon field="nombreCliente"></p-sortIcon></th>
+                            <th pSortableColumn="pregunta">Pregunta<p-sortIcon field="pregunta"></p-sortIcon></th>
+                            <th pSortableColumn="respuesta">Respuesta<p-sortIcon field="respuesta"></p-sortIcon></th>
+                            <th>Fecha</th>
+                            <th>Hora</th>
+                        </tr>
+                    </ng-template>
+    
+                    <ng-template pTemplate="body" let-item>
+                        <tr>
+                            <td style="width:5%; min-width:5rem;">
+                                <span class="p-column-title">Certificado</span>
+                                {{creaNumeroCertificado(item.numeroCertificado)}}
+                            </td>
+                            <td style="width:10%; min-width:10rem;">
+                                <span class="p-column-title">Cliente</span>
+                                {{item.nombreCliente}}
+                            </td>
+                            <td style="width:15%; min-width:15rem;">
+                                <span class="p-column-title">Pregunta</span>
+                                {{item.pregunta}}
+                            </td>
+                            <td style="width:25%; min-width:25rem;">
+                                <span class="p-column-title">Respuesta</span>
+                                <p-rating *ngIf="esRating(item.idReporte)" [cancel]="false" [(ngModel)]="item.respuesta" [stars]="item.respuesta" [readonly]="true"></p-rating>
+                                <span *ngIf="!esRating(item.idReporte)">{{item.respuesta}}</span>
+                            </td>
+                            <td style="width:5%; min-width:5rem;">
+                                <span class="p-column-title">Fecha Respuesta</span>
+                                {{item.fecha | date : 'dd-MM-yyyy'}}
+                            </td>
+                            <td style="width:5%; min-width:5rem;">
+                                <span class="p-column-title">Hora Respuesta</span>
+                                {{item.hora}}
+                            </td>
+                        </tr>
+                    </ng-template>
+                </p-table>
+            </ng-container>
+
+            <!-- <ng-container *ngIf="_listadoPorMes$ | async as listadoPorMes">
+
+                <p-table [value]="listadoPorMes" [columns]="_columnas"
+                    #dt [columns]="_columnas" responsiveLayout="scroll" [rows]="10" [globalFilterFields]="['numeroCertificado', 'nombreCliente','pregunta', 'respuesta']"
+                    [paginator]="true" currentPageReportTemplate="Mostrando de {first} a {last} de {totalRecords} entradas" [rowHover]="true">
+                    
+                <ng-template pTemplate="caption">
+                    <div class="flex flex-column md:flex-row md:justify-content-between md:align-items-center">
+                        <h5 class="m-0">Listado de Respuestas del Mes</h5>
+                        <span class="block mt-2 md:mt-0 p-input-icon-left">
+                            <i class="pi pi-search"></i>
+                            <input pInputText type="text" placeholder="Buscar..."  class="w-full sm:w-auto" (input)="filtroGlobal(dt,$event)"/>
+                        </span>
+                    </div>
+                </ng-template>
+    
+                    <ng-template pTemplate="header">
+                        <tr>
+                            <th pSortableColumn="numeroCertificado">Certificado<p-sortIcon field="numeroCertificado"></p-sortIcon></th>
+                            <th pSortableColumn="nombreCliente">Cliente<p-sortIcon field="nombreCliente"></p-sortIcon></th>
+                            <th pSortableColumn="pregunta">Pregunta<p-sortIcon field="pregunta"></p-sortIcon></th>
+                            <th pSortableColumn="respuesta">Respuesta<p-sortIcon field="respuesta"></p-sortIcon></th>
+                            <th>Fecha</th>
+                            <th>Hora</th>
+                        </tr>
+                    </ng-template>
+    
+                    <ng-template pTemplate="body" let-item>
+                        <tr>
+                            <td style="width:5%; min-width:5rem;">
+                                <span class="p-column-title">Certificado</span>
+                                {{creaNumeroCertificado(item.numeroCertificado)}}
+                            </td>
+                            <td style="width:15%; min-width:15rem;">
+                                <span class="p-column-title">Cliente</span>
+                                {{item.nombreCliente}}
+                            </td>
+                            <td style="width:30%; min-width:30rem;">
+                                <span class="p-column-title">Pregunta</span>
+                                {{item.pregunta}}
+                            </td>
+                            <td style="width:10%; min-width:10rem;">
+                                <span class="p-column-title">Respuesta</span>
+                                <p-rating *ngIf="esRating(item.idReporte)" [cancel]="false" [(ngModel)]="item.respuesta" [stars]="item.respuesta" [readonly]="true"></p-rating>
+                                <span *ngIf="!esRating(item.idReporte)">{{item.respuesta}}</span>
+                            </td>
+                            <td style="width:5%; min-width:5rem;">
+                                <span class="p-column-title">Fecha Respuesta</span>
+                                {{item.fecha | date : 'dd-MM-yyyy'}}
+                            </td>
+                            <td style="width:5%; min-width:5rem;">
+                                <span class="p-column-title">Hora Respuesta</span>
+                                {{item.hora}}
+                            </td>
+                        </tr>
+                    </ng-template>
+                </p-table>
+            </ng-container>
+
+            <ng-container *ngIf="_listadoPorMes$ | async as listadoPorMes">
+
+                <p-table [value]="listadoPorMes" [columns]="_columnas"
+                    #dt [columns]="_columnas" responsiveLayout="scroll" [rows]="10" [globalFilterFields]="['numeroCertificado', 'nombreCliente','pregunta', 'respuesta']"
+                    [paginator]="true" currentPageReportTemplate="Mostrando de {first} a {last} de {totalRecords} entradas" [rowHover]="true">
+                    
+                <ng-template pTemplate="caption">
+                    <div class="flex flex-column md:flex-row md:justify-content-between md:align-items-center">
+                        <h5 class="m-0">Listado de Respuestas del Mes</h5>
+                        <span class="block mt-2 md:mt-0 p-input-icon-left">
+                            <i class="pi pi-search"></i>
+                            <input pInputText type="text" placeholder="Buscar..."  class="w-full sm:w-auto" (input)="filtroGlobal(dt,$event)"/>
+                        </span>
+                    </div>
+                </ng-template>
+    
+                    <ng-template pTemplate="header">
+                        <tr>
+                            <th pSortableColumn="numeroCertificado">Certificado<p-sortIcon field="numeroCertificado"></p-sortIcon></th>
+                            <th pSortableColumn="nombreCliente">Cliente<p-sortIcon field="nombreCliente"></p-sortIcon></th>
+                            <th pSortableColumn="pregunta">Pregunta<p-sortIcon field="pregunta"></p-sortIcon></th>
+                            <th pSortableColumn="respuesta">Respuesta<p-sortIcon field="respuesta"></p-sortIcon></th>
+                            <th>Fecha</th>
+                            <th>Hora</th>
+                        </tr>
+                    </ng-template>
+    
+                    <ng-template pTemplate="body" let-item>
+                        <tr>
+                            <td style="width:5%; min-width:5rem;">
+                                <span class="p-column-title">Certificado</span>
+                                {{creaNumeroCertificado(item.numeroCertificado)}}
+                            </td>
+                            <td style="width:15%; min-width:15rem;">
+                                <span class="p-column-title">Cliente</span>
+                                {{item.nombreCliente}}
+                            </td>
+                            <td style="width:30%; min-width:30rem;">
+                                <span class="p-column-title">Pregunta</span>
+                                {{item.pregunta}}
+                            </td>
+                            <td style="width:10%; min-width:10rem;">
+                                <span class="p-column-title">Respuesta</span>
+                                <p-rating *ngIf="esRating(item.idReporte)" [cancel]="false" [(ngModel)]="item.respuesta" [stars]="item.respuesta" [readonly]="true"></p-rating>
+                                <span *ngIf="!esRating(item.idReporte)">{{item.respuesta}}</span>
+                            </td>
+                            <td style="width:5%; min-width:5rem;">
+                                <span class="p-column-title">Fecha Respuesta</span>
+                                {{item.fecha | date : 'dd-MM-yyyy'}}
+                            </td>
+                            <td style="width:5%; min-width:5rem;">
+                                <span class="p-column-title">Hora Respuesta</span>
+                                {{item.hora}}
+                            </td>
+                        </tr>
+                    </ng-template>
+                </p-table>
+            </ng-container> -->
+
+        </div>
+    </div>
+</div>

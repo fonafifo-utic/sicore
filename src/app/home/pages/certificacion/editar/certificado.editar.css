@@ -1,0 +1,73 @@
+:host {
+    display: block;
+  }
+  
+  .swal2-container {
+    z-index: 200000;
+  }
+  
+  .datorequerido {
+    color: red;
+    font-size: 13px;
+    position: relative;
+    bottom: 5px;
+  }
+  
+  .colortitlewindow {
+    background-color: #17581c;
+    padding-top: 10px;
+    padding-bottom: 10px;
+  }
+  
+  .iconCloseRounded {
+    border-radius: 100% !important;
+  }
+  
+  .p-card-body {
+    padding: 0;
+  }
+  
+  .p-card .p-card-content {
+    padding: 0 0 1.25rem 0;
+  }
+    
+  /* CSS Quill */
+  
+  .editor>div:nth-child(1) {
+    background: #f9fafb;
+    border-radius: 8px 8px 0 0;
+  }
+  
+  .editor>div:nth-child(2) {
+    background: #ffffff;
+    border-radius: 0 0 8px 8px;
+  }
+  
+  .boton {
+    border-radius: 2rem;
+    font-size: 1.25rem;
+  }
+  
+  .boton-cancelar {
+    border-radius: 2rem;
+    font-size: 1.25rem;
+  }
+
+  .form-check-input:checked {
+    background-color: #4CAF50;
+    border-color: #4CAF50;
+  }
+
+  .form-check-input:checked {
+    background-color: #4CAF50;
+    border-color: #4CAF50;
+  }
+
+  .form-check-input {
+    width: 3rem;
+    height: 1.5rem;
+  }
+
+  .form-check-label {
+      font-size: 1.3rem;
+  }

@@ -1,0 +1,192 @@
+<div class="col-12">
+    <div class="flex flex-column md:flex-row md:align-items-center md:justify-content-between mb-3 gap-3">
+        <div class="flex align-items-center">
+            <div class="ml-3">
+                <span class="text-5xl font-light">{{_bienvenido}}, <span
+                        class="font-normal">{{nombreUsuario}}</span></span>
+                <div class="text-2xl text-color-secondary">{{fecha_actual | date }}</div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div *ngIf="_tieneDatosParaMostrar">
+
+    <p-card header="Resumen de Inventario">
+        <ng-container *ngIf="resumenInventarioPorProyecto$ | async as remanentes">
+            <div class="grid">
+                <div class="col-12 lg:col-6 xl:col-3" *ngFor="let item of remanentes">
+                    <div class="card mb-0">
+                        <div class="flex justify-content-between mb-3">
+                            <div>
+                                <span class="block text-500 font-medium mb-3">{{item.proyecto}}</span>
+                                <div class="text-900 font-medium text-xl">Remanente: {{item.remanente | number}} ton CO2
+                                </div>
+                            </div>
+                            <div class="flex align-items-center justify-content-center bg-blue-100 border-round"
+                                [ngStyle]="{width: '2.5rem', height: '2.5rem'}">
+                                <i class="pi pi-briefcase text-blue-500 text-xl"></i>
+                            </div>
+                        </div>
+                        <span class="text-green-500 font-medium">Utilizado: {{item.utilizado | number}} ton CO2</span>
+                        <span class="text-green-500 font-medium">Aproximadamente: ${{item.montoDolares | number}}</span>
+                    </div>
+                </div>
+            </div>
+        </ng-container>
+    </p-card>
+
+    <p-card header="Resumen General">
+        <ng-container *ngIf="proyectos$ | async as proyectos">
+            <div class="grid">
+                <div class="col-12 md:col-6 xl:col-3" *ngFor="let item of proyectos">
+
+                    <div class="card h-full">
+                        <div class="flex align-items-center mb-3">
+                            <p-avatar icon="pi pi-briefcase" size="large" shape="circle"
+                                styleClass="text-base bg-indigo-100 text-indigo-700"></p-avatar>
+                            <span class="text-xl ml-2">UCC vendidos en {{item.proyecto}}:</span>
+                        </div>
+
+                        <div class="flex align-items-center justify-content-between mb-3">
+                            <span class="block font-bold text-3xl mb-3">{{item.vendido | number}} ton CO2e</span>
+                        </div>
+
+                        <div
+                            class="flex align-items-center justify-content-between h-2rem px-2 py-1 bg-green-100 text-green-900 border-round mb-5">
+                            <i class="pi pi-arrow-up-right"></i>
+                            <span class="font-bold ml-1">Cotizado: {{item.comprometido | number}} ton CO2e</span>
+                        </div>
+
+                        <!-- <div class="flex align-items-center justify-content-between h-2rem px-2 py-1 border-round mb-5">
+                            <span class="font-bold ml-1">Total Inventario: {{item.porcentaje | number}} ton CO2e</span>
+                        </div> -->
+
+                        <!-- <div class="border-round overflow-hidden surface-200 mt-5" style="height:.5rem">
+                            <div class="h-full bg-indigo-500" [style]="porcentajeVentas(item.proyecto)"></div>
+                        </div> -->
+
+                    </div>
+                </div>
+            </div>
+        </ng-container>
+    </p-card>
+
+    <p-card header="Remanente, Ventas y Cotizaciones">
+        <ng-container *ngIf="resumenVentas$ | async as resumen">
+            <div class="grid">
+                <div class="col-12 md:col-6 xl:col-3" *ngFor="let proyecto of resumen">
+                    <div class="card h-full">
+                        <div class="flex align-items-center justify-content-between mb-3">
+                            <h5 class="m-0">Resumen {{proyecto.proyecto}}:</h5>
+                        </div>
+                        <div class="flex flex-column align-items-center justify-content-center">
+                            <p-chart type="doughnut" [data]="construyeDonaParaMostrar(proyecto)"
+                                [options]="opcionesGraficoDona" width="180px" height="180px" class="mb-5"></p-chart>
+                            <span class="font-bold mb-2">Resumen</span>
+                            <div class="flex align-items-center justify-content-center gap-3">
+                                <div class="flex align-items-center">
+                                    <i class="pi pi-circle-on text-indigo-500"></i>
+                                    <span class="text-color-secondary ml-2">Vendido</span>
+                                </div>
+                                <div class="flex align-items-center">
+                                    <i class="pi pi-circle-on text-teal-500"></i>
+                                    <span class="text-color-secondary ml-2">Cotizado</span>
+                                </div>
+                                <div class="flex align-items-center">
+                                    <i class="pi pi-circle-on text-purple-500"></i>
+                                    <span class="text-color-secondary ml-2">Remanente</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </ng-container>
+
+    </p-card>
+
+    <p-card header="Ventas y Cotizaciones">
+        <div class="grid">
+            <ng-container *ngIf="resumenCotizaciones$ | async as cotizaciones">
+                <div class="col-12 xl:col-6 xl:col-3">
+
+                    <div class="card h-full">
+                        <div class="flex justify-content-between align-items-center mb-5">
+                            <h5>Resumen de Cotizaciones</h5>
+                        </div>
+                        <ul class="list-none p-0 m-0">
+
+                            <li class="flex flex-column md:flex-row md:align-items-center md:justify-content-between mb-4"
+                                *ngFor="let cotizacion of cotizaciones">
+                                <div>
+                                    <span class="text-900 font-medium mr-2 mb-1 md:mb-0">{{cotizacion.proyecto}}</span>
+                                    <div class="mt-1 text-600">Total Cotizado</div>
+                                </div>
+                                <div class="mt-2 md:mt-0 ml-0 md:ml-8 flex align-items-center">
+                                    <div class="surface-300 border-round overflow-hidden w-10rem lg:w-6rem"
+                                        [ngStyle]="{height: '8px'}">
+                                        <div class="bg-green-500 h-full"
+                                            [style]="stiloPorcentajeCotizacion(cotizacion.remanente, cotizacion.cotizado)">
+                                        </div>
+                                    </div>
+                                    <span
+                                        class="text-green-500 ml-3 font-medium">{{porcentajeCotizacion(cotizacion.remanente,
+                                        cotizacion.cotizado) | percent }}</span>
+                                </div>
+                            </li>
+
+                        </ul>
+                    </div>
+                </div>
+            </ng-container>
+
+            <ng-container *ngIf="resumenVentasPorProyecto$ | async as ventas">
+                <div class="col-12 xl:col-6 xl:col-3">
+
+                    <div class="card h-full">
+                        <div class="flex justify-content-between align-items-center mb-5">
+                            <h5>Resumen de Ventas</h5>
+                        </div>
+                        <ul class="list-none p-0 m-0">
+
+                            <li class="flex flex-column md:flex-row md:align-items-center md:justify-content-between mb-4"
+                                *ngFor="let venta of ventas">
+                                <div>
+                                    <span class="text-900 font-medium mr-2 mb-1 md:mb-0">{{venta.proyecto}}</span>
+                                    <div class="mt-1 text-600">Total Vendido</div>
+                                </div>
+                                <div class="mt-2 md:mt-0 ml-0 md:ml-8 flex align-items-center">
+                                    <div class="surface-300 border-round overflow-hidden w-10rem lg:w-6rem"
+                                        [ngStyle]="{height: '8px'}">
+                                        <div class="bg-green-500 h-full"
+                                            [style]="stiloPorcentajeVentas(venta.remanente, venta.vendido)"></div>
+                                    </div>
+                                    <span class="text-green-500 ml-3 font-medium">{{porcentajeVenta(venta.remanente,
+                                        venta.vendido) | percent }}</span>
+                                </div>
+                            </li>
+
+                        </ul>
+                    </div>
+                </div>
+            </ng-container>
+
+        </div>
+    </p-card>
+
+    <p-card header="Gráfico de Ventas">
+        <div class="col-6 md:col-6 xl:col-6">
+            <div class="card h-full">
+                <div class="flex flex-column">
+                    <p-chart type="line" [data]="datosGraficoVentas" [options]="opcionesGraficoBarras"/>
+                </div>
+            </div>
+        </div>
+    </p-card>
+</div>
+
+<div *ngIf="!_tieneDatosParaMostrar">
+    <span class="text-5xl font-light">Parece que aún no hay registros disponibles. Por favor, ingrese datos en los demás
+        módulos para habilitar la visualización de los gráficos.</span>
+</div>

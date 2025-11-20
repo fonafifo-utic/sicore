@@ -1,0 +1,144 @@
+<div class="card py-8 px-6 md:px-8 overflow-auto">
+	<div class="flex flex-column align-items-start md:flex-row md:align-items-center md:justify-content-between border-bottom-1 surface-border pb-5 min-w-max">
+		
+		<div class="flex flex-column">
+			<div class="my-3 text-4xl font-bold text-900">Fondo Nacional de Financiamiento Forestal</div>
+			<span class="mb-2">San Vicente de Moravia de Plaza Lincoln 200 metros Oeste, 100 metros Sur y 200 metros Oeste,</span>
+			<span>contiguo a la Sinfónica Nacional, Edificio IFAM I y II piso.</span>
+		</div>
+		
+		<div class="flex flex-column mt-5 md:mt-0" style="width: 15%; height: auto;">
+			<img alt="SICORE" src="assets/img/img_login.png">
+		</div>
+	</div>
+
+	<div class="flex flex-column mt-5 md:mt-0">
+		<div class="text-2xl font-semibold text-left mt-5 md:text-left mb-5">FORMALIZACIÓN</div>
+	</div>
+
+	<div class="overflow-x-auto mb-5">
+
+		<ng-container *ngIf="_formalizacion$ | async as formalizacion">
+			<p-table [value]="formalizacion" #dt responsiveLayout="scroll" [rowHover]="true">
+				<ng-template pTemplate="header">
+					<tr>
+						<th class="text-left font-semibold py-3 border-bottom-1 surface-border">Cotización</th>
+						<th class="text-left font-semibold py-3 border-bottom-1 surface-border px-3">Fecha</th>
+						<th class="text-left font-semibold py-3 border-bottom-1 surface-border px-3">Código CIIU</th>
+						<th class="text-left font-semibold py-3 border-bottom-1 surface-border px-3">Factura</th>
+						<th class="text-left font-semibold py-3 border-bottom-1 surface-border px-3">Crédito | Contado</th>
+						<th class="text-left font-semibold py-3 border-bottom-1 surface-border">Estado</th>
+					</tr>
+				</ng-template>
+
+				<ng-template pTemplate="body" let-item>
+					<tr>
+						<td class="text-left py-3 border-bottom-1 surface-border">
+							DDC-CO-{{colocaCerosAlNumeroEntero(item.consecutivo)}}-{{_anno}}
+						</td>
+						<td class="text-left py-3 border-bottom-1 surface-border">{{item.fechaHora | date : 'dd/MM/yyyy HH:mm'}}</td>
+						<td class="text-left py-3 border-bottom-1 surface-border">{{item.numeroCIIU}}</td>
+						<td class="text-left py-3 border-bottom-1 surface-border">{{item.numeroFacturaFonafifo}}</td>
+						<td class="text-left py-3 border-bottom-1 surface-border">{{item.creditoDebito}}</td>
+						<td class="text-left py-3 border-bottom-1 surface-border">{{item.indicadorEstado}}</td>
+					</tr>
+				</ng-template>
+			</p-table>
+		</ng-container>
+
+	</div>
+
+	<div class="overflow-x-auto mb-5">
+		<table class="w-full" style="border-collapse: collapse; table-layout: auto">
+			<thead>
+				<tr>
+					<th class="text-left font-semibold py-3 border-bottom-1 surface-border px-3">Cédula</th>
+					<th class="text-left font-semibold py-3 border-bottom-1 surface-border">Cliente</th>
+					<th class="text-left font-semibold py-3 border-bottom-1 surface-border px-3">Contacto</th>
+					<th class="text-left font-semibold py-3 border-bottom-1 surface-border">Correo Electrónico</th>
+					<th class="text-left font-semibold py-3 border-bottom-1 surface-border">Contacto Financiero</th>
+					<th class="text-left font-semibold py-3 border-bottom-1 surface-border">Correo Electrónico Financiero</th>
+				</tr>
+			</thead>
+			<tbody>
+                <tr>
+					<td class="text-left py-3 border-bottom-1 surface-border" id="cedula"></td>
+                    <td class="text-left py-3 border-bottom-1 surface-border" id="nombreCliente"></td>
+					<td class="text-left py-3 border-bottom-1 surface-border" id="contacto"></td>
+					<td class="text-left py-3 border-bottom-1 surface-border" id="email"></td>
+					<td class="text-left py-3 border-bottom-1 surface-border" id="contactoFinanciero"></td>
+					<td class="text-left py-3 border-bottom-1 surface-border" id="emailFinanciero"></td>
+				</tr>
+			</tbody>
+		</table>
+	</div>
+
+	<div class="overflow-x-auto mt-5">
+
+		<ng-container *ngIf="_formalizacion$ | async as formalizacion">
+			<p-table [value]="formalizacion" #dt responsiveLayout="scroll" [rowHover]="true">
+				<ng-template pTemplate="header">
+					<tr>
+						<th class="text-left font-semibold py-3 border-bottom-1 surface-border">Cantidad</th>
+						<th class="text-left font-semibold py-3 border-bottom-1 surface-border px-3">Descripción</th>
+						<th class="text-right font-semibold py-3 border-bottom-1 surface-border px-3">Precio Unitario</th>
+						<th class="text-right font-semibold py-3 border-bottom-1 surface-border">Sub-Total</th>
+					</tr>
+				</ng-template>
+
+				<ng-template pTemplate="body" let-item>
+					<tr>
+						<td class="text-left py-3 border-bottom-1 surface-border">{{item.cantidad | number}} ton CO2e</td>
+						<td class="text-left py-3 border-bottom-1 surface-border px-3" style="width:40%; min-width:10rem; text-align: justify;">
+							Cada unidad corresponde a una tonelada de carbono equivalente
+							fijado en proyectos conformados por contratos de
+							Pago por Servicios Ambientales, actividad reforestación.
+						</td>
+						<td class="text-right py-3 border-bottom-1 surface-border px-3" id="precio">{{item.precioUnitario | currency : '$'}}</td>
+						<td class="text-right py-3 border-bottom-1 surface-border" id="subTotal">{{item.subTotal | currency : '$'}}</td>
+					</tr>
+				</ng-template>
+
+				<ng-template pTemplate="footer" let-item>
+					<tr>
+						<td class="text-right py-3 border-bottom-1 surface-border"></td>
+						<td class="text-right py-3 border-bottom-1 surface-border"></td>
+						<td class="text-right py-3 border-bottom-1 surface-border"></td>
+						<td class="text-right py-3 border-bottom-1 surface-border">
+							<span class="font-semibold mr-6">TOTAL</span>
+							<span>{{_totalFactura | currency : '$'}}</span>
+						</td>
+					</tr>
+				</ng-template>
+			</p-table>
+		</ng-container>
+	</div>
+	
+	<div class="flex flex-column md:flex-row md:align-items-start md:justify-content-between mt-3">
+		<div class="mb-3 md:mb-0"><strong>JUSTIFICACIÓN: </strong>
+			<span class="mb-3 md:mb-0" style="min-width:10rem; text-align: justify;" id="anotaciones"></span>
+		</div>
+
+    </div>
+	
+    <p-divider align="right"></p-divider>
+
+    <div class="flex">
+        <p-button *ngIf="_paraVerLasObservaciones" label="Observaciones" icon="pi pi-align-left" styleClass="p-button-outlined m-2" (onClick)="verObservaciones()"></p-button> 
+        <p-button label="Salir" icon="pi pi-times" styleClass="p-button-outlined p-button-danger m-2" (onClick)="irToFormalizaciones()" ></p-button>
+    </div>
+</div>
+
+
+<p-dialog maskStyleClass="backdrop-blur-sm" header="Observaciones Encontradas" [modal]="true"
+    [(visible)]="_muestraObservaciones" [style]="{ width: '40vw' }">
+    <form>
+        <div class="p-fluid p-formgrid grid">
+            <div class="field col-12 md:col-12">
+                <label for="observaciones">Observaciones: (*)</label>
+                
+                <textarea pInputText id="observaciones" type="text" placeholder="Comentarios acerca de la Formalización" class="mb-3" rows="7" readonly="true"></textarea>
+            </div>
+        </div>
+    </form>
+</p-dialog>

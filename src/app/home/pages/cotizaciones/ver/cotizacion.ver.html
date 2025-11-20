@@ -1,0 +1,489 @@
+<div class="grid">
+    <div class="col-12">
+        <div class="card px-6 py-6">
+
+            <p-toolbar styleClass="mb-4">
+                <ng-template pTemplate="left">
+                    <div class="my-2">
+                        <div class="mb-2">
+                            <h5>Cotización Número: {{_consecutivo}}</h5>
+                            <button style="border-radius: 2rem; font-size: 1rem;" pButton pRipple label="ATRÁS"
+                                icon="pi pi-times" class="boton p-button-danger mb-5" (click)="irAListar()"></button>
+                        </div>
+
+                        <div class="card col-9 margen-izquierda" style="width: 980px; height: 1240px;" *ngIf="_muestraCotizacion$ | async">
+
+                            <div *ngIf="!cambioDeIdioma" id="documentoCotizacion" style="padding-bottom: 2rem! important;">
+                                <div class="border-round text-center">
+                                    <img src="assets/img/fonafifo-logo-trans.png" alt="" class="mr-5"
+                                        width="30%" />
+                                </div>
+
+                                <div class="text-center">
+                                    <h4 class="line-height-3 m-0">{{_encFonafifo}}</h4>
+                                    <h5 class="line-height-3 m-0">{{_encDir_1}}</h5>
+                                    <h5 class="line-height-3 m-0">{{_encDir_2}}</h5>
+
+                                    <h6 class="line-height-3 m-0 mt-1">{{_tituloCotizacion}}</h6>
+                                    <h6 class="line-height-3 m-0">{{_consecutivo}}</h6>
+                                    <h6 class="line-height-3 m-0">
+                                        {{_fechaExpiracion}}<strong>{{_fechaAproximadaVencimiento | date :
+                                            'fullDate'}}</strong></h6>
+                                </div>
+
+                                <p class="line-height-3 mt-3 margen-carta">{{_textoFechaInicio}}:
+                                    <strong>{{_fechaActual | date : 'fullDate'}}</strong>
+                                </p>
+
+                                <div class="line-height-3 mt-3 margen-carta">
+                                    <div class="row mt-1">
+                                        <div class="col-md-6">
+                                            <p><strong>Cliente:</strong> {{_nombreClienteElegido}}</p>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <p><strong>Cédula:</strong> {{_cedulaClienteElegido}}</p>
+                                        </div>
+                                    </div>
+
+                                    <div class="row mt-3">
+                                        <div class="col-md-6">
+                                            <p><strong>Contacto:</strong> {{_contactoClienteElegido}}</p>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <p><strong>Email:</strong> {{_emailClienteElegido}}</p>
+                                        </div>
+                                    </div>
+
+                                    <div class="row mt-3 mb-5">
+                                        <div class="col-md-6">
+                                            <p><strong>Dirección:</strong> {{_direccionClienteElegido}}</p>
+                                        </div>
+
+                                        <div class="col-md-6">
+                                            <p><strong>Teléfono:</strong> {{_telefonoClienteElegido}}</p>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="line-height-3 mt-3 margen-carta">
+                                    <table class="table">
+                                        <thead>
+                                            <th scope="col">Cantidad</th>
+                                            <th scope="col">Descripción</th>
+                                            <th scope="col">Precio Unitario</th>
+                                            <th scope="col">Sub-Total</th>
+                                        </thead>
+                                        <tbody>
+                                            <tr>
+                                                <td style="width:10%; min-width:5rem;">{{_cantidad}} ton CO2e</td>
+                                                <td style="width:40%; min-width:10rem; text-align: justify;">
+                                                    {{_descripcion}}</td>
+                                                <td style="width:10%; min-width:5rem;">$ {{_precioEnDolaresSugerido}}
+                                                </td>
+                                                <td style="width:10%; min-width:5rem;">$ {{_resultadoCantidadPorPrecio}}
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                        <tfoot>
+                                            <tr>
+                                                <td style="width:10%; min-width:5rem;"></td>
+                                                <td colspan="2" style="width:10%; min-width:5rem;"><strong>TOTAL
+                                                        (Fonafifo está exonerado de IVA)</strong></td>
+                                                <td style="width:10%; min-width:5rem;"><strong>$
+                                                        {{_resultadoCantidadPorPrecio}}</strong></td>
+                                            </tr>
+                                            <tr>
+                                                <td style="width:10%; min-width:5rem;"></td>
+                                                <td colspan="3" style="width:10%; min-width:5rem;"><strong>En letras:
+                                                    </strong>{{_montoEnLetras}}</td>
+                                            </tr>
+                                            <tr>
+                                                <td style="width:10%; min-width:5rem;"></td>
+                                                <td colspan="3" style="width:10%; min-width:5rem;">
+                                                    <p><strong>Proyecto:</strong> {{_nombreProyectoElegido}}</p>
+                                                </td>
+                                            </tr>
+                                            <tr *ngIf="_habilitaPrecio">
+                                                <td style="width:10%; min-width:5rem;"></td>
+                                                <td colspan="3" style="width:10%; min-width:5rem;">
+                                                    <p><strong>Descuento por:</strong> {{_justificacionClientePorDescuesto}}
+                                                    </p>
+                                                </td>
+                                            </tr>
+                                            <tr *ngIf="_habilitaJustificacion">
+                                                <td style="width:10%; min-width:5rem;"></td>
+                                                <td colspan="3" style="width:10%; min-width:5rem;">
+                                                    <p><strong>Justificación:</strong> {{_anotacionesClienteElegido}}
+                                                    </p>
+                                                </td>
+                                            </tr>
+                                        </tfoot>
+                                    </table>
+                                </div>
+
+                                <div *ngIf="!_esDeUsoInterno" class="line-height-3 mt-3 margen-carta">
+                                    <table class="table table-striped">
+                                        <thead *ngIf="(!cuentaBancariaPSAMujer) && (!cuentaBancariaConvenio)">
+                                            <th colspan="3">
+                                                <p>
+                                                    Favor realizar depósito a la - Cuenta de Fonafifo del Banco Nacional de Costa Rica -
+                                                </p>
+                                            </th>
+                                        </thead>
+
+                                        <thead *ngIf="(!cuentaBancariaPSAMujer) && (cuentaBancariaConvenio)">
+                                            <th colspan="3">
+                                                <p>
+                                                    Favor realizar depósito a la - Cuenta 544017 FONAFIFO CONVENIO ICT-BNCR -
+                                                </p>
+                                            </th>
+                                        </thead>
+
+                                        <thead *ngIf="(cuentaBancariaPSAMujer) && (!cuentaBancariaConvenio)">
+                                            <th colspan="3">
+                                                <p>
+                                                    FONDO PSA-Mujer, creado dentro del FID-544-13, del BNCR, Cédula Jurídica: 3-110-688505
+                                                </p>
+                                            </th>
+                                        </thead>
+                                        
+                                        <thead>
+                                            <th scope="col">Cuenta Corriente</th>
+                                            <th scope="col">Cuenta Cliente</th>
+                                            <th scope="col">Cuenta IBAN</th>
+                                            <th scope="col">Moneda</th>
+                                        </thead>
+                                        <tbody>
+                                            <tr *ngIf="(!cuentaBancariaPSAMujer) && (!cuentaBancariaConvenio)">
+                                                <td style="width:15%; min-width:5rem;">100-02-000-619177-9</td>
+                                                <td style="width:15%; min-width:5rem;">15100010026191775</td>
+                                                <td style="width:15%; min-width:5rem;">CR69015100010026191775</td>
+                                                <td style="width:15%; min-width:5rem;">Dólares</td>
+
+                                            </tr>
+                                            <tr *ngIf="(!cuentaBancariaPSAMujer) && (!cuentaBancariaConvenio)">
+                                                <td style="width:15%; min-width:5rem;">100-01-000-216436-6</td>
+                                                <td style="width:15%; min-width:5rem;">15100010012164361</td>
+                                                <td style="width:15%; min-width:5rem;">CR61015100010012164361</td>
+                                                <td style="width:15%; min-width:5rem;">Colones</td>
+                                            </tr>
+                                            <tr *ngIf="(!cuentaBancariaPSAMujer) && (cuentaBancariaConvenio)">
+                                                <td style="width:15%; min-width:5rem;">100-02-000-623170-3</td>
+                                                <td style="width:15%; min-width:5rem;">15100010026231701</td>
+                                                <td style="width:15%; min-width:5rem;">CR28015100010026231701</td>
+                                                <td style="width:15%; min-width:5rem;">Dólares</td>
+                                            </tr>
+                                            <tr *ngIf="(!cuentaBancariaPSAMujer) && (cuentaBancariaConvenio)">
+                                                <td style="width:15%; min-width:5rem;">100-01-000-222331-0</td>
+                                                <td style="width:15%; min-width:5rem;">15100010012223313</td>
+                                                <td style="width:15%; min-width:5rem;">CR30015100010012223313</td>
+                                                <td style="width:15%; min-width:5rem;">Colones</td>
+                                            </tr>
+                                            <tr *ngIf="(cuentaBancariaPSAMujer) && (!cuentaBancariaConvenio)">
+                                                <td style="width:15%; min-width:5rem;">100-02-000-617813-1</td>
+                                                <td style="width:15%; min-width:5rem;">15100010026178131</td>
+                                                <td style="width:15%; min-width:5rem;">CR51015100010026178131</td>
+                                                <td style="width:15%; min-width:5rem;">Dólares</td>
+                                            </tr>
+                                            <tr *ngIf="(cuentaBancariaPSAMujer) && (!cuentaBancariaConvenio)">
+                                                <td style="width:15%; min-width:5rem;">100-01-000-215849-1</td>
+                                                <td style="width:15%; min-width:5rem;">15100010012158490</td>
+                                                <td style="width:15%; min-width:5rem;">CR80015100010012158490</td>
+                                                <td style="width:15%; min-width:5rem;">Colones</td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+
+                                <div class="line-height-3 mt-3 margen-carta">
+                                    <div class="row mt-1">
+                                        <div class="col-md-12">
+                                            <p><strong>Funcionario:</strong> {{_nombreFuncionario}}</p>
+                                        </div>
+                                    </div>
+                                    <div class="row mt-3">
+                                        <div class="col-md-6">
+                                            <p><strong>Correo Electrónico:</strong> {{_emailFuncionario}}</p>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <p><strong>Teléfono:</strong> {{_telefonoFuncionario}}</p>
+                                        </div>
+                                    </div>
+                                    <div class="row mt-3 text-center">
+                                        <div class="col-md-12">
+                                            <p><strong>{{_departamento}}</strong></p>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <p class="line-height-3 mt-3 margen-carta" style="text-align: justify;">
+                                    {{_textoDescriptivoFinalEraParte}}
+                                </p>
+
+                                <p class="line-height-3 mt-3 margen-carta" style="text-align: center; font-style: italic;">
+                                    {{_textoDescriptivoFinalDaParte}}
+                                </p>
+
+                            </div>
+
+                            <p-divider *ngIf="!cambioDeIdioma" align="right">
+                                <p-button *ngIf="paraVerBotonDescargar()" label="Exportar" icon="pi pi-file-pdf" (onClick)="descargarPDF()"
+                                    styleClass="p-button-outlined m-2"></p-button>
+                                
+                                <p-button *ngIf="((paraVerBotonEnviar()) && (!_esDeUsoInterno))" id="botonEnviar" label="Enviar" icon="pi pi-file-pdf" (onClick)="enviarPDF()"
+                                    styleClass="p-button-outlined m-2"></p-button>
+
+                                <p-button *ngIf="paraVerBotonValidar()" id="botonValidar" label="Aprobar" icon="pi pi-check" (onClick)="validarCotizacion()"
+                                    styleClass="p-button-outlined m-2"></p-button>
+                                
+                                <p-button *ngIf="paraVerBotonValidar()" id="botonValidar" label="Rechazar" icon="pi pi-times" (onClick)="entraEnRechazarCotizacion()"
+                                    styleClass="p-button-danger p-button-outlined m-2"></p-button>
+                            </p-divider>
+
+                            <div *ngIf="cambioDeIdioma" id="documentoCotizacion" style="padding-bottom: 2rem! important;">
+                                <div class="border-round text-center p-2">
+                                    <img src="assets/img/fonafifo-logo-trans.png" alt="" class="mr-5"
+                                        width="30%" />
+                                </div>
+
+                                <div class="text-center">
+                                    <h4 class="line-height-3 m-0">{{_encFonafifo}}</h4>
+                                    <h5 class="line-height-3 m-0">{{_encDir_1}}</h5>
+                                    <h5 class="line-height-3 m-0">{{_encDir_2}}</h5>
+
+                                    <h6 class="line-height-3 m-0 mt-1">{{_tituloCotizacion}}</h6>
+                                    <h6 class="line-height-3 m-0">{{_consecutivo}}</h6>
+                                    <h6 class="line-height-3 m-0">
+                                        {{_fechaExpiracion}}<strong>{{_fechaAproximadaVencimientoEnIngles}}</strong>
+                                    </h6>
+                                </div>
+
+                                <p class="line-height-3 mt-3 margen-carta">{{_textoFechaInicio}}:
+                                    <strong>{{_fechaActualEnIngles}}</strong></p>
+
+                                <div class="line-height-3 mt-3 margen-carta">
+                                    <div class="row mt-1">
+                                        <div class="col-md-6">
+                                            <p><strong>Customer:</strong> {{_nombreClienteElegido}}</p>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <p><strong>ID:</strong> {{_cedulaClienteElegido}}</p>
+                                        </div>
+                                    </div>
+
+                                    <div class="row mt-3">
+                                        <div class="col-md-6">
+                                            <p><strong>Contact:</strong> {{_contactoClienteElegido}}</p>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <p><strong>Email:</strong> {{_emailClienteElegido}}</p>
+                                        </div>
+                                    </div>
+
+                                    <div class="row mt-3 mb-5">
+                                        <div class="col-md-6">
+                                            <p><strong>Address:</strong> {{_direccionClienteElegido}}</p>
+                                        </div>
+
+                                        <div class="col-md-6">
+                                            <p><strong>Phone:</strong> {{_telefonoClienteElegido}}</p>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="line-height-3 mt-3 margen-carta">
+                                    <table class="table">
+                                        <thead>
+                                            <th scope="col">Amount</th>
+                                            <th scope="col">Description</th>
+                                            <th scope="col">Price</th>
+                                            <th scope="col">Final Price</th>
+                                        </thead>
+                                        <tbody>
+                                            <tr>
+                                                <td style="width:10%; min-width:5rem;">{{_cantidad}} ton CO2e</td>
+                                                <td style="width:40%; min-width:10rem; text-align: justify;">{{_descripcion}}</td>
+                                                <td style="width:10%; min-width:5rem;">$ {{_precioEnDolaresSugerido}}</td>
+                                                <td style="width:10%; min-width:5rem;">$ {{_resultadoCantidadPorPrecio}}</td>
+                                            </tr>
+                                        </tbody>
+                                        <tfoot>
+                                            <tr>
+                                                <td style="width:10%; min-width:5rem;"></td>
+                                                <td colspan="2" style="width:10%; min-width:5rem;"><strong>TOTAL (Fonafifo is exempt from VAT)</strong></td>
+                                                <td style="width:10%; min-width:5rem;"><strong>$ {{_resultadoCantidadPorPrecio}}</strong></td>
+                                            </tr>
+                                            <tr>
+                                                <td style="width:10%; min-width:5rem;"></td>
+                                                <td colspan="3" style="width:10%; min-width:5rem;">
+                                                    <p><strong>Name of Proyect:</strong> {{_nombreProyectoElegido}}</p>
+                                                </td>
+                                            </tr>
+                                            <tr *ngIf="_habilitaPrecio">
+                                                <td style="width:10%; min-width:5rem;"></td>
+                                                <td colspan="3" style="width:10%; min-width:5rem;">
+                                                    <p><strong>Discount:</strong> {{_justificacionClientePorDescuesto}}
+                                                    </p>
+                                                </td>
+                                            </tr>
+                                            <tr *ngIf="_habilitaJustificacion">
+                                                <td style="width:10%; min-width:5rem;"></td>
+                                                <td colspan="3" style="width:10%; min-width:5rem;">
+                                                    <p><strong>Justification:</strong> {{_anotacionesClienteElegido}}
+                                                    </p>
+                                                </td>
+                                            </tr>
+                                        </tfoot>
+                                    </table>
+                                </div>
+
+                                <div class="line-height-3 mt-3 margen-carta">
+                                    <table class="table table-striped">
+                                        <thead *ngIf="!cuentaBancariaConvenio && !cuentaBancariaPSAMujer">
+                                            <th colspan="3">
+                                                <p>
+                                                    Account for Deposit: - Banco Nacional de Costa Rica, Fonafifo Account -
+                                                </p>
+                                            </th>
+                                        </thead>
+
+                                        <thead *ngIf="cuentaBancariaConvenio && !cuentaBancariaPSAMujer">
+                                            <th colspan="3">
+                                                <p>
+                                                    Account for Deposit: "544017 FONAFIFO CONVENIO ICT-BNCR"
+                                                </p>
+                                            </th>
+                                        </thead>
+
+                                        <thead *ngIf="cuentaBancariaPSAMujer && !cuentaBancariaConvenio">
+                                            <th colspan="3">
+                                                <p>
+                                                    Account for Deposit: "FONDO PSA-Mujer | FID-544-13 | ID: 3-110-688505"
+                                                </p>
+                                            </th>
+                                        </thead>
+                                        
+                                        <thead>
+                                            <th scope="col">Account Number</th>
+                                            <th scope="col">Customer Account Number</th>
+                                            <th scope="col">IBAN Account Number</th>
+                                            <th scope="col">Currency</th>
+                                        </thead>
+                                        <tbody>
+                                            <tr *ngIf="!cuentaBancariaConvenio && !cuentaBancariaPSAMujer">
+                                                <td style="width:15%; min-width:5rem;">100-02-000-619177-9</td>
+                                                <td style="width:15%; min-width:5rem;">15100010026191775</td>
+                                                <td style="width:15%; min-width:5rem;">CR69015100010026191775</td>
+                                                <td style="width:15%; min-width:5rem;">Dollars</td>
+                                            </tr>
+                                            <tr *ngIf="!cuentaBancariaConvenio && !cuentaBancariaPSAMujer">
+                                                <td style="width:15%; min-width:5rem;">100-01-000-216436-6</td>
+                                                <td style="width:15%; min-width:5rem;">15100010012164361</td>
+                                                <td style="width:15%; min-width:5rem;">CR61015100010012164361</td>
+                                                <td style="width:15%; min-width:5rem;">Colones</td>
+                                            </tr>
+                                            <tr *ngIf="cuentaBancariaConvenio && !cuentaBancariaPSAMujer">
+                                                <td style="width:15%; min-width:5rem;">100-02-000-623170-3</td>
+                                                <td style="width:15%; min-width:5rem;">15100010026231701</td>
+                                                <td style="width:15%; min-width:5rem;">CR28015100010026231701</td>
+                                                <td style="width:15%; min-width:5rem;">Dollars</td>
+                                            </tr>
+                                            <tr *ngIf="cuentaBancariaConvenio && !cuentaBancariaPSAMujer">
+                                                <td style="width:15%; min-width:5rem;">100-01-000-222331-0</td>
+                                                <td style="width:15%; min-width:5rem;">15100010012223313</td>
+                                                <td style="width:15%; min-width:5rem;">CR30015100010012223313</td>
+                                                <td style="width:15%; min-width:5rem;">Colones</td>
+                                            </tr>
+                                            <tr *ngIf="cuentaBancariaPSAMujer && !cuentaBancariaConvenio">
+                                                <td style="width:15%; min-width:5rem;">100-02-000-617813-1</td>
+                                                <td style="width:15%; min-width:5rem;">15100010026178131</td>
+                                                <td style="width:15%; min-width:5rem;">CR51015100010026178131</td>
+                                                <td style="width:15%; min-width:5rem;">Dollars</td>
+                                            </tr>
+                                            <tr *ngIf="cuentaBancariaPSAMujer && !cuentaBancariaConvenio">
+                                                <td style="width:15%; min-width:5rem;">100-01-000-215849-1</td>
+                                                <td style="width:15%; min-width:5rem;">15100010012158490</td>
+                                                <td style="width:15%; min-width:5rem;">CR80015100010012158490</td>
+                                                <td style="width:15%; min-width:5rem;">Colones</td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+
+                                <div class="line-height-3 mt-3 margen-carta">
+                                    <div class="row mt-1">
+                                        <div class="col-md-12">
+                                            <p><strong>Contact:</strong> {{_nombreFuncionario}}</p>
+                                        </div>
+                                    </div>
+                                    <div class="row mt-3">
+                                        <div class="col-md-6">
+                                            <p><strong>Email:</strong> {{_emailFuncionario}}</p>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <p><strong>Phone:</strong> {{_telefonoFuncionario}}</p>
+                                        </div>
+                                    </div>
+                                    <div class="row mt-3 text-center">
+                                        <div class="col-md-12">
+                                            <p><strong>{{_departamento}}</strong></p>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <p class="line-height-3 mt-3 margen-carta" style="text-align: justify;">
+                                    {{_textoDescriptivoFinalEraParte}}
+                                </p>
+
+                                <p class="line-height-3 mt-3 margen-carta" style="text-align: center; font-style: italic;">
+                                    {{_textoDescriptivoFinalDaParte}}
+                                </p>
+                            </div>
+                            
+                            <p-divider align="right" *ngIf="cambioDeIdioma">
+                                <p-button *ngIf="paraVerBotonDescargar()" label="Exportar" icon="pi pi-file-pdf" (onClick)="descargarPDF()"
+                                    styleClass="p-button-outlined m-2"></p-button>
+                                
+                                <p-button *ngIf="paraVerBotonEnviar()" id="botonEnviar" label="Enviar" icon="pi pi-file-pdf" (onClick)="enviarPDF()"
+                                    styleClass="p-button-outlined m-2"></p-button>
+
+                                <p-button *ngIf="paraVerBotonValidar()" id="botonValidar" label="Validar" icon="pi pi-check" (onClick)="validarCotizacion()"
+                                    styleClass="p-button-outlined m-2"></p-button>
+
+                                <p-button *ngIf="paraVerBotonValidar()" id="botonValidar" label="Rechazar" icon="pi pi-times" (onClick)="entraEnRechazarCotizacion()"
+                                    styleClass="p-button-danger p-button-outlined m-2"></p-button>
+                            </p-divider>
+
+                        </div>
+                        
+                    </div>
+                </ng-template>
+            </p-toolbar>
+
+        </div>
+    </div>
+</div>
+
+<p-dialog maskStyleClass="backdrop-blur-sm" header="Observaciones" [modal]="true"
+    [(visible)]="_muestraObservaciones" [style]="{ width: '40vw' }">
+    <form>
+        <div class="p-fluid p-formgrid grid">
+            <div class="field col-12 md:col-12">
+                <label for="observaciones">Observaciones: (*)</label>
+                
+                <textarea pInputText id="observaciones" type="text" placeholder="Comentarios acerca de la Cotización" class="mb-3" (focus)="entraObservaciones()" rows="7"></textarea>
+                <span class="datorequerido" *ngIf="_datoRequerido">
+                    Campo requerido.
+                </span>
+                <span class="datorequerido" *ngIf="_cantidadMenor">
+                    La observación debe ser mayor a 5 caracteres,
+                </span>
+
+                <div class="field col-3 md:col-3 flex justify-content-end gap-2 mt-5">
+                    <button pButton pRipple class="boton-aplicar mr-2" label="Aplicar" icon="pi pi-times" (click)="rechazarCotizacion()"></button>
+                </div>
+                
+            </div>
+        </div>
+    </form>
+</p-dialog>

@@ -1,0 +1,19 @@
+.boton {
+    border-radius: 2rem;
+    font-size: 1.25rem;
+}
+
+.boton-redondo {
+    border-radius: 2rem;
+    font-size: 1rem;
+}
+
+.flote {
+    background: #e9ecef;
+    color: #495057;
+}
+
+.boton-cancelar {
+    border-radius: 2rem;
+    font-size: 1.25rem;
+}

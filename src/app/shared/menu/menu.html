@@ -1,0 +1,11 @@
+<ul class="layout-menu mt-5">
+    <li *ngFor="let item of model" class="layout-root-menuitem">
+        <ng-container>
+            <a (click)="itemClick($event)" [routerLink]="item.rutaEnlace" routerLinkActive="active-route">
+                <i [ngClass]="item.icono" class="layout-menuitem-icon"></i>
+                <span class="texto-enlace">{{item.titulo}}</span>
+                <i class="pi pi-fw pi-angle-down layout-submenu-toggler"></i>
+            </a>
+        </ng-container>
+    </li>
+</ul>
