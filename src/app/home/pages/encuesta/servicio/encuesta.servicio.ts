@@ -3,7 +3,7 @@ import { Injectable } from "@angular/core";
 import { Observable } from "rxjs";
 import { IResultadoMetodo } from "../../../../interfaces/iSistema";
 import { environment } from "../../../../../environments/environment";
-import { iDataGrafico, iEncuesta, iEncuestaEnviada, iEncuestaPendiente, iListaEncuesta, iPregunta, iPreguntas, iRespuestaEncuestaEnviada, iRespuestas, iRespuestasEncuesta, iRespuestasListadoMes, iVistaEncuesta } from "../interfaces/iEncuesta";
+import { iDataGrafico, iEncuesta, iEncuestaEnviada, iEncuestaPendiente, iEncuestaTraeRespuestasOpinion, iEncuestaTraeRespuestasParaExcel, iListaEncuesta, iPregunta, iPreguntas, iRespuestaEncuestaEnviada, iRespuestas, iRespuestasEncuesta, iRespuestasListadoMes, iVistaEncuesta } from "../interfaces/iEncuesta";
 import { iListadoRespuestasPorAnno, iOpcionesParaEnviarCertificado } from "../../certificacion/interfaces/iCertificacion";
 
 @Injectable({
@@ -187,5 +187,27 @@ export class EncuestaServicio {
         }
 
         return this.http.post<IResultadoMetodo>(urlControladorCotizacion, JSON.stringify(opcionesEnvio), httpOptions);
+    }
+
+    obtenerRespuestasDeLaEncuestaExportarExcel(): Observable<iEncuestaTraeRespuestasParaExcel[]> {
+        const urlControladorEncuesta : string = `${environment.baseUrl}C_Encuesta/ObtenerRespuestasDeLaEncuestaExportarExcel`;
+        const httpOptions = {
+            headers: new HttpHeaders({
+                'Content-Type': 'application/json',
+            })
+        }
+
+        return this.http.get<iEncuestaTraeRespuestasParaExcel[]>(urlControladorEncuesta, httpOptions)
+    }
+
+    obtenerRespuestasOpinion(fechaInicio : string, fechaFin : string): Observable<iEncuestaTraeRespuestasOpinion[]> {
+        const urlControladorEncuesta : string = `${environment.baseUrl}C_Encuesta/ObtenerRespuestasOpinion/${fechaInicio}/${fechaFin}`;
+        const httpOptions = {
+            headers: new HttpHeaders({
+                'Content-Type': 'application/json',
+            })
+        }
+
+        return this.http.get<iEncuestaTraeRespuestasOpinion[]>(urlControladorEncuesta, httpOptions)
     }
 }

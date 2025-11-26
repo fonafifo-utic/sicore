@@ -91,4 +91,8 @@ export class ListarPreguntas implements OnInit {
     irToEncuesta() {
         this.router.navigate(['encuesta/listar']);
     }
+
+    irToListado() {
+        this.router.navigate(['encuesta/encuesta-enviada']);
+    }
 }

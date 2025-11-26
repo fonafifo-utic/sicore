@@ -691,8 +691,8 @@ export class VerCertificado implements OnInit, OnDestroy {
     }
 
     recortaObservaciones(cadena : string) : string {
-        if (cadena.length > 700) {
-            return cadena.substring(0, 700) + "...";
+        if (cadena.length > 500) {
+            return cadena.substring(0, 500) + "(...)";
         }
         
         return cadena;

@@ -27,7 +27,7 @@
 
             <div class="custom-text">
                 <p *ngIf="_esVisibleTexto">{{_textoAlternativo}}</p>
-                <textarea *ngIf="!_esVisibleTexto" pTextarea id="textoPersonalizado" rows="3" cols="105" class="h-full" style="resize: none; border: 1px solid #ccc;"
+                <textarea *ngIf="!_esVisibleTexto" pTextarea id="textoPersonalizado" maxlength="330" rows="3" cols="105" class="h-full" style="resize: none; border: 1px solid #ccc;"
                     [formControl]="textAreaControl" (input)="cuandoTextAreaCambia()" (change)="cuandoTextAreaCambia()"></textarea>
             </div>
 

@@ -145,4 +145,8 @@ export class ListaEncuesta implements OnInit {
         this.router.navigate(['encuesta/ver']);
     }
 
+    irToListado() {
+        this.router.navigate(['encuesta/encuesta-enviada']);
+    }
+
 }

@@ -135,3 +135,25 @@ export interface iRespuestaEncuestaEnviada
     fecha : string;
     hora : string;
 }
+
+export interface iEncuestaTraeRespuestasParaExcel
+{
+    pregunta : string;
+    respuesta : string;
+    contestaron : number;
+}
+
+export interface iEncuestaTraeRespuestasOpinion
+{
+    pregunta : string;
+    respuesta : string;
+    fecha : string;
+    cliente : string;
+    agente : string;
+}
+
+export interface iEncuestaSoloRespuestas
+{
+    respuesta : string;
+    contestaron : number;
+}
