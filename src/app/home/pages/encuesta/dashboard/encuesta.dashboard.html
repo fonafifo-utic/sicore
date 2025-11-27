@@ -5,21 +5,21 @@
             <p-toolbar styleClass="mb-4" *ngIf="_perfilPermitido">
                 <ng-template pTemplate="left">
                     <div class="my-2">
-                        <button pButton pRipple label="ENCUESTA" icon="pi pi-search"
+                        <button pButton pRipple label="DISEÑO ENCUESTA" icon="pi pi-search"
                             class="boton-redondo p-button-success mr-2" (click)="irToEncuesta()"></button>
                     </div>
                     <div class="my-2">
-                        <button pButton pRipple label="PREGUNTAS" icon="pi pi-question"
+                        <button pButton pRipple label="LISTADO PREGUNTAS" icon="pi pi-question"
                             class="boton-redondo p-button-success mr-2" (click)="irToPreguntas()"></button>
                     </div>
 
                     <div class="my-2">
-                        <button pButton pRipple label="LISTADO" icon="pi pi-list"
+                        <button pButton pRipple label="LISTADO ENVIADAS" icon="pi pi-list"
                             class="boton-redondo p-button-success mr-2" (click)="irToListado()"></button>
                     </div>
 
                     <div class="my-2">
-                        <button pButton pRipple label="EXCEL" icon="pi pi-file-excel"
+                        <button pButton pRipple label="EXPORTAR EXCEL" icon="pi pi-file-excel"
                             class="boton-descargar p-button-success mr-2" (click)="exportarToExcel()"></button>
                     </div>
 
@@ -113,6 +113,6 @@
 
 <p-dialog header="Importante" [modal]="true" [(visible)]="_muestraInformacion" [style]="{ width: '50rem' }" [breakpoints]="{ '1199px': '75vw', '575px': '90vw' }">
     <p>
-        Los gráficos acá mostrados se toman desde principio de año es decir, desde el primero de enero del presente año a el día de hoy.
+        Los gráficos presentados muestran información acumulada desde el 01 de enero del año en curso, hasta la fecha actual (hoy).
     </p>
 </p-dialog>
